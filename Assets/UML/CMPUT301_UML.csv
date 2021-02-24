@@ -1,0 +1,67 @@
+Id,Name,Shape Library,Page ID,Contained By,Group,Line Source,Line Destination,Source Arrow,Destination Arrow,Text Area 1,Text Area 2,Text Area 3
+1,Page,,,,,,,,,UML Class,,
+2,MinimalTextBlock,Standard,1,,,,,,,1,,
+3,MinimalTextBlock,Standard,1,,,,,,,0..*,,
+4,MinimalTextBlock,Standard,1,,,,,,,exchangable with database?,,
+5,Class,UML,1,,,,,,,CountExperiment,-Trials: Collection<CountTrial>,-totalCount(): int
+6,Class,UML,1,,,,,,,Experiment,"-id: int
+-region: String
+-description: String
+-minimumTrials: int
+-owner: User
+-locationEnable: Boolean
+-publishEnable: Boolean
+-isFinshed: Boolean
++questionBoard: Collection<Question>
+-ignoreList: Collection<String> ","-median(): Number
+-mean():  Number
+-std_dev(): Number"
+7,Class,UML,1,,,,,,,Trial,"-location: Geolocation
+-experimenter: User",
+8,Class,UML,1,,,,,,,BinimialExperiment,-Trials: Collection<BinomialTrial>,
+9,Class,UML,1,,,,,,,NonNegCountExperiment,-Trials: Collection<NonNegCountTrial>,
+10,Class,UML,1,,,,,,,MeasurementExperiment,-Trials: Collection<MeasurementTrial>,
+11,Class,UML,1,,,,,,,CountTrial,-result: int,
+12,Class,UML,1,,,,,,,BinomialTrial,-result: Boolean,
+13,Class,UML,1,,,,,,,NonNegCountTrial,-result: int,
+14,Class,UML,1,,,,,,,MeasurementTrial,-result: double,
+15,Class,UML,1,,,,,,,User,"-username: String
+-email: String
+-subscriptions: Collection<int> //experiment ids
+-ownedExperiments: Collection<int>",
+16,Class,UML,1,,,,,,,Question,"-head: String
+-replies: Collection<String>",
+17,Class,UML,1,,,,,,,UserManager,-database: ??,"+search(username: String): User
++add(user: User)
+..."
+18,Class,UML,1,,,,,,,ExperimentManager,-database: ??,"add(experiement: Experiment)
+publish(exprimentID: int)
+find(id: int): Experiment
+newTrial(trial: Trial, experiementID: int)
+..."
+19,Class,UML,1,,,,,,,DATABASE,Carries all experiment and user information,
+20,Class,UML,1,,,,,,,Not Done ,"-QR/Barcode design
+-Database details
+-Activity navigation & UI details
+-histogram & plot
+-geolocation details
+",
+21,Line,,1,,,6,8,None,Generalization,,,
+22,Line,,1,,,6,9,None,Generalization,,,
+23,Line,,1,,,6,10,None,Generalization,,,
+24,Line,,1,,,6,5,None,Generalization,,,
+25,Line,,1,,,7,11,None,Generalization,,,
+26,Line,,1,,,7,12,None,Generalization,,,
+27,Line,,1,,,7,14,None,Generalization,,,
+28,Line,,1,,,7,12,None,Generalization,,,
+29,Line,,1,,,11,5,None,Aggregation,0..*,1,
+30,Line,,1,,,13,9,None,Aggregation,0..*,1,
+31,Line,,1,,,14,10,None,Aggregation,0..*,1,
+32,Line,,1,,,12,8,None,Aggregation,1,0..*,
+33,Line,,1,,,16,6,None,Aggregation,,,
+34,Line,,1,,,15,6,None,Aggregation,1,1,
+35,Line,,1,,,6,15,None,Aggregation,0..*,0..*,
+36,Line,,1,,,18,19,None,Open Arrow,Request/update,,
+37,Line,,1,,,17,19,None,Open Arrow,Request/update ,,
+38,Line,,1,,,18,6,None,Open Arrow,Add/Remove/Update,,
+39,Line,,1,,,17,15,None,Open Arrow,Add/Remove/Update,,
