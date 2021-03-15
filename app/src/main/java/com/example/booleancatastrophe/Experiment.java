@@ -2,15 +2,15 @@ package com.example.booleancatastrophe;
 
 public class Experiment {
 
-    String id;
-    String region;
-    String description;
-    String owner;
-    String type;
+    private String id;
+    private String region;
+    private String description;
+    private String owner;
+    private String type;
 
     public Experiment() {}
 
-    public Experiment(String region, String description, String owner, String type){
+    public Experiment(String description, String region, String owner, String type){
         id = ""; //id will be determined by the database
         this.region = region;
         this.description = description;
@@ -18,28 +18,44 @@ public class Experiment {
         this.type = type;
 
     }
-    String getId(){
+    public String getId(){
         return id;
     }
 
-    String getRegion(){
+    public String getRegion(){
         return region;
     }
 
-    String getDescription(){
+    public String getDescription(){
         return description;
     }
 
-    String getOwner(){
+    public String getOwner(){
         return owner;
     }
 
-    String getType(){
+    public String getType(){
         return type;
     }
 
-    void setId(String id){
+    public void setId(String id){
         this.id = id;
+    }
+
+    public void setRegion(String region){
+        this.region = region;
+    }
+
+    public void setDescription(String description){
+        this.description = description;
+    }
+
+    public void setOwner(String owner){
+        this.owner = owner;
+    }
+
+    public void setType(String type){
+        this.type = type;
     }
 
 }
