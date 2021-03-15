@@ -16,7 +16,7 @@ public class ExperimentManager {
     void addExperiment(Experiment exp){
         //make new document
         DocumentReference newRef = db.collection("experiments").document();
-        //set the experiment id for later refrence
+        //set the experiment id for later reference
         exp.setId(newRef.getId());
         //add object to the database
         newRef.set(exp);
@@ -25,7 +25,8 @@ public class ExperimentManager {
 
     }
 
-    void addTrial(int e_id, Trial trial){
-
+    void addTrial(String e_id, Trial trial){
+        DocumentReference newRef = db.collection("experiments").document(e_id)
+                .collection("trials").document()
     }
 }
