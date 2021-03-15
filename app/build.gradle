@@ -44,5 +44,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics'
     // Declare the dependency for the Cloud Firestore library
     implementation 'com.google.firebase:firebase-firestore'
+	implementation 'com.firebase:firebase-client-android:2.5.0'
+
 
 }
