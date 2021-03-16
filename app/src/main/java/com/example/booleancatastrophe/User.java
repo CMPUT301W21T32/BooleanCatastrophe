@@ -3,7 +3,7 @@ package com.example.booleancatastrophe;
 import java.util.Collection;
 
 // TODO better error checking in the username and email setters - possibly the owned experiments too
-// TODO set the constructor function and get id based on firebase app installation id - figure out how that integration will work
+// TODO make sure integration works with UserManager and also figure out how setting email/username will work with the manager
 // TODO set up the myCodes functionality (figure out how that should work, if its just simple addition/removal or if more functionality is needed)
 
 /**
@@ -13,7 +13,7 @@ import java.util.Collection;
  **/
 
 public class User {
-    private String deviceID;
+    private int deviceID;
     private String username;
     private String email;
 
@@ -25,14 +25,26 @@ public class User {
     private static final int MAX_EMAIL_LENGTH = 25;
 
     /**
-     * Constructor setting up a new user which will be tied to a deviceID (need to check with the
-     * User Manager if this user already exists)
+     * Constructor setting up a new user which will be tied to a deviceID - this constructor will
+     * be called by UserManager and the ID will be generated and passed from there
+     * Username and email fields will initially be set up as blank strings until the user edits
+     * their profile later
+     * @param id
+     * The device/installation id tied to this user account
      **/
-    public User() {
-        // String id = FirebaseInstallations.getInstance().getID
-        // NEED TO WAIT TO SEE HOW THE FIREBASE IS SETUP AND POSSIBLY INCLUDE LOGIC TO AVOID
-        // DUPLICATES EITHER HERE OR IN THE MANAGER CLASS
+    public User(int id) {
         this.deviceID = id;
+        this.username = "";
+        this.email = "";
+    }
+
+    /**
+     * This is the getter for the User's id
+     * @return
+     * Returns the User's id
+     **/
+    public int getDeviceID() {
+        return deviceID;
     }
 
     /**
@@ -110,11 +122,38 @@ public class User {
     }
 
     /**
-     * This adds the experiment to the user's owned list
+     * This adds the experiment to the user's owned list - note that User's won't be able to un-own
+     * experiments once they have been started although they may be unpublished
      * @param experimentID
      * The experiment to add to this user's owned list
      **/
     public void addOwnedExperiment(int experimentID) {
         ownedExperiments.add(experimentID);
+    }
+
+    /**
+     * This adds the code to the user's account
+     * @param code
+     * The code to add to this user's saved codes collection
+     **/
+    public void addCode(String code) {
+        if(myCodes.contains(code)) {
+            throw new IllegalArgumentException("Cannot add as the user already has that code");
+        } else {
+            myCodes.add(code);
+        }
+    }
+
+    /**
+     * This removes the code from the user's account
+     * @param code
+     * The code to remove from this user's saved codes collection
+     **/
+    public void removeCode(String code) {
+        if(!myCodes.contains(code)) {
+            throw new IllegalArgumentException("Cannot remove as the user didn't have that code");
+        } else {
+            myCodes.remove(code);
+        }
     }
 }
