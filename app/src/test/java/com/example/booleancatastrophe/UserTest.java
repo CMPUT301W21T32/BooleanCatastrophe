@@ -8,6 +8,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class UserTest {
 
+    /**
+     * Set up a mock user with some default parameters for internal test use
+     **/
     private User mockUser(int id) {
         User user = new User(id);
         user.setEmail("mock@user.ca");
@@ -15,18 +18,35 @@ public class UserTest {
         return user;
     }
 
+    /**
+     * Test the new User object constructor defaults
+     **/
+    @Test
+    void testDefaultUser() {
+        User user = new User(0);
+        assertEquals(0, user.getDeviceID());
+        assertEquals("", user.getUsername());
+        assertEquals("", user.getEmail());
+    }
+
+    /**
+     * Test getting of user ids
+     **/
     @Test
     void testUserID() {
-        User user = mockUser(0);
-        assertEquals(0, user.getDeviceID());
+        User user1 = mockUser(1);
+        assertEquals(1, user1.getDeviceID());
 
         User user2 = mockUser(420);
         assertEquals(420, user2.getDeviceID());
     }
 
+    /**
+     * Test getting and setting of user emails
+     **/
     @Test
     void testUserEmail() {
-        User user = mockUser(1);
+        User user = mockUser(2);
         assertEquals("mock@user.ca", user.getEmail());
 
         user.setEmail("test@changed.com");
@@ -37,9 +57,12 @@ public class UserTest {
         });
     }
 
+    /**
+     * Test getting and setting of user usernames
+     **/
     @Test
     void testUserUsername() {
-        User user = mockUser(2);
+        User user = mockUser(3);
         assertEquals("Mr. Mock User", user.getUsername());
 
         user.setUsername("Bob");
@@ -50,8 +73,10 @@ public class UserTest {
         });
     }
 
-    @Test
-    void testAddSubscriptions() {
-        User user = mockUser(3);
-    }
+
+
+//    @Test
+//    void testAddSubscriptions() {
+//        User user = mockUser(4);
+//    }
 }
