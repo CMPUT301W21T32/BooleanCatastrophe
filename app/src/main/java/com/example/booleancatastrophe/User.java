@@ -25,6 +25,20 @@ public class User {
     private static final int MAX_EMAIL_LENGTH = 25;
 
     /**
+     * This returns the maximum allowed username character limit length
+     **/
+    public static int getMaxUsernameLength() {
+        return MAX_USERNAME_LENGTH;
+    }
+
+    /**
+     * This returns the maximum allowed email character limit length
+     **/
+    public static int getMaxEmailLength() {
+        return MAX_EMAIL_LENGTH;
+    }
+
+    /**
      * Constructor setting up a new user which will be tied to a deviceID - this constructor will
      * be called by UserManager and the ID will be generated and passed from there
      * Username and email fields will initially be set up as blank strings until the user edits
