@@ -33,8 +33,6 @@ public class ForumPost {
 
     /**
      * The constructor that is used by both questions and replies in the forum
-     * @param datePosted
-     * The date that the question/reply was posted (not modifiable)
      * @param poster
      * The user that posted the question/reply (not modifiable, hidden if user was deleted or chose
      * to delete this message)
@@ -42,7 +40,7 @@ public class ForumPost {
      * The content of the question/reply, can be modified
      **/
     public ForumPost(User poster, String content) {
-        datePosted = LocalDateTime.now();
+        //datePosted = LocalDateTime.now();
         this.poster = poster;
         this.content = content;
     }
@@ -104,8 +102,9 @@ public class ForumPost {
      * The date formatted into a string format
      **/
     public String getDatePosted() {
-        String strDate = datePosted.format(DateTimeFormatter.RFC_1123_DATE_TIME);
-        return strDate;
+        //String strDate = datePosted.format(DateTimeFormatter.RFC_1123_DATE_TIME);
+        //return strDate;
+        return "temp";
     }
 
     /**

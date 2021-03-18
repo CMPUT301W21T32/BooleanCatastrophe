@@ -5,4 +5,6 @@
     <string name="top_app_bar_userprofile">User Profile</string>
     <string name="cd_top_app_bar_search">Top app bar button to search</string>
     <string name="cd_top_app_bar_userprofile">Top app bar button to access user profile</string>
+    <string name="top_app_bar_more">More</string>
+    <string name="cd_top_app_bar_more">More options menu button on the top app bar</string>
 </resources>
