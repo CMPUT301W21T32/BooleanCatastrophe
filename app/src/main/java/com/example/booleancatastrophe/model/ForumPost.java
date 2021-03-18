@@ -1,4 +1,4 @@
-package com.example.booleancatastrophe;
+package com.example.booleancatastrophe.model;
 
 
 import java.time.LocalDateTime;

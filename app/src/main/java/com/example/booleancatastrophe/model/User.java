@@ -1,6 +1,6 @@
-package com.example.booleancatastrophe;
+package com.example.booleancatastrophe.model;
 
-import java.util.Collection;
+import java.util.ArrayList;
 
 // TODO better error checking in the username and email setters - possibly the owned experiments too
 // TODO make sure integration works with UserManager and also figure out how setting email/username will work with the manager
@@ -13,43 +13,34 @@ import java.util.Collection;
  **/
 
 public class User {
-    private int deviceID;
+    private String accountID; //changed from device ID
     private String username;
     private String email;
 
-    Collection<Integer> subscriptions;
-    Collection<Integer> ownedExperiments;
-    Collection<String> myCodes;
+    private ArrayList<String> subscriptions;
+    private ArrayList<String> ownedExperiments;
+    private ArrayList<String> myCodes;
 
     private static final int MAX_USERNAME_LENGTH = 40;
     private static final int MAX_EMAIL_LENGTH = 25;
 
-    /**
-     * This returns the maximum allowed username character limit length
-     **/
-    public static int getMaxUsernameLength() {
-        return MAX_USERNAME_LENGTH;
-    }
+    public User() {}
 
     /**
-     * This returns the maximum allowed email character limit length
-     **/
-    public static int getMaxEmailLength() {
-        return MAX_EMAIL_LENGTH;
-    }
-
-    /**
-     * Constructor setting up a new user which will be tied to a deviceID - this constructor will
+     * Constructor setting up a new user which will be tied to a firestore installation ID - this constructor will
      * be called by UserManager and the ID will be generated and passed from there
      * Username and email fields will initially be set up as blank strings until the user edits
      * their profile later
      * @param id
      * The device/installation id tied to this user account
      **/
-    public User(int id) {
-        this.deviceID = id;
-        this.username = "";
+    public User(String id) {
+        this.accountID = id;
         this.email = "";
+        this.username = "";
+        subscriptions = new ArrayList<String>();
+        ownedExperiments = new ArrayList<String>();
+        myCodes = new ArrayList<String>();
     }
 
     /**
@@ -57,8 +48,8 @@ public class User {
      * @return
      * Returns the User's id
      **/
-    public int getDeviceID() {
-        return deviceID;
+    public String getAccountID() {
+        return accountID;
     }
 
     /**
@@ -77,6 +68,19 @@ public class User {
      **/
     public String getEmail() {
         return email;
+    }
+
+
+    public ArrayList<String> getSubscriptions(){
+        return subscriptions;
+    }
+
+    public ArrayList<String> getOwnedExperiments(){
+        return ownedExperiments;
+    }
+
+    public ArrayList<String> getMyCodes() {
+        return myCodes;
     }
 
     /**
@@ -101,7 +105,7 @@ public class User {
      **/
     public void setUsername(String username) {
         if(username.length() > MAX_USERNAME_LENGTH) {
-            throw new IllegalArgumentException("Username exceeds the maximum allowed length");
+           throw new IllegalArgumentException("Username exceeds the maximum allowed length");
         } else {
             this.username = username;
         }
@@ -112,7 +116,7 @@ public class User {
      * @param experimentID
      * The experiment to add to this user's subscription list
      **/
-    public void addSubscription(int experimentID) {
+    public void addSubscription(String experimentID) {
         if(subscriptions.contains(experimentID)) {
             throw new IllegalArgumentException("Cannot add as the user is already " +
                     "subscribed to that experiment");
@@ -126,7 +130,7 @@ public class User {
      * @param experimentID
      * The experiment to remove from this user's subscription list
      **/
-    public void removeSubscription(int experimentID) {
+    public void removeSubscription(String experimentID) {
         if(!subscriptions.contains(experimentID)) {
             throw new IllegalArgumentException("Cannot remove as the user wasn't subscribed" +
                     "to that experiment");
@@ -141,7 +145,7 @@ public class User {
      * @param experimentID
      * The experiment to add to this user's owned list
      **/
-    public void addOwnedExperiment(int experimentID) {
+    public void addOwnedExperiment(String experimentID) {
         ownedExperiments.add(experimentID);
     }
 
