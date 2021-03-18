@@ -70,6 +70,8 @@ public class ExperimentManager {
      * @param eId the id of the experiment
      * @param trial the trial object that will be added
      **/
+    //TODO: automatically subscribe the user after submitting a trial
+
     public void addTrial(String eId, Trial trial){
 
        experimentRef.document(eId).collection("trials")
@@ -127,6 +129,9 @@ public class ExperimentManager {
                     }
                 });
     }
+
+    //function to end the given experiment
+    public void end(String eID) {};
 
     /**
      * function to get a list of experiment objects from the database, with an option of returning
