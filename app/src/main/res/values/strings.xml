@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">BooleanCatastrophe</string>
+    <string name="top_app_bar_title">Boolean Catastrophe</string>
+    <string name="top_app_bar_search">Search</string>
+    <string name="top_app_bar_userprofile">User Profile</string>
+    <string name="cd_top_app_bar_search">Top app bar button to search</string>
+    <string name="cd_top_app_bar_userprofile">Top app bar button to access user profile</string>
 </resources>

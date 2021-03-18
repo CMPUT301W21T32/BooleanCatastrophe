@@ -1,0 +1,17 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24"
+    android:tint="?attr/colorControlNormal"
+    android:alpha="0.6">
+  <path
+      android:fillColor="#FF000000"
+      android:pathData="M6,7h5a1,1 0,1 1,0 2L6,9a1,1 0,1 1,0 -2zM13,15h5a1,1 0,0 1,0 2L13,17a1,1 0,1 1,0 -2zM6,11h12a1,1 0,0 1,0 2L6,13a1,1 0,1 1,0 -2z"/>
+</vector>
+
+    <!-- NOTE: changed the tint as per
+    https://material.io/components/app-bars-top/android#regular-top-app-bar
+    and removed this:
+    android:tint="#333333"
+    -->
