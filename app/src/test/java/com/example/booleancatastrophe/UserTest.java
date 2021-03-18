@@ -1,4 +1,5 @@
 package com.example.booleancatastrophe;
+import com.example.booleancatastrophe.model.User;
 
 import org.junit.jupiter.api.Test;
 
@@ -11,7 +12,7 @@ public class UserTest {
     /**
      * Set up a mock user with some default parameters for internal test use
      **/
-    private User mockUser(int id) {
+    private User mockUser(String id) {
         User user = new User(id);
         user.setEmail("mock@user.ca");
         user.setUsername("Mr. Mock User");
@@ -23,8 +24,8 @@ public class UserTest {
      **/
     @Test
     void testDefaultUser() {
-        User user = new User(0);
-        assertEquals(0, user.getDeviceID());
+        User user = new User("0");
+        assertEquals("0", user.getAccountID());
         assertEquals("", user.getUsername());
         assertEquals("", user.getEmail());
     }
@@ -34,11 +35,11 @@ public class UserTest {
      **/
     @Test
     void testUserID() {
-        User user1 = mockUser(1);
-        assertEquals(1, user1.getDeviceID());
+        User user1 = mockUser("1");
+        assertEquals("1", user1.getAccountID());
 
-        User user2 = mockUser(420);
-        assertEquals(420, user2.getDeviceID());
+        User user2 = mockUser("420");
+        assertEquals("420", user2.getAccountID());
     }
 
     /**
@@ -46,7 +47,7 @@ public class UserTest {
      **/
     @Test
     void testUserEmail() {
-        User user = mockUser(2);
+        User user = mockUser("2");
         assertEquals("mock@user.ca", user.getEmail());
 
         user.setEmail("test@changed.com");
@@ -62,7 +63,7 @@ public class UserTest {
      **/
     @Test
     void testUserUsername() {
-        User user = mockUser(3);
+        User user = mockUser("3");
         assertEquals("Mr. Mock User", user.getUsername());
 
         user.setUsername("Bob");
