@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 /**
  * This is a class that represents an application user
- * @see UserManager as this class works closely with it to keep one user per device, persistent
+ * @ see UserManager as this class works closely with it to keep one user per device, persistent
  * data, no duplicates, etc.
  **/
 
