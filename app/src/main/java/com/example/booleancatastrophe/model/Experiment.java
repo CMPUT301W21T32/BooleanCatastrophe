@@ -1,4 +1,4 @@
-package com.example.booleancatastrophe;
+package com.example.booleancatastrophe.model;
 
 // Class that holds all information about a given experiment, should follow an simple POJO structure
 // for easy database usage

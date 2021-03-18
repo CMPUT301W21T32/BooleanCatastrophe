@@ -1,7 +1,8 @@
-package com.example.booleancatastrophe;
+package com.example.booleancatastrophe.interfaces;
+
+import com.example.booleancatastrophe.model.Experiment;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public interface FirestoreExperimentListCallback {
     void OnCallBack(ArrayList<Experiment> list);

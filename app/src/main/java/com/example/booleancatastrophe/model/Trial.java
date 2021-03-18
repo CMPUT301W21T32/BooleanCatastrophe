@@ -1,12 +1,13 @@
-package com.example.booleancatastrophe;
+package com.example.booleancatastrophe.model;
 
+import com.example.booleancatastrophe.model.ExperimentType;
 import com.google.firebase.firestore.GeoPoint;
 
 // Class to hold all information about a trial
 public class Trial {
 
     private String experimenter;
-    private double result;   //to make the class serializable and deserializable we use a double for all results
+    private double result;   //to make the class easily serializable and deserializable we use a double for all results
     private GeoPoint location;
     private ExperimentType type;
 
@@ -31,7 +32,7 @@ public class Trial {
         Number temp = 0;
         switch (type){
             case COUNT:
-                temp = (int) result;
+                temp = 1;
                 break;
             case BINOMIAL:     //map 0 to a failure and anything else to a success
                 if(result == 0){

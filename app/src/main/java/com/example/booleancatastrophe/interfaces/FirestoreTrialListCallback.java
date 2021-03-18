@@ -1,4 +1,6 @@
-package com.example.booleancatastrophe;
+package com.example.booleancatastrophe.interfaces;
+
+import com.example.booleancatastrophe.model.Trial;
 
 import java.util.ArrayList;
 

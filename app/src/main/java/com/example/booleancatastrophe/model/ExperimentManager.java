@@ -1,9 +1,12 @@
-package com.example.booleancatastrophe;
+package com.example.booleancatastrophe.model;
 
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.booleancatastrophe.interfaces.FirestoreExperimentCallback;
+import com.example.booleancatastrophe.interfaces.FirestoreExperimentListCallback;
+import com.example.booleancatastrophe.interfaces.FirestoreTrialListCallback;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -11,6 +14,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -28,9 +32,10 @@ public class ExperimentManager {
     /**
      * function to add an experiment to the database
      * the experiment id will be determined by firestore
+     * and the experiment will also be added to the users "ownedExperiments"
      * @param exp the experiment object to be added
      **/
-    void addExperiment(Experiment exp){
+    public void addExperiment(Experiment exp){
         //make new document
         DocumentReference newRef = db.collection("experiments").document();
         //set the experiment id for later reference
@@ -41,6 +46,13 @@ public class ExperimentManager {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "Successfully added experiment");
+                        // On success add the experiment ID to the owners "ownedExperiments"
+                        db.collection("users").document(exp.getOwner())
+                                .update("owned",  FieldValue.arrayUnion(exp.getId()));
+
+
+
+
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -49,6 +61,7 @@ public class ExperimentManager {
                         Log.d(TAG, "Couldn't add experiment");
                     }
                 });
+
     }
 
 
@@ -57,7 +70,7 @@ public class ExperimentManager {
      * @param eId the id of the experiment
      * @param trial the trial object that will be added
      **/
-    void addTrial(String eId, Trial trial){
+    public void addTrial(String eId, Trial trial){
 
        experimentRef.document(eId).collection("trials")
                .add(trial).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -80,7 +93,7 @@ public class ExperimentManager {
      * activity should confirm that current_user == owner before allowing publishing
      * @param eId the id of the experiment
      **/
-    void publish(String eId){
+    public void publish(String eId){
         experimentRef.document(eId).update("published", true).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
@@ -96,13 +109,33 @@ public class ExperimentManager {
     }
 
     /**
+     * unpublish the given experiement
+     * activity should confirm that current_user == owner before allowing publishing/unpublishing
+     * @param eId the id of the experiment
+     **/
+    public void unpublish(String eId){
+        experimentRef.document(eId).update("published", false).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d(TAG, "Experiment has been unpublished");
+            }
+        })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Experiemnt failed to be unpublished");
+                    }
+                });
+    }
+
+    /**
      * function to get a list of experiment objects from the database, with an option of returning
      * only published experiments
      * Due to the Asynchronous behaviour it it nessecary to use a callback function, which is called
      * after a successful read
      *
      * @param experimentIDs a list of experiments to get
-     * @param onlyPublished if true only published experiments will be returned
+     * @param firestoreCallback defines the function that is called when the read is completed 
      * @return the list of experiments, accessible through the callback function
      *
      * EXAMPLE USAGE
@@ -115,63 +148,50 @@ public class ExperimentManager {
      *             }
      *         });
      **/
-    void getExperimentList(ArrayList<String> experimentIDs, Boolean onlyPublished, FirestoreExperimentListCallback firestoreCallback) {
+    public void getExperimentList(ArrayList<String> experimentIDs, FirestoreExperimentListCallback firestoreCallback) {
         ArrayList<Experiment> experimentList = new ArrayList<Experiment>();
-        if (onlyPublished) {
-            experimentRef.whereEqualTo("published", true)
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if (task.isSuccessful()) {
-                                for (QueryDocumentSnapshot document : task.getResult()) {
+        experimentRef
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                if(experimentIDs.contains( ((Experiment) document.toObject(Experiment.class)).getId())){
                                     experimentList.add((Experiment) document.toObject(Experiment.class));
                                 }
-                                firestoreCallback.OnCallBack(experimentList);
+                            }
+                            firestoreCallback.OnCallBack(experimentList);
 
-                            } else {
-                                Log.d(TAG, "Failure getting experiments");
-                            }
+                        } else {
+                            Log.d(TAG, "Failure getting experiments");
                         }
-                    });
-        } else {
-            experimentRef
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if (task.isSuccessful()) {
-                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                    experimentList.add((Experiment) document.toObject(Experiment.class));
-                                }
-                                firestoreCallback.OnCallBack(experimentList);
-                            } else {
-                                Log.d(TAG, "Failure getting experiments");
-                            }
-                        }
-                    });
-        }
+                    }
+                });
+
     }
 
 
 
+
     /**
-     * function to get a list of experiment objects from the database, with an option of returning
-     * only published experiments
+     * function to get a single experiment object from the database
+     *
      * Due to the Asynchronous behaviour it it nessecary to use a callback function
      *
      * @param eId the id of the experiment
-     * @return the experiment, accessible through the callback function -> list.get(0)
+     * @param firestoreCallback defines the function that is called when the read is completed
+     * @return the experiment, accessible through the callback function
      *
      * EXAMPLE USAGE
-     *         eManager.getExperiment(experiment.getId(), new FirestoreCallback() {
+     *         eManager.getExperiment(experiment.getId(), new FirestoreExperimentCallback() {
      *             @Override
-     *             public void OnCallBack(ArrayList<Experiment> list) {
-     *                    Log.d(TAG, list.get(0).getDescription() );
+     *             public void OnCallBack(Experiment exp) {
+     *                    Log.d(TAG, exp.getDescription() );
      *             }
      *         });
      **/
-    void getExperiment(String eId, FirestoreExperimentCallback firestoreCallback){
+    public void getExperiment(String eId, FirestoreExperimentCallback firestoreCallback){
         experimentRef.document(eId)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -193,7 +213,25 @@ public class ExperimentManager {
                 });
     }
 
-    void getTrials(String eId, FirestoreTrialListCallback firestoreCallback){
+
+    /**
+     * function to get a list of trials that belong to the given experiment
+     *
+     * Due to the Asynchronous behaviour it it nessecary to use a callback function
+     *
+     * @param eId the id of the experiment
+     * @param firestoreCallback defines the function that is called when the read is completed
+     * @return the experiment, accessible through the callback function
+     *
+     * EXAMPLE USAGE
+     *         eManager.getExperiment(experiment.getId(), new FirestoreExperimentCallback() {
+     *             @Override
+     *             public void OnCallBack(Experiment exp) {
+     *                    Log.d(TAG, exp.getDescription() );
+     *             }
+     *         });
+     **/
+    public void getTrials(String eId, FirestoreTrialListCallback firestoreCallback){
         ArrayList<Trial> trials = new ArrayList<>();
         experimentRef
                 .document(eId)
@@ -213,6 +251,9 @@ public class ExperimentManager {
                     }
                 });
     }
+
+
+    //void search(String token){ }
 
 
 
