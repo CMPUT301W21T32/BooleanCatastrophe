@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.example.booleancatastrophe.storage.FirestoreCallback;
+import com.example.booleancatastrophe.storage.Database;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -25,9 +26,8 @@ import java.util.ArrayList;
 public class ExperimentManager {
 
     private static final String TAG = "Experiment Manager";
-    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final FirebaseFirestore db = Database.getInstance();
     private final CollectionReference experimentRef = db.collection("experiments");
-
 
     /**
      * function to add an experiment to the database

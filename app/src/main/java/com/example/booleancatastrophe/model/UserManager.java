@@ -4,6 +4,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.booleancatastrophe.storage.Database;
 import com.example.booleancatastrophe.storage.FirestoreCallback;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -18,7 +19,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class UserManager {
 
     private static final String TAG = "User Manager";
-    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final FirebaseFirestore db = Database.getInstance();
     private final CollectionReference usersRef = db.collection("users");
     public static User currentUser;
 
