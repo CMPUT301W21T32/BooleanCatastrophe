@@ -4,10 +4,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.text.InputFilter;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.booleancatastrophe.interfaces.FirestoreCallback;
 import com.example.booleancatastrophe.model.User;
 import com.example.booleancatastrophe.model.UserManager;
 
@@ -15,10 +17,12 @@ import com.example.booleancatastrophe.model.UserManager;
 
 public class UserProfileActivity extends AppCompatActivity {
 
+    private final static String TAG = "User Profile Activity";
+
     EditText etUsername;
     EditText etEmail;
     Button btnSave;
-    UserManager userManager;
+    UserManager userManager = new UserManager();
     User user;
 
     @Override
@@ -26,7 +30,13 @@ public class UserProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
 
-        user = UserManager.currentUser;
+        user = ((ExperimentApplication) this.getApplication()).getCurrentUser();
+        if(user == null){
+            finish();
+        }
+        else{
+            Log.d(TAG, "user is not null");
+        }
         etUsername = (EditText) findViewById(R.id.et_user_name);
         etEmail = (EditText) findViewById(R.id.et_user_email);
         btnSave = (Button) findViewById(R.id.btn_save_profile);
@@ -44,8 +54,19 @@ public class UserProfileActivity extends AppCompatActivity {
         /* Save Profile button onclick listener; update the user's username and email and
         * return to the MainActivity (for now) */
         btnSave.setOnClickListener(v -> {
-            userManager.setUsername(user.getUsername(), etUsername.getText().toString());
-            userManager.setEmail(user.getUsername(), etEmail.getText().toString());
+            userManager.setUsername(user.getAccountID(), etUsername.getText().toString(), new FirestoreCallback() {
+                @Override
+                public void OnCallBack() {
+                    //Update the global user on successful call back
+                    ((ExperimentApplication) getApplication()).setCurrentUsername(etUsername.getText().toString());
+                }
+            });
+            userManager.setEmail(user.getAccountID(), etEmail.getText().toString(), new FirestoreCallback() {
+                @Override
+                public void OnCallBack() {
+                    ((ExperimentApplication) getApplication()).setCurrentUserEmail(etEmail.getText().toString());
+                }
+            });
             finish();
         });
     }

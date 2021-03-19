@@ -1,9 +1,12 @@
 package com.example.booleancatastrophe.model;
 
+import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.booleancatastrophe.ExperimentApplication;
+import com.example.booleancatastrophe.interfaces.FirestoreCallback;
 import com.example.booleancatastrophe.interfaces.FirestoreUserCallback;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -19,8 +22,6 @@ public class UserManager {
     private static final String TAG = "User Manager";
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference usersRef = db.collection("users");
-    public static User currentUser;
-
 
     /**
      * add a user to the data base, call the first time a user opens the app
@@ -40,7 +41,6 @@ public class UserManager {
                         Log.d(TAG, "Couldn't add user " + u.getAccountID());
                     }
                 });
-
     }
 
     /**
@@ -75,12 +75,14 @@ public class UserManager {
      * @param accountID the id of the user
      * @param email the new value of email
      **/
-    public void setEmail(String accountID, String email){
+    public void setEmail(String accountID, String email, FirestoreCallback firestoreCallback){
         usersRef.document(accountID).update("email", email)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "Email has been changed");
+                        //currentUser.setEmail(email);
+                        firestoreCallback.OnCallBack();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -96,12 +98,15 @@ public class UserManager {
      * @param accountID the id of the user
      * @param username the new value of username
      **/
-    public void setUsername(String accountID, String username){
+    public void setUsername(String accountID, String username, FirestoreCallback firestoreCallback){
         usersRef.document(accountID).update("username", username)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "Username has been changed");
+                        //currentUser.setUsername(username);
+                        firestoreCallback.OnCallBack();
+                        
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
