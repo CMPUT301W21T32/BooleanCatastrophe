@@ -32,13 +32,11 @@ public class MainActivity extends AppCompatActivity {
         topAppToolbar = (Toolbar) findViewById(R.id.top_app_toolbar);
         setSupportActionBar(topAppToolbar);    // display the toolbar
 //      topAppActionbar = getSupportActionBar();    // Specific actions on the toolbar
-
         /* Listener for clicking on the navigation (far left) menu-style button */
         topAppToolbar.setNavigationOnClickListener(v -> {
             // handle navigation icon (far left) click
             topAppToolbar.setTitle("NAV PRESS");
         });
-
         /* Listener for clicking on the various action buttons set up on the toolbar */
         topAppToolbar.setOnMenuItemClickListener(item -> {
             int id = item.getItemId();
@@ -56,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        /* Set up the tabs and detect when different ones are selected */
         tabOptions = (TabLayout) findViewById(R.id.tabs);
         tabOptions.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -71,6 +70,8 @@ public class MainActivity extends AppCompatActivity {
                     topAppToolbar.setTitle("ACTIVE TAB");
                 } else if(id == 4) {
                     topAppToolbar.setTitle("ENDED TAB");
+                } else {
+                    // default case - should always be home?
                 }
             }
 
