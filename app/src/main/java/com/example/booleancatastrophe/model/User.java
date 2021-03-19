@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 /**
  * This is a class that represents an application user
- * @ see UserManager as this class works closely with it to keep one user per device, persistent
+ * @see UserManager as this class works closely with it to keep one user per device, persistent
  * data, no duplicates, etc.
  **/
 
@@ -21,8 +21,8 @@ public class User {
     private ArrayList<String> ownedExperiments;
     private ArrayList<String> myCodes;
 
-    private static final int MAX_USERNAME_LENGTH = 40;
-    private static final int MAX_EMAIL_LENGTH = 25;
+    public static final int MAX_USERNAME_LENGTH = 40;
+    public static final int MAX_EMAIL_LENGTH = 25;
 
     public User() {}
 

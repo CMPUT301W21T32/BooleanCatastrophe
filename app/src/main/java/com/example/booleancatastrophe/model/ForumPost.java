@@ -20,16 +20,7 @@ public class ForumPost {
     private boolean edited = false;
     private boolean deleted = false;
 
-    private static final int MAX_FORUM_POST_LENGTH = 500;
-    /**
-     * Static function to access the maximum number of characters that a user can enter in any forum
-     * question or reply - note that edited posts may have more due to the added " - [edited]" tag
-     * @return MAX_FORUM_POST_LENGTH
-     * Maximum number of characters in any forum question or reply
-     **/
-    public static int getMaxForumPostLength() {
-        return MAX_FORUM_POST_LENGTH;
-    }
+    public static final int MAX_FORUM_POST_LENGTH = 500;
 
     /**
      * The constructor that is used by both questions and replies in the forum
