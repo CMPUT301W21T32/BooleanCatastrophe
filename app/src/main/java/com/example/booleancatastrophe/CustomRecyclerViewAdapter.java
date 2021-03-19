@@ -1,40 +1,48 @@
 package com.example.booleancatastrophe;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.booleancatastrophe.model.Experiment;
 
-import java.util.ArrayList;
+import java.util.List;
 
+public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecyclerViewAdapter.MyViewHolder> {
 
-public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecyclerViewAdapter.CustomViewHolder> {
+    Context context;
+    List<Experiment> experiments;
 
-    ArrayList<Experiment> experiments;
-
-    public CustomRecyclerViewAdapter(ArrayList<Experiment> experiments) {
+    public CustomRecyclerViewAdapter(Context context, List<Experiment> experiments) {
+        this.context = context;
         this.experiments = experiments;
     }
 
     @Override
-    public CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_item, null);
-        return new CustomViewHolder(itemView);
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view;
+        view = LayoutInflater.from(context).inflate(R.layout.experiment_as_list_item, parent,
+                false);
+        MyViewHolder viewHolder = new MyViewHolder(view);
+
+        return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(CustomViewHolder holder, final int position) {
-        holder.experimentTitle.setText(experiments.get(position).getDescription());
-        //holder.experimentImage.setImageResource(R.drawable.ic_ ... );
-        // TODO ADD ICONS, BUTTONS, FUNCTIONALITY FOR EACH ITEM
+    public void onBindViewHolder(MyViewHolder holder, int position) {
 
-        holder.itemView.setOnClickListener((View.OnClickListener) v -> {
-            System.out.println(experiments.get(position));
-        });
+        holder.tvExperimentItemOwner.setText(experiments.get(position).getDescription());
+        holder.tvExperimentItemOwner.setText(experiments.get(position).getOwner());
+        // TODO use the icon as some kind of data indicator or allow users to set the picture, etc.
+        // do it in this kind of way somehow:
+//        holder.imgExperimentImage.setImageResource(experiments.get(position).getPhoto());
+
+
     }
 
     @Override
@@ -42,16 +50,21 @@ public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecycl
         return experiments.size();
     }
 
-    public class CustomViewHolder extends RecyclerView.ViewHolder {
-        TextView experimentTitle;
-        //ImageView experimentImage;
-        // TODO ADD ICONS, BUTTONS, FUNCTIONALITY FOR EACH ITEM
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
 
+        TextView tvExperimentItemDescription;
+        TextView tvExperimentItemOwner;
+        ImageView imgExperimentImage;
 
-        public CustomViewHolder(View itemView) {
+        public MyViewHolder(View itemView) {
             super(itemView);
-            experimentTitle = (TextView) itemView.findViewById(
+
+            tvExperimentItemDescription = (TextView) itemView.findViewById(
                     R.id.tv_experiment_item_description);
+            tvExperimentItemOwner = (TextView) itemView.findViewById(
+                    R.id.tv_experiment_item_owner);
+            imgExperimentImage = (ImageView) itemView.findViewById(
+                    R.id.img_experiment_item);
         }
     }
 }

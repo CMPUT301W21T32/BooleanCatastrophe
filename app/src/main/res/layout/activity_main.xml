@@ -34,6 +34,7 @@ Use this for further tab implementation help -->
             android:contentDescription="@string/cd_tabs"
             app:tabMode="scrollable">
 
+<!-- MY HARDCODED TABS ARE NO LONGER USED; KEEPING CODE HERE UNTIL SURE THE NEW VERSION WORKS -->
 <!--            <com.google.android.material.tabs.TabItem-->
 <!--                android:id="@+id/tab_home"-->
 <!--                android:layout_width="wrap_content"-->
@@ -71,10 +72,12 @@ Use this for further tab implementation help -->
         </com.google.android.material.tabs.TabLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
+    <!--        TODO the value for the viewpager is currently hardcoded... may have to add a constraint layout but would prefer it was dynamic -->
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_marginTop="112dp"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btn_add_experiment"
