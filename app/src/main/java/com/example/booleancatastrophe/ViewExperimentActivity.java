@@ -10,6 +10,7 @@ import com.example.booleancatastrophe.model.Experiment;
 import com.example.booleancatastrophe.model.ExperimentManager;
 import com.example.booleancatastrophe.model.ExperimentType;
 import com.example.booleancatastrophe.model.Trial;
+import com.example.booleancatastrophe.model.User;
 import com.example.booleancatastrophe.model.UserManager;
 
 import java.util.ArrayList;
@@ -17,6 +18,8 @@ import java.util.ArrayList;
 public class ViewExperimentActivity extends AppCompatActivity {
 
     private Experiment currentExperiment;
+    private ArrayList<Trial> currentTrials;
+    private User user;
     private ExperimentManager eManager = new ExperimentManager();
     private UserManager userManager = new UserManager();
 
@@ -36,6 +39,7 @@ public class ViewExperimentActivity extends AppCompatActivity {
         eManager.getTrials("Test", new FirestoreTrialListCallback() {
             @Override
             public void OnCallBack(ArrayList<Trial> trials) {
+                currentTrials = trials;
                 String trialCount = ((Integer)trials.size()).toString();
                 String minTrials = ((Integer) currentExperiment.getMinTrials()).toString();
                 String display = trialCount + " / " + minTrials + " trials completed";
@@ -43,7 +47,9 @@ public class ViewExperimentActivity extends AppCompatActivity {
             }
         });
 
-        usernameText.setText(UserManager.currentUser.getUsername());
+        usernameText.setText( user.getUsername() );
+        descriptionText.setText( currentExperiment.getDescription() );
+        regionText.setText(currentExperiment.getRegion());
 
 
     }
