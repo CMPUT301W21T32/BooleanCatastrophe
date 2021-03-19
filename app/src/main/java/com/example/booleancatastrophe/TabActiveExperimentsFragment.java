@@ -132,6 +132,7 @@ public class TabActiveExperimentsFragment extends Fragment {
         e12.setOwner("A19 Owner");
         experiments.add(e19);*/
         /* See the ExperimentManager and UserManager classes to integrate */
+
         eManager.getPublishedExperiments(new FirestoreExperimentListCallback() { //this function is currently broken
             @Override
             public void OnCallBack(ArrayList<Experiment> list) {

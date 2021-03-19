@@ -85,6 +85,7 @@ public class TabOwnedExperimentsFragment extends Fragment {
         e6.setOwner("O6 Owner");
         experiments.add(e6);*/
         /* See the ExperimentManager and UserManager classes to integrate */
+
         String id = ((ExperimentApplication) this.getActivity().getApplication()).getAccountID();
         Log.d("Owned", id);
         uManager.getUser(id, new FirestoreUserCallback() {
