@@ -11,11 +11,9 @@
     <string name="lbl_user_name">Username:</string>
     <string name="lbl_user_email">Email:</string>
     <string name="btn_save_profile">Save Profile</string>
-<<<<<<< HEAD
     <string name="btn_new_trial">New Trial</string>
     <string name="lbl_result">Result: </string>
     <string name="trial_type">TYPE</string>
-=======
     <string name="lbl_tab_home">Home</string>
     <string name="lbl_tab_owned">Owned Experiments</string>
     <string name="lbl_tab_subscribed">Subscribed Experiments</string>
@@ -32,5 +30,4 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="cd_item_image">Images for experiments in recycler view list</string>
     <string name="TEMP">Multitude of user options will be coming here soon; some redundancies and shortcuts that can also be reached from other UI flows within the app</string>
->>>>>>> 8e5cad6eac69f8d8b2f2dfcf5b8cfe205c741b72
 </resources>
