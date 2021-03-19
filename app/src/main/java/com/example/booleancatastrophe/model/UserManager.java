@@ -106,7 +106,7 @@ public class UserManager {
                         Log.d(TAG, "Username has been changed");
                         //currentUser.setUsername(username);
                         firestoreCallback.OnCallBack();
-                        
+
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

@@ -57,7 +57,7 @@ public class UserProfileActivity extends AppCompatActivity {
             userManager.setUsername(user.getAccountID(), etUsername.getText().toString(), new FirestoreCallback() {
                 @Override
                 public void OnCallBack() {
-                    //Update the global user on successful call back
+                    //Update the global user on successful call back, ideally done in the manager but I couldn't get it working
                     ((ExperimentApplication) getApplication()).setCurrentUsername(etUsername.getText().toString());
                 }
             });
