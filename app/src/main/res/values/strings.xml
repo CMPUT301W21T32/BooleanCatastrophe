@@ -18,4 +18,7 @@
     <string name="cd_tab_subscribed_experiments">Tab for experiments the user is subscribed to</string>
     <string name="cd_tab_active_experiments">Tab for experiments that are open and can be participated in by the user</string>
     <string name="cd_tab_ended_experiments">Tab for experiments that have been ended</string>
+    <string name="btn_add_experiment">Floating button to add new experiment</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

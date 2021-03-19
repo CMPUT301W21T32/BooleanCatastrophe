@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -8,19 +8,15 @@
     tools:context=".MainActivity">
 
 <!--    https://material.io/components/app-bars-top
-Use this for further toolbar functionality implementation -->
+Use this for further toolbar functionality implementation
 
+https://material.io/components/tabs/android#using-tabs
+Use this for further tab implementation help -->
 
-    <!--            https://material.io/components/tabs/android#using-tabs
-    Use this for further tab implementation help -->
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/top_app_toolbar_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:liftOnScroll="true">
+        android:layout_height="wrap_content">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/top_app_toolbar"
@@ -31,62 +27,61 @@ Use this for further toolbar functionality implementation -->
             app:navigationIcon="@drawable/ic_top_app_bar_menu"
             app:title="@string/top_app_bar_title" />
 
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <com.google.android.material.tabs.TabLayout
+        <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/top_app_toolbar_layout"
             android:contentDescription="@string/cd_tabs"
-            app:tabContentStart="56dp"
             app:tabMode="scrollable">
 
-            <com.google.android.material.tabs.TabItem
-                android:id="@+id/tab_home"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/cd_tab_home"
-                android:text="@string/lbl_tab_home" />
+<!--            <com.google.android.material.tabs.TabItem-->
+<!--                android:id="@+id/tab_home"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:contentDescription="@string/cd_tab_home"-->
+<!--                android:text="@string/lbl_tab_home" />-->
 
-            <com.google.android.material.tabs.TabItem
-                android:id="@+id/tab_owned_experiments"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/cd_tab_owned_experiments"
-                android:text="@string/lbl_tab_owned" />
+<!--            <com.google.android.material.tabs.TabItem-->
+<!--                android:id="@+id/tab_owned_experiments"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:contentDescription="@string/cd_tab_owned_experiments"-->
+<!--                android:text="@string/lbl_tab_owned" />-->
 
-            <com.google.android.material.tabs.TabItem
-                android:id="@+id/tab_subscribed_experiments"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/cd_tab_subscribed_experiments"
-                android:text="@string/lbl_tab_subscribed" />
+<!--            <com.google.android.material.tabs.TabItem-->
+<!--                android:id="@+id/tab_subscribed_experiments"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:contentDescription="@string/cd_tab_subscribed_experiments"-->
+<!--                android:text="@string/lbl_tab_subscribed" />-->
 
-            <com.google.android.material.tabs.TabItem
-                android:id="@+id/tab_active_experiments"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/cd_tab_active_experiments"
-                android:text="@string/lbl_tab_active" />
+<!--            <com.google.android.material.tabs.TabItem-->
+<!--                android:id="@+id/tab_active_experiments"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:contentDescription="@string/cd_tab_active_experiments"-->
+<!--                android:text="@string/lbl_tab_active" />-->
 
-            <com.google.android.material.tabs.TabItem
-                android:id="@+id/tab_ended_experiments"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/cd_tab_ended_experiments"
-                android:text="@string/lbl_tab_ended" />
-
+<!--            <com.google.android.material.tabs.TabItem-->
+<!--                android:id="@+id/tab_ended_experiments"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:contentDescription="@string/cd_tab_ended_experiments"-->
+<!--                android:text="@string/lbl_tab_ended" />-->
         </com.google.android.material.tabs.TabLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
-    <!-- Note: A RecyclerView can also be used -->
     <androidx.viewpager.widget.ViewPager
-        android:id="@+id/container"
+        android:id="@+id/view_pager"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tabs" />
+        android:layout_height="match_parent" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btn_add_experiment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:src="@drawable/ic_add_experiment"
+        android:contentDescription="@string/btn_add_experiment"
+        android:layout_margin="20dp" />
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
