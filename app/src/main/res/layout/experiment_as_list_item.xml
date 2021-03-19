@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <ImageView
+        android:id="@+id/img_experiment_item"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_experiment"
+        android:contentDescription="@string/cd_item_image"/>
+    <TextView
+        android:id="@+id/tv_experiment_item_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:textAlignment="viewStart"
+        android:textSize="20sp" />
+    <TextView
+        android:id="@+id/tv_experiment_item_owner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:textAlignment="viewStart"
+        android:textSize="12sp" />
+
+</LinearLayout>

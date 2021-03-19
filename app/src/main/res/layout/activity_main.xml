@@ -7,35 +7,84 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+<!--    https://material.io/components/app-bars-top
+Use this for further toolbar functionality implementation
+
+https://material.io/components/tabs/android#using-tabs
+Use this for further tab implementation help -->
+
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/top_app_toolbar_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:liftOnScroll="true">
+        android:layout_height="wrap_content">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/top_app_toolbar"
+            style="@style/Widget.MaterialComponents.Toolbar.Primary"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title="@string/top_app_bar_title"
             app:menu="@menu/top_app_bar"
             app:navigationIcon="@drawable/ic_top_app_bar_menu"
-            style="@style/Widget.MaterialComponents.Toolbar.Primary"
-            />
+            app:title="@string/top_app_bar_title" />
 
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/cd_tabs"
+            app:tabMode="scrollable">
+
+<!-- MY HARDCODED TABS ARE NO LONGER USED; KEEPING CODE HERE UNTIL SURE THE NEW VERSION WORKS -->
+<!--            <com.google.android.material.tabs.TabItem-->
+<!--                android:id="@+id/tab_home"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:contentDescription="@string/cd_tab_home"-->
+<!--                android:text="@string/lbl_tab_home" />-->
+
+<!--            <com.google.android.material.tabs.TabItem-->
+<!--                android:id="@+id/tab_owned_experiments"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:contentDescription="@string/cd_tab_owned_experiments"-->
+<!--                android:text="@string/lbl_tab_owned" />-->
+
+<!--            <com.google.android.material.tabs.TabItem-->
+<!--                android:id="@+id/tab_subscribed_experiments"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:contentDescription="@string/cd_tab_subscribed_experiments"-->
+<!--                android:text="@string/lbl_tab_subscribed" />-->
+
+<!--            <com.google.android.material.tabs.TabItem-->
+<!--                android:id="@+id/tab_active_experiments"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:contentDescription="@string/cd_tab_active_experiments"-->
+<!--                android:text="@string/lbl_tab_active" />-->
+
+<!--            <com.google.android.material.tabs.TabItem-->
+<!--                android:id="@+id/tab_ended_experiments"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:contentDescription="@string/cd_tab_ended_experiments"-->
+<!--                android:text="@string/lbl_tab_ended" />-->
+        </com.google.android.material.tabs.TabLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <!-- Note: A RecyclerView can also be used -->
-    <androidx.core.widget.NestedScrollView
+    <!--        TODO the value for the viewpager is currently hardcoded... may have to add a constraint layout but would prefer it was dynamic -->
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:layout_marginTop="112dp"/>
 
-        <!-- Scrollable content -->
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.core.widget.NestedScrollView>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btn_add_experiment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:src="@drawable/ic_add_experiment"
+        android:contentDescription="@string/btn_add_experiment"
+        android:layout_margin="20dp" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
