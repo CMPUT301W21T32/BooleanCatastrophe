@@ -193,6 +193,7 @@ public class ExperimentManager {
      *             }
      *         });
      **/
+    //TODO fix function, query is not wokring properly
     public void getPublishedExperiments(FirestoreExperimentListCallback firestoreCallback){
         ArrayList<Experiment> experimentList = new ArrayList<Experiment>();
         experimentRef

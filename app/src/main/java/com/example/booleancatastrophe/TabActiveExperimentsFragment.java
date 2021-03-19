@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -131,10 +132,16 @@ public class TabActiveExperimentsFragment extends Fragment {
         e12.setOwner("A19 Owner");
         experiments.add(e19);*/
         /* See the ExperimentManager and UserManager classes to integrate */
-        eManager.getPublishedExperiments(new FirestoreExperimentListCallback() {
+        eManager.getPublishedExperiments(new FirestoreExperimentListCallback() { //this function is currently broken
             @Override
             public void OnCallBack(ArrayList<Experiment> list) {
                     experiments.addAll(list);
+                    if(!(list.isEmpty())){
+                        Log.d("Published", "Got list");
+                    }
+                    else{
+                        Log.d("Published", "No list :(");
+                    }
             }
         });
 

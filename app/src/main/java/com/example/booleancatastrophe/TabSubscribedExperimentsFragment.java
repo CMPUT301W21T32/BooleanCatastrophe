@@ -6,13 +6,17 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.booleancatastrophe.interfaces.FirestoreExperimentListCallback;
+import com.example.booleancatastrophe.interfaces.FirestoreUserCallback;
 import com.example.booleancatastrophe.model.Experiment;
 import com.example.booleancatastrophe.model.ExperimentManager;
+import com.example.booleancatastrophe.model.User;
+import com.example.booleancatastrophe.model.UserManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +30,7 @@ public class TabSubscribedExperimentsFragment extends Fragment {
     RecyclerView recyclerView;
     private List<Experiment> experiments;
     private ExperimentManager eManager = new ExperimentManager();
+    private UserManager uManager = new UserManager();
 
     public TabSubscribedExperimentsFragment() {
         // Required empty public constructor
@@ -64,11 +69,20 @@ public class TabSubscribedExperimentsFragment extends Fragment {
         experiments.add(e2);*/
 
         /* See the ExperimentManager and UserManager classes to integrate */
-        ArrayList<String> ids = ((ExperimentApplication) this.getActivity().getApplication()).getCurrentUser().getSubscriptions();
-        eManager.getExperimentList(ids, new FirestoreExperimentListCallback() {
+        String id = ((ExperimentApplication) this.getActivity().getApplication()).getAccountID();
+        Log.d("Subscribed", id);
+        uManager.getUser(id, new FirestoreUserCallback() {
             @Override
-            public void OnCallBack(ArrayList<Experiment> list) {
-                experiments.addAll(list);
+            public void OnCallBack(User user) {
+                eManager.getExperimentList(user.getSubscriptions(), new FirestoreExperimentListCallback() {
+                    @Override
+                    public void OnCallBack(ArrayList<Experiment> list) {
+                        experiments.addAll(list);
+                        if(!(list.isEmpty())){
+                            Log.d("Subscribed", "Got list");
+                        }
+                    }
+                });
             }
         });
 

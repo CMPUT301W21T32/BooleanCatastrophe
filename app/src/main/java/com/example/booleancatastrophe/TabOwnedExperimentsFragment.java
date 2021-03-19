@@ -6,14 +6,18 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.example.booleancatastrophe.interfaces.FirestoreExperimentListCallback;
+import com.example.booleancatastrophe.interfaces.FirestoreUserCallback;
 import com.example.booleancatastrophe.model.Experiment;
 import com.example.booleancatastrophe.model.ExperimentManager;
+import com.example.booleancatastrophe.model.User;
+import com.example.booleancatastrophe.model.UserManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +31,7 @@ public class TabOwnedExperimentsFragment extends Fragment {
     RecyclerView recyclerView;
     private List<Experiment> experiments;
     private ExperimentManager eManager = new ExperimentManager();
+    private UserManager uManager = new UserManager();
 
     public TabOwnedExperimentsFragment() {
         // Required empty public constructor
@@ -55,7 +60,7 @@ public class TabOwnedExperimentsFragment extends Fragment {
         /* This block is temporary and must be replaced with the code to actively get the required
         * experiments subcategory (often based on the current user) and query ExperimentManager to
         * get the updated list from the database */
-        Experiment e1 = new Experiment();
+/*        Experiment e1 = new Experiment();
         e1.setDescription("O1 Description");
         e1.setOwner("O1 Owner");
         experiments.add(e1);
@@ -78,14 +83,24 @@ public class TabOwnedExperimentsFragment extends Fragment {
         Experiment e6 = new Experiment();
         e6.setDescription("O6 Description");
         e6.setOwner("O6 Owner");
-        experiments.add(e6);
+        experiments.add(e6);*/
         /* See the ExperimentManager and UserManager classes to integrate */
-        ArrayList<String> ids = ((ExperimentApplication) this.getActivity().getApplication()).getCurrentUser().getOwnedExperiments();
-        eManager.getExperimentList(ids, new FirestoreExperimentListCallback() {
+        String id = ((ExperimentApplication) this.getActivity().getApplication()).getAccountID();
+        Log.d("Owned", id);
+        uManager.getUser(id, new FirestoreUserCallback() {
             @Override
-            public void OnCallBack(ArrayList<Experiment> list) {
-                experiments.addAll(list);
+            public void OnCallBack(User user) {
+                eManager.getExperimentList(user.getOwnedExperiments(), new FirestoreExperimentListCallback() {
+                    @Override
+                    public void OnCallBack(ArrayList<Experiment> list) {
+                        experiments.addAll(list);
+                        if(!(list.isEmpty())){
+                            Log.d("Owned", "Got list");
+                        }
+                    }
+                });
             }
         });
+
     }
 }
