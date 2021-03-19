@@ -193,7 +193,7 @@ public class ExperimentManager {
      *             }
      *         });
      **/
-    void getPublishedExperiments(FirestoreExperimentListCallback firestoreCallback){
+    public void getPublishedExperiments(FirestoreExperimentListCallback firestoreCallback){
         ArrayList<Experiment> experimentList = new ArrayList<Experiment>();
         experimentRef
                 .whereEqualTo("published", "true")
