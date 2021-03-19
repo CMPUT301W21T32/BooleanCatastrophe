@@ -25,6 +25,7 @@ import java.io.IOException;
 public class ExperimentApplication extends Application {
 
     private String accountID;
+    private User currentUser;
 
     public String getAccountID(){
         return accountID;
@@ -32,6 +33,20 @@ public class ExperimentApplication extends Application {
 
     public void  setAccountID(String accountID){
         this.accountID = accountID;
+    }
+
+    public User getCurrentUser(){ return currentUser;}
+
+    public void setCurrentUser(User user){
+        currentUser = user;
+    }
+
+    public void setCurrentUsername(String name){
+        currentUser.setUsername(name);
+    }
+
+    public void setCurrentUserEmail(String email){
+        currentUser.setEmail(email);
     }
 
     @Override
@@ -54,7 +69,7 @@ public class ExperimentApplication extends Application {
                 uManager.getUser(ID, new FirestoreUserCallback() {
                     @Override
                     public void OnCallBack(User user) {
-                        UserManager.currentUser = user;
+                        setCurrentUser(user);
                     }
                 });
                 Log.d("Experiment Application", "Found file and set global!");
@@ -77,13 +92,9 @@ public class ExperimentApplication extends Application {
                     Log.e("Experiment Application", "Writing ID file", e);
                 }
                 setAccountID(aID);
+
                 uManager.addUser(new User(aID));
-                uManager.getUser(aID, new FirestoreUserCallback() {
-                    @Override
-                    public void OnCallBack(User user) {
-                        UserManager.currentUser = user;
-                    }
-                });
+                setCurrentUser(new User(aID));
         }
 
 
@@ -101,8 +112,4 @@ public class ExperimentApplication extends Application {
                 Build.USER.length()%10 ;
         return(uID);
     }
-
-
-
-
 }
