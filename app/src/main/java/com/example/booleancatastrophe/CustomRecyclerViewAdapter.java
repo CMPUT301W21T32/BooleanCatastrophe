@@ -1,6 +1,8 @@
 package com.example.booleancatastrophe;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.booleancatastrophe.model.Experiment;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecyclerViewAdapter.MyViewHolder> {
@@ -30,7 +33,17 @@ public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecycl
                 false);
         MyViewHolder viewHolder = new MyViewHolder(view);
 
-        // TODO set up the onclick event listener for items here, see https://www.youtube.com/watch?v=Zd0TUuoPP-s for a helpful guide
+        /* Onclick listener that should send the selected experiment to be viewed in another activity*/
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int pos = viewHolder.getAdapterPosition();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("experiment", (Serializable) experiments.get(pos));
+                Intent intent = new Intent(context, ViewExperimentActivity.class);
+                intent.putExtras(bundle);
+            }
+        });
 
         return viewHolder;
     }
