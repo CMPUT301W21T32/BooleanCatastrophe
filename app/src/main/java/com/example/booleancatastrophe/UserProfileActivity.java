@@ -34,9 +34,6 @@ public class UserProfileActivity extends AppCompatActivity {
         if(user == null){
             finish();
         }
-        else{
-            Log.d(TAG, "user is not null");
-        }
         etUsername = (EditText) findViewById(R.id.et_user_name);
         etEmail = (EditText) findViewById(R.id.et_user_email);
         btnSave = (Button) findViewById(R.id.btn_save_profile);
