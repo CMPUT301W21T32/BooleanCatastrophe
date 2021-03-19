@@ -40,34 +40,52 @@ Use this for further toolbar functionality implementation -->
 <!--            https://material.io/components/tabs/android#using-tabs
 Use this for further tab implementation help -->
             <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="?actionBarSize"
                 app:tabMode="scrollable"
-                app:tabContentStart="56dp">
+                app:tabContentStart="56dp"
+                android:contentDescription="@string/cd_tabs">
 
                 <com.google.android.material.tabs.TabItem
+                    android:id="@+id/tab_home"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/lbl_tab_home"
+                    android:contentDescription="@string/cd_tab_home"
                     />
 
                 <com.google.android.material.tabs.TabItem
+                    android:id="@+id/tab_owned_experiments"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/lbl_tab_owned"
+                    android:contentDescription="@string/cd_tab_owned_experiments"
                     />
 
                 <com.google.android.material.tabs.TabItem
+                    android:id="@+id/tab_subscribed_experiments"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/lbl_tab_subscribed"
+                    android:contentDescription="@string/cd_tab_subscribed_experiments"
                     />
 
                 <com.google.android.material.tabs.TabItem
+                    android:id="@+id/tab_active_experiments"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/lbl_tab_active"
+                    android:contentDescription="@string/cd_tab_active_experiments"
+                    />
+
+                <com.google.android.material.tabs.TabItem
+                    android:id="@+id/tab_ended_experiments"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lbl_tab_ended"
+                    android:contentDescription="@string/cd_tab_ended_experiments"
                     />
 
             </com.google.android.material.tabs.TabLayout>

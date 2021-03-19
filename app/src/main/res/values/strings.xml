@@ -11,4 +11,11 @@
     <string name="lbl_tab_owned">Owned Experiments</string>
     <string name="lbl_tab_subscribed">Subscribed Experiments</string>
     <string name="lbl_tab_active">Active Experiments</string>
+    <string name="lbl_tab_ended">Ended Experiments</string>
+    <string name="cd_tabs">Tabs displaying various experiment lists and options for user action</string>
+    <string name="cd_tab_home">Tab for main user action options</string>
+    <string name="cd_tab_owned_experiments">Tab for experiments owned by the user</string>
+    <string name="cd_tab_subscribed_experiments">Tab for experiments the user is subscribed to</string>
+    <string name="cd_tab_active_experiments">Tab for experiments that are open and can be participated in by the user</string>
+    <string name="cd_tab_ended_experiments">Tab for experiments that have been ended</string>
 </resources>

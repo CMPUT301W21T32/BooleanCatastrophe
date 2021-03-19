@@ -11,11 +11,15 @@ import android.view.MenuInflater;
 import com.example.booleancatastrophe.model.Experiment;
 import com.example.booleancatastrophe.model.ExperimentManager;
 import com.example.booleancatastrophe.model.ExperimentType;
+import com.google.android.material.tabs.TabLayout;
 
 public class MainActivity extends AppCompatActivity {
 
     private final static String TAG = "Main Activity";
 
+    Toolbar topAppToolbar;
+    //ActionBar topAppActionbar;
+    TabLayout tabOptions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,9 +29,9 @@ public class MainActivity extends AppCompatActivity {
         //e.addExperiment(new Experiment("Coin", "AB", ((ExperimentApplication) this.getApplication()).getAccountID(), 5, ExperimentType.BINOMIAL));
 
         /* Set up the top toolbar - listeners are set up for different toolbar button actions */
-        Toolbar topAppToolbar = (Toolbar) findViewById(R.id.top_app_toolbar);
+        topAppToolbar = (Toolbar) findViewById(R.id.top_app_toolbar);
         setSupportActionBar(topAppToolbar);    // display the toolbar
-//        ActionBar topAppActionbar = getSupportActionBar();    // Specific actions on the toolbar
+//      topAppActionbar = getSupportActionBar();    // Specific actions on the toolbar
 
         /* Listener for clicking on the navigation (far left) menu-style button */
         topAppToolbar.setNavigationOnClickListener(v -> {
@@ -35,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
             topAppToolbar.setTitle("NAV PRESS");
         });
 
+        /* Listener for clicking on the various action buttons set up on the toolbar */
         topAppToolbar.setOnMenuItemClickListener(item -> {
             int id = item.getItemId();
             if(id == R.id.top_app_bar_search) {    // User selected the top bar search icon
@@ -48,6 +53,35 @@ public class MainActivity extends AppCompatActivity {
             } else {   // User's action not recognized; interacts with 'more' dropdown (look into)!
                 topAppToolbar.setTitle("IDK");
                 return false;
+            }
+        });
+
+        tabOptions = (TabLayout) findViewById(R.id.tabs);
+        tabOptions.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                int id = tab.getPosition();
+                if(id == 0) {
+                    topAppToolbar.setTitle("HOME");
+                } else if(id == 1) {
+                    topAppToolbar.setTitle("OWNED TAB");
+                } else if(id == 2) {
+                    topAppToolbar.setTitle("SUBSCRIBED TAB");
+                } else if(id == 3) {
+                    topAppToolbar.setTitle("ACTIVE TAB");
+                } else if(id == 4) {
+                    topAppToolbar.setTitle("ENDED TAB");
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
             }
         });
 
