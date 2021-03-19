@@ -11,7 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.example.booleancatastrophe.interfaces.FirestoreExperimentListCallback;
 import com.example.booleancatastrophe.model.Experiment;
+import com.example.booleancatastrophe.model.ExperimentManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +26,7 @@ public class TabOwnedExperimentsFragment extends Fragment {
     View view;
     RecyclerView recyclerView;
     private List<Experiment> experiments;
+    private ExperimentManager eManager = new ExperimentManager();
 
     public TabOwnedExperimentsFragment() {
         // Required empty public constructor
@@ -77,5 +80,12 @@ public class TabOwnedExperimentsFragment extends Fragment {
         e6.setOwner("O6 Owner");
         experiments.add(e6);
         /* See the ExperimentManager and UserManager classes to integrate */
+        ArrayList<String> ids = ((ExperimentApplication) this.getActivity().getApplication()).getCurrentUser().getOwnedExperiments();
+        eManager.getExperimentList(ids, new FirestoreExperimentListCallback() {
+            @Override
+            public void OnCallBack(ArrayList<Experiment> list) {
+                experiments.addAll(list);
+            }
+        });
     }
 }

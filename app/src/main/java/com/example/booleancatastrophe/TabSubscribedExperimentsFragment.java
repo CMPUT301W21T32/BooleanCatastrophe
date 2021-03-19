@@ -10,7 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.booleancatastrophe.interfaces.FirestoreExperimentListCallback;
 import com.example.booleancatastrophe.model.Experiment;
+import com.example.booleancatastrophe.model.ExperimentManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +25,7 @@ public class TabSubscribedExperimentsFragment extends Fragment {
     View view;
     RecyclerView recyclerView;
     private List<Experiment> experiments;
+    private ExperimentManager eManager = new ExperimentManager();
 
     public TabSubscribedExperimentsFragment() {
         // Required empty public constructor
@@ -51,15 +54,23 @@ public class TabSubscribedExperimentsFragment extends Fragment {
         /* This block is temporary and must be replaced with the code to actively get the required
          * experiments subcategory (often based on the current user) and query ExperimentManager to
          * get the updated list from the database */
-        Experiment e1 = new Experiment();
+/*        Experiment e1 = new Experiment();
         e1.setDescription("S1 Description");
         e1.setOwner("S1 Owner");
         experiments.add(e1);
         Experiment e2 = new Experiment();
         e2.setDescription("S2 Description");
         e2.setOwner("S2 Owner");
-        experiments.add(e2);
+        experiments.add(e2);*/
 
         /* See the ExperimentManager and UserManager classes to integrate */
+        ArrayList<String> ids = ((ExperimentApplication) this.getActivity().getApplication()).getCurrentUser().getSubscriptions();
+        eManager.getExperimentList(ids, new FirestoreExperimentListCallback() {
+            @Override
+            public void OnCallBack(ArrayList<Experiment> list) {
+                experiments.addAll(list);
+            }
+        });
+
     }
 }
