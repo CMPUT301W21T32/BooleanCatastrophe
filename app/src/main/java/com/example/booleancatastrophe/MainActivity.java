@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -79,8 +80,8 @@ public class MainActivity extends AppCompatActivity {
                 topAppToolbar.setTitle("SEARCH PRESS");
                 return true;
             } else if(id == R.id.top_app_bar_userprofile) {    // User selected the top bar profile icon
-                // TODO launch the user profile details activity where they can edit their details, etc
-                topAppToolbar.setTitle("PROFILE PRESS");
+                Intent intent = new Intent(this, UserProfileActivity.class);
+                startActivity(intent);
                 return true;
             } else {   // User's action not recognized; interacts with 'more' dropdown (look into)!
                 topAppToolbar.setTitle("IDK");
