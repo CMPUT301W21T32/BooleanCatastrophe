@@ -40,8 +40,14 @@ public class ViewExperimentActivity extends AppCompatActivity implements NewTria
         Button newTrialButton = (Button) findViewById(R.id.newTrialButton);
 
         //get experiment data (eventually) through intent
-        //TODO Load intent from another experiment
-        currentExperiment = new Experiment("Coin Flip", "AB", "Braden", 10, ExperimentType.MEASUREMENT);
+        //TODO Check that this bundle/intent loading to get experiment is working, add else case if the extra received is null
+//        currentExperiment = new Experiment("Coin Flip", "AB", "Braden", 10, ExperimentType.MEASUREMENT);
+
+        Bundle extras = getIntent().getExtras();
+        if(extras != null) {
+            currentExperiment = (Experiment) getIntent().getSerializableExtra("experiment");
+        }
+
         currentExperiment.setId("Test");
         //get trial data from DB
         eManager.getTrials("Test", new FirestoreTrialListCallback() {

@@ -54,7 +54,7 @@ public class TabActiveExperimentsFragment extends Fragment {
         /* This block is temporary and must be replaced with the code to actively get the required
          * experiments subcategory (often based on the current user) and query ExperimentManager to
          * get the updated list from the database */
-/*        Experiment e1 = new Experiment();
+        Experiment e1 = new Experiment();
         e1.setDescription("A1 Description");
         e1.setOwner("A1 Owner");
         experiments.add(e1);
@@ -129,14 +129,14 @@ public class TabActiveExperimentsFragment extends Fragment {
         Experiment e19 = new Experiment();
         e19.setDescription("A19 Description");
         e12.setOwner("A19 Owner");
-        experiments.add(e19);*/
+        experiments.add(e19);
         /* See the ExperimentManager and UserManager classes to integrate */
-        eManager.getPublishedExperiments(new FirestoreExperimentListCallback() {
-            @Override
-            public void OnCallBack(ArrayList<Experiment> list) {
-                    experiments.addAll(list);
-            }
-        });
+//        eManager.getPublishedExperiments(new FirestoreExperimentListCallback() {
+//            @Override
+//            public void OnCallBack(ArrayList<Experiment> list) {
+//                    experiments.addAll(list);
+//            }
+//        });
 
 
     }

@@ -1,8 +1,10 @@
 package com.example.booleancatastrophe.model;
 
+import java.io.Serializable;
+
 // Class that holds all information about a given experiment, should follow an simple POJO structure
 // for easy database usage
-public class Experiment {
+public class Experiment implements Serializable {
 
     private String id;
     private String region;

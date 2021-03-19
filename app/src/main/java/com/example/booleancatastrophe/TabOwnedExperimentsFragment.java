@@ -80,12 +80,12 @@ public class TabOwnedExperimentsFragment extends Fragment {
         e6.setOwner("O6 Owner");
         experiments.add(e6);
         /* See the ExperimentManager and UserManager classes to integrate */
-        ArrayList<String> ids = ((ExperimentApplication) this.getActivity().getApplication()).getCurrentUser().getOwnedExperiments();
-        eManager.getExperimentList(ids, new FirestoreExperimentListCallback() {
-            @Override
-            public void OnCallBack(ArrayList<Experiment> list) {
-                experiments.addAll(list);
-            }
-        });
+//        ArrayList<String> ids = ((ExperimentApplication) this.getActivity().getApplication()).getCurrentUser().getOwnedExperiments();
+//        eManager.getExperimentList(ids, new FirestoreExperimentListCallback() {
+//            @Override
+//            public void OnCallBack(ArrayList<Experiment> list) {
+//                experiments.addAll(list);
+//            }
+//        });
     }
 }
