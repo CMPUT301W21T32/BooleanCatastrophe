@@ -134,8 +134,7 @@ public class ExperimentManager {
     public void end(String eID) {};
 
     /**
-     * function to get a list of experiment objects from the database, with an option of returning
-     * only published experiments
+     * function to get a list of experiment objects from the database
      * Due to the Asynchronous behaviour it it nessecary to use a callback function, which is called
      * after a successful read
      *
@@ -174,6 +173,45 @@ public class ExperimentManager {
                     }
                 });
 
+    }
+
+    /**
+     * function to get a list of all published experiment objects from the database
+     * Due to the Asynchronous behaviour it it nessecary to use a callback function, which is called
+     * after a successful read
+     *
+     * @param firestoreCallback defines the function that is called when the read is completed
+     * @return the list of experiments, accessible through the callback function
+     *
+     * EXAMPLE USAGE
+     *         eManager.getExperimentList(idList, true, new FirestoreCallback() {
+     *             @Override
+     *             public void OnCallBack(ArrayList<Experiment> list) {
+     *                 for(int i = 0; i < list.size(); i++){
+     *                     Log.d(TAG, list.get(i).getDescription() );
+     *                 }
+     *             }
+     *         });
+     **/
+    void getPublishedExperiments(FirestoreExperimentListCallback firestoreCallback){
+        ArrayList<Experiment> experimentList = new ArrayList<Experiment>();
+        experimentRef
+                .whereEqualTo("published", "true")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                experimentList.add((Experiment) document.toObject(Experiment.class));
+                            }
+                            firestoreCallback.OnCallBack(experimentList);
+
+                        } else {
+                            Log.d(TAG, "Failure getting experiments");
+                        }
+                    }
+                });
     }
 
 
@@ -221,8 +259,6 @@ public class ExperimentManager {
 
     /**
      * function to get a list of trials that belong to the given experiment
-     *
-     * Due to the Asynchronous behaviour it it nessecary to use a callback function
      *
      * @param eId the id of the experiment
      * @param firestoreCallback defines the function that is called when the read is completed

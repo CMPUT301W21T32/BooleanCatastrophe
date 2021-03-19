@@ -60,7 +60,6 @@ public class ExperimentApplication extends Application {
         UserManager uManager = new UserManager();
         File path = new File(this.getApplicationContext().getFilesDir(), "accountID.txt");
         //look for account file, if it exists set it equal to global accountID
-        path.delete();
         if(path.exists()){
             try{
                 BufferedReader br = new BufferedReader(new FileReader(path));
