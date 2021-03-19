@@ -21,7 +21,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 // Extension of the application class to allow for the global variable "accountID"
-// If the account fiel doesnt exist in memeory a new ID will be generated
+// If the account file doesn't exist in memory a new ID will be generated and added to the DB
 public class ExperimentApplication extends Application {
 
     private String accountID;

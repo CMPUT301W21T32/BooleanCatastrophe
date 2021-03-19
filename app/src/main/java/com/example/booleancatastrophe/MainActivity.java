@@ -52,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        
+
     }
 
     /* Necessary to create top bar icons */
