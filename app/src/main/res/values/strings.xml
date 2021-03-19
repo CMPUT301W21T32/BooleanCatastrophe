@@ -11,4 +11,7 @@
     <string name="lbl_user_name">Username:</string>
     <string name="lbl_user_email">Email:</string>
     <string name="btn_save_profile">Save Profile</string>
+    <string name="btn_new_trial">New Trial</string>
+    <string name="lbl_result">Result: </string>
+    <string name="trial_type">TYPE</string>
 </resources>
