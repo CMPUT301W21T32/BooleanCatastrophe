@@ -4,7 +4,8 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.example.booleancatastrophe.interfaces.FirestoreUserCallback;
+import com.example.booleancatastrophe.storage.FirestoreCallback;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -48,7 +49,7 @@ public class UserManager {
      * @param accountID the id of the user
      * @param firestoreCallback defines the function called when the database operation is complete
      **/
-    public void getUser(String accountID, FirestoreUserCallback firestoreCallback) {
+    public void getUser(String accountID, FirestoreCallback<User> firestoreCallback) {
         usersRef.document(accountID).get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
@@ -59,7 +60,7 @@ public class UserManager {
                             Log.d(TAG, "No such document");
                         }
                         //should return a null object if the user does not exist
-                        firestoreCallback.OnCallBack((User) documentSnapshot.toObject(User.class));
+                        firestoreCallback.onCallback((User) documentSnapshot.toObject(User.class));
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

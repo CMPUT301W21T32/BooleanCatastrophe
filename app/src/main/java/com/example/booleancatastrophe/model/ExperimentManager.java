@@ -4,13 +4,13 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.example.booleancatastrophe.interfaces.FirestoreExperimentCallback;
-import com.example.booleancatastrophe.interfaces.FirestoreExperimentListCallback;
-import com.example.booleancatastrophe.interfaces.FirestoreTrialListCallback;
+import com.example.booleancatastrophe.storage.FirestoreCallback;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -49,10 +49,6 @@ public class ExperimentManager {
                         // On success add the experiment ID to the owners "ownedExperiments"
                         db.collection("users").document(exp.getOwner())
                                 .update("owned",  FieldValue.arrayUnion(exp.getId()));
-
-
-
-
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -61,9 +57,7 @@ public class ExperimentManager {
                         Log.d(TAG, "Couldn't add experiment");
                     }
                 });
-
     }
-
 
     /**
      * function to add a trial to any given experiment
@@ -73,7 +67,6 @@ public class ExperimentManager {
     //TODO: automatically subscribe the user after submitting a trial
 
     public void addTrial(String eId, Trial trial){
-
        experimentRef.document(eId).collection("trials")
                .add(trial).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
            @Override
@@ -88,7 +81,6 @@ public class ExperimentManager {
                 }
             });
     }
-
 
     /**
      * publish the given experiement
@@ -140,7 +132,7 @@ public class ExperimentManager {
      * after a successful read
      *
      * @param experimentIDs a list of experiments to get
-     * @param firestoreCallback defines the function that is called when the read is completed 
+     * @param firestoreCallback defines the function that is called when the read is completed
      * @return the list of experiments, accessible through the callback function
      *
      * EXAMPLE USAGE
@@ -153,7 +145,7 @@ public class ExperimentManager {
      *             }
      *         });
      **/
-    public void getExperimentList(ArrayList<String> experimentIDs, FirestoreExperimentListCallback firestoreCallback) {
+    public void getExperimentList(ArrayList<String> experimentIDs, FirestoreCallback<ArrayList<Experiment>> firestoreCallback) {
         ArrayList<Experiment> experimentList = new ArrayList<Experiment>();
         experimentRef
                 .get()
@@ -166,7 +158,7 @@ public class ExperimentManager {
                                     experimentList.add((Experiment) document.toObject(Experiment.class));
                                 }
                             }
-                            firestoreCallback.OnCallBack(experimentList);
+                            firestoreCallback.onCallback(experimentList);
 
                         } else {
                             Log.d(TAG, "Failure getting experiments");
@@ -175,9 +167,6 @@ public class ExperimentManager {
                 });
 
     }
-
-
-
 
     /**
      * function to get a single experiment object from the database
@@ -196,7 +185,7 @@ public class ExperimentManager {
      *             }
      *         });
      **/
-    public void getExperiment(String eId, FirestoreExperimentCallback firestoreCallback){
+    public void getExperiment(String eId, FirestoreCallback<Experiment> firestoreCallback){
         experimentRef.document(eId)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -209,7 +198,7 @@ public class ExperimentManager {
                             } else {
                                 Log.d(TAG, "No such document");
                             }
-                            firestoreCallback.OnCallBack((Experiment) document.toObject(Experiment.class));
+                            firestoreCallback.onCallback((Experiment) document.toObject(Experiment.class));
                         } else {
                             Log.d(TAG, "get failed with ", task.getException());
                         }
@@ -217,7 +206,6 @@ public class ExperimentManager {
                     }
                 });
     }
-
 
     /**
      * function to get a list of trials that belong to the given experiment
@@ -236,7 +224,7 @@ public class ExperimentManager {
      *             }
      *         });
      **/
-    public void getTrials(String eId, FirestoreTrialListCallback firestoreCallback){
+    public void getTrials(String eId, FirestoreCallback<ArrayList<Trial>> firestoreCallback){
         ArrayList<Trial> trials = new ArrayList<>();
         experimentRef
                 .document(eId)
@@ -249,7 +237,7 @@ public class ExperimentManager {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 trials.add((Trial) document.toObject(Trial.class));
                             }
-                            firestoreCallback.OnCallBack(trials);
+                            firestoreCallback.onCallback(trials);
                         } else {
                             Log.d(TAG, "Failure getting experiments");
                         }
@@ -257,10 +245,6 @@ public class ExperimentManager {
                 });
     }
 
-
     //void search(String token){ }
-
-
-
 
 }
