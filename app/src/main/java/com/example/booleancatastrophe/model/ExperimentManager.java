@@ -48,7 +48,7 @@ public class ExperimentManager {
                         Log.d(TAG, "Successfully added experiment");
                         // On success add the experiment ID to the owners "ownedExperiments"
                         db.collection("users").document(exp.getOwner())
-                                .update("owned",  FieldValue.arrayUnion(exp.getId()));
+                                .update("ownedExperiments",  FieldValue.arrayUnion(exp.getId()));
 
 
 
