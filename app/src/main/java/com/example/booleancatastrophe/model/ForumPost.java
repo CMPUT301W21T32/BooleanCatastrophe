@@ -4,120 +4,77 @@ package com.example.booleancatastrophe.model;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-// TODO clean up this class; might have overcomplicated thinking about deletion and editing and there are definitely cleaner ways to handle that functionality
-
 
 /**
  * This represents objects posted in a forum (can either be questions or replies but have nearly
  * identical functionality - contain User, Date, and content information as well as whether that
  * content has been 'deleted' or 'edited'
  **/
-public class ForumPost {
+public abstract class ForumPost {
 
-    private LocalDateTime datePosted;
-    private User poster;
+    final private Experiment experiment;
+    final private LocalDateTime datePosted;
+    final private User poster;
     private String content;
-    private boolean edited = false;
-    private boolean deleted = false;
 
     public static final int MAX_FORUM_POST_LENGTH = 500;
 
     /**
-     * The constructor that is used by both questions and replies in the forum
+     * The constructor that is used by both questions and replies in the forum - date is
+     * automatically set
      * @param poster
-     * The user that posted the question/reply (not modifiable, hidden if user was deleted or chose
-     * to delete this message)
+     * The user that posted the forum post
      * @param content
-     * The content of the question/reply, can be modified
+     * The content of the forum post
      **/
-    public ForumPost(User poster, String content) {
-        //datePosted = LocalDateTime.now();
+    public ForumPost(User poster, String content, Experiment experiment) {
+        this.experiment = experiment;
+        this.datePosted = LocalDateTime.now();
         this.poster = poster;
         this.content = content;
     }
 
     /**
-     * This function indicates whether the question/reply has been edited
-     * @return edited
-     * Returns true if the post has been edited and false if not
-     **/
-    public Boolean wasEdited() {
-        return edited;
-    }
-
-    /**
-     * This function indicates whether the question/reply has been deleted
-     * @return deleted
-     * Returns true if the post has been deleted and false if not
-     **/
-    public Boolean wasDeleted() {
-        return deleted;
-    }
-
-    /**
-     * This function returns the content - it adds on a ' - [edited]' tag if it has been edited
+     * This function returns the content of the forum post
      * @return content
-     * The content (with a tag indicator added on if it has been edited)
+     * The content line of the forum post
      **/
     public String getContent() {
-        if(deleted) {
-            return "[deleted]";
-        } else {
-            if(edited) {
-                return content + " - [edited]";
-            } else {
-                return content;
-            }
-        }
+        return content;
     }
 
     /**
-     * This edits the content of questions/replies and sets the value of the edited boolean
-     * @param editedContent
-     * The edited content to add
-     **/
-    public void setContent(String editedContent) {
-        if(editedContent.length() > MAX_FORUM_POST_LENGTH) {
-            throw new IllegalArgumentException("Too many characters; exceeded the ForumPost limit");
-        } else if(deleted) {
-            throw new IllegalArgumentException("The ForumPost has been deleted and cannot be edited");
-        } else {
-            edited = true;
-            content = editedContent;
-        }
-    }
-
-    /**
-     * This function returns the posted date of this question/reply in a string format
-     * @return strDate
+     * This function returns the posted date of this forum post in a string format
+     * @return datePosted
      * The date formatted into a string format
      **/
     public String getDatePosted() {
-        //String strDate = datePosted.format(DateTimeFormatter.RFC_1123_DATE_TIME);
-        //return strDate;
-        return "temp";
+        return datePosted.format(DateTimeFormatter.RFC_1123_DATE_TIME);
     }
 
     /**
-     * This function gets the username of the User who posted this question/reply
+     * This function gets the username of the User who posted this forum post
      * @return posterUsername
-     * The username of the poster of this question/reply
+     * The username of the poster of this forum post
      **/
     public String getPoster() {
-        String posterUsername;
-        if(deleted) {
-            return "[deleted]";
-        } else {
-            posterUsername = poster.getUsername();
-            return posterUsername;
-        }
+        return poster.getUsername();
     }
 
     /**
-     * This function hides (doesn't technically clear) the content of the forum post by putting it
-     * in a deleted state and replaces the visible poster/content with a deletion message
+     * This function gets the id of the experiment tied to this forum post
+     * @return experimentID
+     * The ID of the experiment this forum post is tied to
+     * **/
+    public String getExperimentID() {
+        return experiment.getId();
+    }
+
+    /**
+     * This function replaces the content of the forum post with a message indicating that it was
+     * deleted by the user
      **/
     public void delete() {
-        deleted = true;
+        this.content = "< Content deleted by the user >";
     }
 }

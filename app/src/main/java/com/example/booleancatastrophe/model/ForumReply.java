@@ -4,7 +4,7 @@ package com.example.booleancatastrophe.model;
 /**
  * This represents replies that will be nested under questions in the forum
  **/
-public class Reply extends ForumPost {
+public class ForumReply extends ForumPost {
 
     /**
      * Constructor for replies that calls its parent constructor ForumPost
@@ -12,8 +12,11 @@ public class Reply extends ForumPost {
      * The user who posted this reply
      * @param content
      * The initial content of this reply
+     * @param experiment
+     * The experiment tied to this reply
      **/
-    public Reply(User poster, String content) {
-        super(poster, content);
+
+    public ForumReply(User poster, String content, Experiment experiment) {
+        super(poster, content, experiment);
     }
 }
