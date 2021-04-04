@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Editable text for the new experiment description -->
+    <EditText
+        android:id="@+id/et_pub_exp_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autofillHints="text"
+        android:ems="10"
+        android:hint="@string/hint_pub_exp_description"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- View who the owner of the experiment will be (the current user/
+     person who clicked the 'publish experiment' button, not editable) -->
+    <TextView
+        android:id="@+id/tv_pub_exp_owner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_pub_exp_description" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

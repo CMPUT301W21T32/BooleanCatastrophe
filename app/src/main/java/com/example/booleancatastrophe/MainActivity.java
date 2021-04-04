@@ -13,6 +13,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 
+import com.example.booleancatastrophe.model.Experiment;
+import com.example.booleancatastrophe.model.ExperimentManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
@@ -20,7 +22,8 @@ import com.google.android.material.tabs.TabLayout;
 // Took a lot of help from https://stackoverflow.com/questions/41504539/android-tablayout-navigation-with-recyclerview-items
 // for using recycler view and setting it up to work in a multi-tab style with appropriate fragments
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements
+        PublishExperimentFragment.OnFragmentInteractionListener {
 
     private final static String TAG = "Main Activity";
 
@@ -30,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
     TabLayout tabLayout;
     ViewPager viewPager;
     CustomViewPagerAdapter viewPagerAdapter;
+
+    ExperimentManager experimentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
         tabLayout = (TabLayout) findViewById(R.id.tabs) ;
         viewPager = (ViewPager) findViewById(R.id.view_pager);
         viewPagerAdapter = new CustomViewPagerAdapter(getSupportFragmentManager(), 1);
+
+        experimentManager = new ExperimentManager();
 
         // Add Fragments
         viewPagerAdapter.AddFragment(new TabHomeFragment(),
@@ -91,11 +98,11 @@ public class MainActivity extends AppCompatActivity {
 
 
         /* Set up the floating action button and its listener */
-        // TODO add new experiment fragment functionality
         FloatingActionButton btnAddExperiment =
                 (FloatingActionButton) findViewById(R.id.btn_add_experiment);
         btnAddExperiment.setOnClickListener(view -> {
-            topAppToolbar.setTitle("NEW EXPERIMENT");
+            PublishExperimentFragment newExpFrag = new PublishExperimentFragment();
+            newExpFrag.show(getSupportFragmentManager(), "PUBLISH_EXPERIMENT");
         });
 
 
@@ -144,5 +151,11 @@ public class MainActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.top_app_bar, menu);
         return true;
+    }
+
+    @Override
+    public void onOkPressed(Experiment experiment) {
+        experimentManager.addExperiment(experiment);
+        // TODO check this functionality
     }
 }

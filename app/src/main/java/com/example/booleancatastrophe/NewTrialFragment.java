@@ -47,7 +47,7 @@ public class NewTrialFragment extends DialogFragment {
             listener = (NewTrialFragment.OnFragmentInteractionListener) context;
         }
         else{
-            throw new RuntimeException(context.toString() + "must implement OnFragmentInterationListner");
+            throw new RuntimeException(context.toString() + "must implement OnFragmentInterationListener");
         }
 
     }
