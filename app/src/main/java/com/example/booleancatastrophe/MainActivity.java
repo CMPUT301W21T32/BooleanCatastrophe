@@ -156,7 +156,5 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onOkPressed(Experiment experiment) {
         experimentManager.addExperiment(experiment);
-//        viewPagerAdapter.notifyDataSetChanged();
-        // TODO check this functionality
     }
 }

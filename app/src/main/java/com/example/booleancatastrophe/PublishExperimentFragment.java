@@ -68,9 +68,9 @@ public class PublishExperimentFragment extends DialogFragment {
 
         user = ((ExperimentApplication) this.getActivity().getApplication()).getCurrentUser();
         if(user.getUsername().equals("")) {
-            tvOwner.setText("Owner: YOU (username not set)");
+            tvOwner.setText("Owner:   YOU (username not set)");
         } else {
-            tvOwner.setText("Owner: " + user.getUsername());
+            tvOwner.setText("Owner:   " + user.getUsername());
         }
 
         /* Build and return the dialog with listener on the OK button - will return a new
