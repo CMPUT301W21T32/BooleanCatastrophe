@@ -12,7 +12,10 @@
         android:id="@+id/et_pub_exp_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:autofillHints="text"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:importantForAutofill="no"
         android:ems="10"
         android:hint="@string/hint_pub_exp_description"
         android:inputType="text"
@@ -22,14 +25,84 @@
 
     <!-- View who the owner of the experiment will be (the current user/
      person who clicked the 'publish experiment' button, not editable) -->
+
     <TextView
         android:id="@+id/tv_pub_exp_owner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:ems="10"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_pub_exp_description" />
+        app:layout_constraintTop_toBottomOf="@+id/lbl_pub_exp_min" />
+
+    <!-- Radio buttons for selecting the experiment trial type -->
+    <RadioGroup
+        android:id="@+id/rad_group_pub_exp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_pub_exp_description">
+
+        <RadioButton
+            android:id="@+id/rad_binomial"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/rad_binomial"
+            android:tooltipText="@string/rad_binomial_tooltip" />
+
+        <RadioButton
+            android:id="@+id/rad_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/rad_count"
+            android:tooltipText="@string/rad_count_tooltip" />
+
+        <RadioButton
+            android:id="@+id/rad_measurement"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/rad_measurement"
+            android:tooltipText="@string/rad_measurement_tooltip" />
+
+        <RadioButton
+            android:id="@+id/rad_nonnegcount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/rad_nonnegcount"
+            android:tooltipText="@string/rad_nonnegcount_tooltip" />
+    </RadioGroup>
+
+    <!-- Label and number-input edit text for setting the minimum number of trials -->
+    <TextView
+        android:id="@+id/lbl_pub_exp_min"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:labelFor="@+id/et_pub_exp_min"
+        android:text="@string/lbl_pub_exp_min"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="@+id/rad_group_pub_exp"
+        app:layout_constraintTop_toBottomOf="@+id/rad_group_pub_exp" />
+
+    <EditText
+        android:id="@+id/et_pub_exp_min"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:importantForAutofill="no"
+        android:inputType="number"
+        android:text="@string/pub_exp_min_default_value"
+        app:layout_constraintBaseline_toBaselineOf="@+id/lbl_pub_exp_min"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.2"
+        app:layout_constraintStart_toEndOf="@+id/lbl_pub_exp_min"
+        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
