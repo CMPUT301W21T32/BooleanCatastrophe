@@ -10,14 +10,20 @@ import java.time.format.DateTimeFormatter;
  * identical functionality - contain User, Date, and content information as well as whether that
  * content has been 'deleted' or 'edited'
  **/
-public abstract class ForumPost {
+public class ForumPost {
 
-    final private Experiment experiment;
-    final private LocalDateTime datePosted;
-    final private User poster;
+    private String id;
+    private User user;
+    private Experiment experiment;
     private String content;
+    private String posterID;
+    private String parentID;
+    private String experimentID;
+    private LocalDateTime datePosted;
 
     public static final int MAX_FORUM_POST_LENGTH = 500;
+
+    public ForumPost() {}
 
     /**
      * The constructor that is used by both questions and replies in the forum - date is
@@ -26,12 +32,52 @@ public abstract class ForumPost {
      * The user that posted the forum post
      * @param content
      * The content of the forum post
+     * @param experiment
+     * The experiment tied to this forum post
      **/
-    public ForumPost(User poster, String content, Experiment experiment) {
+    public ForumPost(Experiment experiment, User user, String content) {
         this.experiment = experiment;
-        this.datePosted = LocalDateTime.now();
         this.poster = poster;
         this.content = content;
+        this.datePosted = LocalDateTime.now();  // Date posted will be the moment the object is created
+        this.id = null;  // ID will be set by the manager class
+        this.parentID = parentID;
+    }
+
+    /**
+     * This function sets the id of the forum post
+     * @return id
+     * Get the id of the forum post
+     **/
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * This function sets the id of the forum post
+     * @param id
+     * Set the id of the forum post
+     **/
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    /**
+     * This function sets the parent post id of the forum post
+     * @param parentID
+     * Set the parent post id of this forum post
+     **/
+    public void setParentID(String parentID) {
+        this.parentID = parentID;
+    }
+
+    /**
+     * This function get the parent post id of the forum post
+     * @return parentID
+     * Get the parent post id of this forum post
+     **/
+    public String getParentID() {
+        return parentID;
     }
 
     /**
@@ -57,8 +103,17 @@ public abstract class ForumPost {
      * @return posterUsername
      * The username of the poster of this forum post
      **/
-    public String getPoster() {
+    public String getPosterName() {
         return poster.getUsername();
+    }
+
+    /**
+     * This function gets the user id of the User who posted this forum post
+     * @return posterID
+     * The ID of the poster of this forum post
+     **/
+    public String getPosterID() {
+        return poster.getAccountID();
     }
 
     /**

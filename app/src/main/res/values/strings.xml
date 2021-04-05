@@ -41,4 +41,8 @@
     <string name="rad_nonnegcount_tooltip">Set up as a non-negative integer count experiment (zero or more trial type)</string>
     <string name="lbl_pub_exp_min">Minimum Trials:</string>
     <string name="pub_exp_min_default_value">0</string>
+    <string name="tv_forumposts">Experiment Question Forum</string>
+    <string name="btn_add_question">Post New Question</string>
+    <string name="cd_forum_question">Image for forum questions</string>
+    <string name="lbl_forum_question_num_replies">Replies</string>
 </resources>
