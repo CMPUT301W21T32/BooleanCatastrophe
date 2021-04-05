@@ -1,6 +1,8 @@
 package com.example.booleancatastrophe.model;
 
 
+import com.google.firebase.firestore.Exclude;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -10,16 +12,17 @@ import java.time.format.DateTimeFormatter;
  * identical functionality - contain User, Date, and content information as well as whether that
  * content has been 'deleted' or 'edited'
  **/
-public class ForumPost {
+public abstract class ForumPost {
 
     private String id;
-    private User user;
-    private Experiment experiment;
-    private String content;
+    private LocalDateTime datePosted;
+    private String experimentID;
     private String posterID;
     private String parentID;
-    private String experimentID;
-    private LocalDateTime datePosted;
+    private String content;
+
+    private Experiment experiment;
+    private User poster;
 
     public static final int MAX_FORUM_POST_LENGTH = 500;
 
@@ -40,12 +43,13 @@ public class ForumPost {
         this.poster = poster;
         this.content = content;
         this.datePosted = LocalDateTime.now();  // Date posted will be the moment the object is created
+
         this.id = null;  // ID will be set by the manager class
-        this.parentID = parentID;
+        this.parentID = null;
     }
 
     /**
-     * This function sets the id of the forum post
+     * This function gets the id of the forum post
      * @return id
      * Get the id of the forum post
      **/
@@ -60,24 +64,6 @@ public class ForumPost {
      **/
     public void setId(String id) {
         this.id = id;
-    }
-
-    /**
-     * This function sets the parent post id of the forum post
-     * @param parentID
-     * Set the parent post id of this forum post
-     **/
-    public void setParentID(String parentID) {
-        this.parentID = parentID;
-    }
-
-    /**
-     * This function get the parent post id of the forum post
-     * @return parentID
-     * Get the parent post id of this forum post
-     **/
-    public String getParentID() {
-        return parentID;
     }
 
     /**
