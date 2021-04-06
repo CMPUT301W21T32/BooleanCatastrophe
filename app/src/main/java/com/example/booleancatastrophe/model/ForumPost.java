@@ -18,6 +18,8 @@ public abstract class ForumPost {
 
     public static final int MAX_FORUM_POST_LENGTH = 500;
 
+    public ForumPost() {}
+
     /**
      * The constructor that is used by both questions and replies in the forum - date is
      * automatically set

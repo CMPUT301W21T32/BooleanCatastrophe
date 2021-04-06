@@ -72,7 +72,6 @@ public class ForumManager {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "Successfully added forum post");
-
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -81,6 +80,8 @@ public class ForumManager {
                         Log.w(TAG, "Error adding forum post");
                     }
                 });
+
+        d.clear();
     }
 
     /**

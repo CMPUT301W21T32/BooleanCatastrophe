@@ -9,6 +9,8 @@ public class ForumQuestion extends ForumPost {
 
     private ArrayList<ForumReply> replies = new ArrayList<>();
 
+    public ForumQuestion() {}
+
     public ForumQuestion(Experiment experiment, User poster, String content) {
         super(experiment, poster, content);
     }

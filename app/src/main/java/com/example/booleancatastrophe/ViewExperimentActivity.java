@@ -40,18 +40,12 @@ public class ViewExperimentActivity extends AppCompatActivity implements NewTria
         Button newTrialButton = (Button) findViewById(R.id.newTrialButton);
         Button btnViewExperimentForum = (Button) findViewById(R.id.btn_experiment_forum);
 
-        //get experiment data (eventually) through intent
-        //TODO Check that this bundle/intent loading to get experiment is working, add else case if the extra received is null
-//        currentExperiment = new Experiment("Coin Flip", "AB", "Braden", 10, ExperimentType.MEASUREMENT);
+        // Get the current experiment data through the intent
+        Intent intent = getIntent();
+        currentExperiment = (Experiment) intent.getSerializableExtra("experiment");
 
-        Bundle extras = getIntent().getExtras();
-        if(extras != null) {
-            currentExperiment = (Experiment) getIntent().getSerializableExtra("experiment");
-        }
-
-        currentExperiment.setId("Test");
         //get trial data from DB
-        eManager.getTrials("Test", new FirestoreTrialListCallback() {
+        eManager.getTrials(currentExperiment.getId(), new FirestoreTrialListCallback() {
             @Override
             public void OnCallBack(ArrayList<Trial> trials) {
                 currentTrials = trials;
@@ -79,9 +73,9 @@ public class ViewExperimentActivity extends AppCompatActivity implements NewTria
 
         /* Go to the experiment question forum activity if this button is clicked */
         btnViewExperimentForum.setOnClickListener((v) -> {
-            Intent intent = new Intent(this, ViewForumQuestionsActivity.class);
-            intent.putExtra("EXPERIMENT", currentExperiment);
-            startActivity(intent);
+            Intent newIntent = new Intent(this, ViewForumQuestionsActivity.class);
+            newIntent.putExtra("EXPERIMENT", currentExperiment);
+            startActivity(newIntent);
         });
     }
 
