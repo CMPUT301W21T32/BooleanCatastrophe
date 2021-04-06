@@ -33,7 +33,7 @@ public abstract class ForumPost {
         this.poster = poster;
         this.content = content;
 
-        this.datePosted = null;  // Date posted will be set by the manager class
+        this.datePosted = new Date();  // Set the date to the moment the object is created
         this.id = null;  // ID will be set by the manager class
     }
 

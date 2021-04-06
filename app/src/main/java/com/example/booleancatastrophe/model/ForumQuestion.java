@@ -7,7 +7,7 @@ import java.util.ArrayList;
  **/
 public class ForumQuestion extends ForumPost {
 
-    private ArrayList<ForumReply> replies;
+    private ArrayList<ForumReply> replies = new ArrayList<>();
 
     public ForumQuestion(Experiment experiment, User poster, String content) {
         super(experiment, poster, content);

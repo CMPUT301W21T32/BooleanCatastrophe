@@ -58,7 +58,7 @@ public class NewForumQuestionFragment extends DialogFragment {
         View view = LayoutInflater.from(getActivity()).inflate(
                 R.layout.fragment_new_forum_question, null);
 
-        etQuestionContent = (EditText) view.findViewById(R.id.et_pub_exp_min);
+        etQuestionContent = (EditText) view.findViewById(R.id.et_new_question_content);
 
         /* Build and return the dialog with listener on the OK button - will return a new
          * experiment on press */
