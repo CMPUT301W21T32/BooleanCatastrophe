@@ -46,7 +46,7 @@ public class ViewForumQuestionsActivity extends AppCompatActivity
 
         forumManager = ForumManager.getInstance();
         adapter = new ForumQuestionFirestoreRecyclerAdapter(forumManager.getAllExperimentQuestions(currentExperiment));
-        rv.setLayoutManager(new LinearLayoutManager(this));
+        rv.setLayoutManager(new LinearLayoutManager(ViewForumQuestionsActivity.this));
         rv.setAdapter(adapter);
 
         btnAddQuestion.setOnClickListener(new View.OnClickListener() {
@@ -77,5 +77,6 @@ public class ViewForumQuestionsActivity extends AppCompatActivity
     public void onOkPressed(String askedQuestionContent){
        ForumQuestion newForumQuestion = new ForumQuestion(currentExperiment, currentUser, askedQuestionContent);
        forumManager.addForumPost(newForumQuestion);
+       adapter.updateOptions(forumManager.getAllExperimentQuestions(currentExperiment));
     }
 }
