@@ -1,57 +1,46 @@
 package com.example.booleancatastrophe.model;
 
-import com.google.firebase.firestore.IgnoreExtraProperties;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 /**
- * Forum Question POJO for easy database transaction
+ * Forum Question object that contains a number of replies
  **/
-@IgnoreExtraProperties
-public class ForumQuestion {
+public class ForumQuestion extends ForumPost {
 
-    public static final String FIELD_ID = "id";
-    public static final String FIELD_DATE = "date";
-    public static final String FIELD_EXPERIMENT = "experimentID";
-    public static final String FIELD_POSTER = "posterID";
-    public static final String FIELD_CONTENT = "content";
+    private ArrayList<ForumReply> replies;
 
-    private String id;
-    private LocalDateTime date;
-    private String experimentID;
-    private String posterID;
-    private String content;
-
-    public ForumQuestion() {}
-
-    public ForumQuestion(String content, Experiment experiment, User user) {
-        this.id = null;    // will be set by the ForumManager
-        this.date = LocalDateTime.now();
-        this.experimentID = experiment.getId();
-        this.posterID = user.getAccountID();
-        this.content = content;
+    public ForumQuestion(Experiment experiment, User poster, String content) {
+        super(experiment, poster, content);
     }
 
-    public String getId() {
-        return id;
+    /**
+     * This function adds a reply to the list of replies that address this question
+     * @param reply
+     * The reply to add to this Question's list of replies
+     **/
+    public void addReply(ForumReply reply) {
+        replies.add(reply);
     }
 
-    public LocalDateTime getDate() {
-        return date;
+    /**
+     * This function gets the replies list that this question holds
+     * @return replies
+     * The list of replies contained by this question
+     **/
+    public ArrayList<ForumReply> getReplies() {
+        return replies;
     }
 
-    public String getExperimentID() {
-        return experimentID;
+    /**
+     * This function gets the IDs of the replies in the replies list that this question holds
+     * @return ids
+     * The list of reply ids contained by this question
+     **/
+    public ArrayList<String> getReplyIds() {
+        ArrayList<String> ids = new ArrayList<>();
+        for(int i = 0; i < replies.size(); ++i) {
+            ids.add(replies.get(i).getId());
+        }
+        return ids;
     }
-
-    public String getPosterID() {
-        return posterID;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public
 }

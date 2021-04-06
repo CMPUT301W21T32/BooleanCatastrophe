@@ -1,32 +1,22 @@
 package com.example.booleancatastrophe.model;
 
 
-import com.google.firebase.firestore.Exclude;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 
 /**
  * This represents objects posted in a forum (can either be questions or replies but have nearly
- * identical functionality - contain User, Date, and content information as well as whether that
- * content has been 'deleted' or 'edited'
+ * identical functionality - contain User, Date, and content information
  **/
 public abstract class ForumPost {
 
     private String id;
-    private LocalDateTime datePosted;
-    private String experimentID;
-    private String posterID;
-    private String parentID;
-    private String content;
-
+    private Date datePosted;
     private Experiment experiment;
+    private String content;
     private User poster;
 
     public static final int MAX_FORUM_POST_LENGTH = 500;
-
-    public ForumPost() {}
 
     /**
      * The constructor that is used by both questions and replies in the forum - date is
@@ -38,14 +28,13 @@ public abstract class ForumPost {
      * @param experiment
      * The experiment tied to this forum post
      **/
-    public ForumPost(Experiment experiment, User user, String content) {
+    public ForumPost(Experiment experiment, User poster, String content) {
         this.experiment = experiment;
         this.poster = poster;
         this.content = content;
-        this.datePosted = LocalDateTime.now();  // Date posted will be the moment the object is created
 
+        this.datePosted = null;  // Date posted will be set by the manager class
         this.id = null;  // ID will be set by the manager class
-        this.parentID = null;
     }
 
     /**
@@ -76,12 +65,21 @@ public abstract class ForumPost {
     }
 
     /**
-     * This function returns the posted date of this forum post in a string format
+     * This function returns the posted date of this forum post
      * @return datePosted
-     * The date formatted into a string format
+     * The date this forum post was posted
      **/
-    public String getDatePosted() {
-        return datePosted.format(DateTimeFormatter.RFC_1123_DATE_TIME);
+    public Date getDatePosted() {
+        return datePosted;
+    }
+
+    /**
+     * This function sets the posted date of this forum post
+     * @param datePosted
+     * The date to set for this forum post
+     **/
+    public void setDatePosted(Date datePosted) {
+        this.datePosted = datePosted;
     }
 
     /**
