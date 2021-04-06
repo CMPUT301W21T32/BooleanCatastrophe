@@ -5,12 +5,14 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -79,6 +81,16 @@ public class ForumManager {
                         Log.w(TAG, "Error adding forum post");
                     }
                 });
+    }
+
+    /**
+     * Function to set up recycler view - get all questions ordered by date for a specific experiment
+     **/
+    public FirestoreRecyclerOptions<ForumQuestion> getAllExperimentQuestions(Experiment experiment) {
+        Query query = forumpostRef.whereEqualTo("experimentID", experiment.getId()).orderBy("date", Query.Direction.DESCENDING);
+        return new FirestoreRecyclerOptions.Builder<ForumQuestion>()
+                .setQuery(query, ForumQuestion.class)
+                .build();
     }
 
 

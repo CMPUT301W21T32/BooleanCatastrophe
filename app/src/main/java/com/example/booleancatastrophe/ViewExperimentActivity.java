@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -12,7 +11,6 @@ import com.example.booleancatastrophe.interfaces.FirestoreTrialListCallback;
 import com.example.booleancatastrophe.interfaces.FirestoreUserCallback;
 import com.example.booleancatastrophe.model.Experiment;
 import com.example.booleancatastrophe.model.ExperimentManager;
-import com.example.booleancatastrophe.model.ExperimentType;
 import com.example.booleancatastrophe.model.Trial;
 import com.example.booleancatastrophe.model.User;
 import com.example.booleancatastrophe.model.UserManager;
@@ -81,8 +79,8 @@ public class ViewExperimentActivity extends AppCompatActivity implements NewTria
 
         /* Go to the experiment question forum activity if this button is clicked */
         btnViewExperimentForum.setOnClickListener((v) -> {
-            Intent intent = new Intent(this, ViewExperimentForumActivity.class);
-            intent.putExtra("EXPERIMENT_ID", currentExperiment.getId());
+            Intent intent = new Intent(this, ViewForumQuestionsActivity.class);
+            intent.putExtra("EXPERIMENT", currentExperiment);
             startActivity(intent);
         });
     }

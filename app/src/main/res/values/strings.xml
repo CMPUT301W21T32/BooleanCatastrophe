@@ -46,4 +46,5 @@
     <string name="cd_forum_question">Image for forum questions</string>
     <string name="lbl_forum_question_num_replies">Replies</string>
     <string name="btn_experiment_forum">View Experiment Forum</string>
+    <string name="hint_new_question">Enter your question regarding this experiment...</string>
 </resources>

@@ -43,4 +43,13 @@ public class ForumQuestion extends ForumPost {
         }
         return ids;
     }
+
+    /**
+     * This function gets the number of the replies in the replies list that this question holds
+     * @return numReplies
+     * The number of replies contained by this question
+     **/
+    public int getReplyNumber() {
+        return replies.size();
+    }
 }
