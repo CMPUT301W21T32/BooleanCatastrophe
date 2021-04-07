@@ -12,8 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.example.booleancatastrophe.interfaces.FirestoreExperimentListCallback;
-import com.example.booleancatastrophe.interfaces.FirestoreUserCallback;
 import com.example.booleancatastrophe.model.Experiment;
 import com.example.booleancatastrophe.model.ExperimentManager;
 import com.example.booleancatastrophe.model.User;
@@ -88,19 +86,14 @@ public class TabOwnedExperimentsFragment extends Fragment {
 
         String id = ((ExperimentApplication) this.getActivity().getApplication()).getAccountID();
         Log.d("Owned", id);
-        uManager.getUser(id, new FirestoreUserCallback() {
-            @Override
-            public void OnCallBack(User user) {
-                eManager.getExperimentList(user.getOwnedExperiments(), new FirestoreExperimentListCallback() {
-                    @Override
-                    public void OnCallBack(ArrayList<Experiment> list) {
+        uManager.getUser(id, (user) -> {
+                //In the database callback, get the experiments owned by the retrieved user
+                eManager.getExperimentList(user.getOwnedExperiments(), (ArrayList<Experiment> list) -> {
                         experiments.addAll(list);
                         if(!(list.isEmpty())){
                             Log.d("Owned", "Got list");
                         }
-                    }
                 });
-            }
         });
 
     }

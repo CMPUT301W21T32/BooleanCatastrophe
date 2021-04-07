@@ -6,8 +6,6 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.booleancatastrophe.interfaces.FirestoreTrialListCallback;
-import com.example.booleancatastrophe.interfaces.FirestoreUserCallback;
 import com.example.booleancatastrophe.model.Experiment;
 import com.example.booleancatastrophe.model.ExperimentManager;
 import com.example.booleancatastrophe.model.ExperimentType;
@@ -50,23 +48,18 @@ public class ViewExperimentActivity extends AppCompatActivity implements NewTria
 
         currentExperiment.setId("Test");
         //get trial data from DB
-        eManager.getTrials("Test", new FirestoreTrialListCallback() {
-            @Override
-            public void OnCallBack(ArrayList<Trial> trials) {
-                currentTrials = trials;
-                String trialCount = ((Integer)trials.size()).toString();
-                String minTrials = ((Integer) currentExperiment.getMinTrials()).toString();
-                String display = trialCount + " / " + minTrials + " trials completed";
-                trialCountText.setText(display);
-            }
+        eManager.getTrials("Test", (ArrayList<Trial> trials) -> {
+            currentTrials = trials;
+            String trialCount = ((Integer)trials.size()).toString();
+            String minTrials = ((Integer) currentExperiment.getMinTrials()).toString();
+            String display = trialCount + " / " + minTrials + " trials completed";
+            trialCountText.setText(display);
         });
 
-        userManager.getUser(((ExperimentApplication) this.getApplication()).getAccountID(), new FirestoreUserCallback() {
-            @Override
-            public void OnCallBack(User user) {
-                currentUser = user;
-                usernameText.setText( currentUser.getUsername() );
-            }
+        userManager.getUser(((ExperimentApplication) this.getApplication()).getAccountID(),
+                (User user) -> {
+                    currentUser = user;
+                    usernameText.setText( currentUser.getUsername() );
         });
 
         descriptionText.setText( currentExperiment.getDescription() );

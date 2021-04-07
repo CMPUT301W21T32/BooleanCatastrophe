@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.example.booleancatastrophe.interfaces.FirestoreCallback;
 import com.example.booleancatastrophe.model.User;
 import com.example.booleancatastrophe.model.UserManager;
 
@@ -51,18 +50,12 @@ public class UserProfileActivity extends AppCompatActivity {
         /* Save Profile button onclick listener; update the user's username and email and
         * return to the MainActivity (for now) */
         btnSave.setOnClickListener(v -> {
-            userManager.setUsername(user.getAccountID(), etUsername.getText().toString(), new FirestoreCallback() {
-                @Override
-                public void OnCallBack() {
+            userManager.setUsername(user.getAccountID(), etUsername.getText().toString(), (Void result) -> {
                     //Update the global user on successful call back, ideally done in the manager but I couldn't get it working
                     ((ExperimentApplication) getApplication()).setCurrentUsername(etUsername.getText().toString());
-                }
             });
-            userManager.setEmail(user.getAccountID(), etEmail.getText().toString(), new FirestoreCallback() {
-                @Override
-                public void OnCallBack() {
+            userManager.setEmail(user.getAccountID(), etEmail.getText().toString(), (Void result) -> {
                     ((ExperimentApplication) getApplication()).setCurrentUserEmail(etEmail.getText().toString());
-                }
             });
             finish();
         });

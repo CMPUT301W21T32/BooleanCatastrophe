@@ -5,14 +5,8 @@ import android.content.Context;
 import android.os.Build;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-
-import com.example.booleancatastrophe.interfaces.FirestoreUserCallback;
 import com.example.booleancatastrophe.model.User;
 import com.example.booleancatastrophe.model.UserManager;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.installations.FirebaseInstallations;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -65,12 +59,7 @@ public class ExperimentApplication extends Application {
                 BufferedReader br = new BufferedReader(new FileReader(path));
                 String ID = br.readLine();
                 setAccountID(ID);
-                uManager.getUser(ID, new FirestoreUserCallback() {
-                    @Override
-                    public void OnCallBack(User user) {
-                        setCurrentUser(user);
-                    }
-                });
+                uManager.getUser(ID, (user)->{ setCurrentUser(user); });
                 Log.d("Experiment Application", "Found file and set global!");
             }
             catch(IOException e){
@@ -96,8 +85,6 @@ public class ExperimentApplication extends Application {
                 uManager.addUser(u);
                 setCurrentUser(u);
         }
-
-
     }
 
     // Function to generate a Pseudo-Unique ID, taken from https://www.pocketmagic.net/android-unique-device-id/
