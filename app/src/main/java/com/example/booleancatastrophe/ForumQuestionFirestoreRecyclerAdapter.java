@@ -12,9 +12,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.booleancatastrophe.model.ForumQuestion;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.DocumentSnapshot;
 
-public class ForumQuestionFirestoreRecyclerAdapter extends FirestoreRecyclerAdapter<
-        ForumQuestion, ForumQuestionFirestoreRecyclerAdapter.ForumQuestionHolder> {
+public class ForumQuestionFirestoreRecyclerAdapter extends FirestoreRecyclerAdapter<ForumQuestion, ForumQuestionFirestoreRecyclerAdapter.ForumQuestionHolder> {
+
+    private OnItemClickListener listener;
 
     public ForumQuestionFirestoreRecyclerAdapter(
             @NonNull FirestoreRecyclerOptions<ForumQuestion> options) {
@@ -33,11 +35,11 @@ public class ForumQuestionFirestoreRecyclerAdapter extends FirestoreRecyclerAdap
     @Override
     public ForumQuestionHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(
-                R.layout.forumquestion_as_list_item, parent, false);
+                R.layout.forum_question_as_list_item, parent, false);
         return new ForumQuestionHolder(view);
     }
 
-    public static class ForumQuestionHolder extends RecyclerView.ViewHolder {
+    public class ForumQuestionHolder extends RecyclerView.ViewHolder {
         ImageView img;
         TextView tvQuestion;
         TextView tvNumberOfReplies;
@@ -50,6 +52,25 @@ public class ForumQuestionFirestoreRecyclerAdapter extends FirestoreRecyclerAdap
             tvQuestion = (TextView) itemView.findViewById(R.id.tv_forum_question);
             tvNumberOfReplies = (TextView) itemView.findViewById(R.id.tv_forum_question_num_replies);
             tvReplyLabel = itemView.findViewById(R.id.lbl_forum_question_num_replies);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    // Avoid case where item is clicked on when recycler view is in the removal animation
+                    if(position != RecyclerView.NO_POSITION && listener != null) {
+                        listener.onItemClick(getSnapshots().getSnapshot(position), position);
+                    }
+                }
+            });
         }
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(DocumentSnapshot documentSnapshot, int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
     }
 }

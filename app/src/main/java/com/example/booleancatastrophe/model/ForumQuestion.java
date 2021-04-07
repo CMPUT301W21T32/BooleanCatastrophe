@@ -2,13 +2,14 @@ package com.example.booleancatastrophe.model;
 
 import com.google.firebase.firestore.Exclude;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
 /**
  * Forum Question object that contains a number of replies
  **/
-public class ForumQuestion {
+public class ForumQuestion implements Serializable {
 
     @Exclude
     private Experiment experiment;

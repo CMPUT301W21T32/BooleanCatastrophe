@@ -14,38 +14,32 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
-import com.example.booleancatastrophe.model.Experiment;
-import com.example.booleancatastrophe.model.ExperimentType;
-import com.example.booleancatastrophe.model.ForumQuestion;
-import com.example.booleancatastrophe.model.User;
 
 /**
- * This fragment is a dialog to publish new question for a specific experiment
+ * This fragment is a dialog to publish new reply for a specific question
  **/
-public class NewForumQuestionFragment extends DialogFragment {
+public class NewForumReplyFragment extends DialogFragment {
 
     /* Required empty public constructor */
-    public NewForumQuestionFragment() {
-
-    }
+    public NewForumReplyFragment() {}
 
     /* Set up fragment UI and listener interface that needs to be implemented by the activity */
-    private EditText etQuestionContent;
+    private EditText etReplyContent;
 
-    private NewForumQuestionFragment.OnFragmentInteractionListener listener;
+    private NewForumReplyFragment.OnFragmentInteractionListener listener;
 
     public interface OnFragmentInteractionListener {
-        void onOkPressed(String askedQuestionContent);
+        void onOkPressed(String replyContent);
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if(context instanceof NewForumQuestionFragment.OnFragmentInteractionListener) {
-            listener = (NewForumQuestionFragment.OnFragmentInteractionListener) context;
+        if(context instanceof NewForumReplyFragment.OnFragmentInteractionListener) {
+            listener = (NewForumReplyFragment.OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement NewForumQuestionFragment.OnFragmentInteractionListener");
+                    + " must implement NewForumReplyFragment.OnFragmentInteractionListener");
         }
     }
 
@@ -54,28 +48,29 @@ public class NewForumQuestionFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(getActivity()).inflate(
-                R.layout.fragment_new_forum_question, null);
+                R.layout.fragment_new_forum_reply, null);
 
-        etQuestionContent = (EditText) view.findViewById(R.id.et_new_question_content);
+        etReplyContent = (EditText) view.findViewById(R.id.et_new_reply_content);
 
         /* Build and return the dialog with listener on the OK button - will return a new
          * experiment on press */
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
         return builder
-                .setTitle("Add Question to Experiment's Forum")
+                .setTitle("Reply To This Question")
                 .setView(view)
                 .setNegativeButton("Cancel", null)
-                .setPositiveButton("Publish Question", new DialogInterface.OnClickListener() {
+                .setPositiveButton("Add Reply", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
                         /* As soon as OK is clicked, pass the new experiment with this dialog
                          * fragment's UI value selections */
-                        String questionContent = etQuestionContent.getText().toString();
+                        String strReply = etReplyContent.getText().toString();
 
-                        listener.onOkPressed(questionContent);
+                        listener.onOkPressed(strReply);
                     }
                 }).create();
     }
+
 }

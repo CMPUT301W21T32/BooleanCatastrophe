@@ -12,12 +12,12 @@ import android.widget.Button;
 import com.example.booleancatastrophe.model.Experiment;
 import com.example.booleancatastrophe.model.ForumManager;
 import com.example.booleancatastrophe.model.ForumQuestion;
-import com.example.booleancatastrophe.model.Trial;
 import com.example.booleancatastrophe.model.User;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.DocumentSnapshot;
 
-public class ViewForumQuestionsActivity extends AppCompatActivity
-        implements NewForumQuestionFragment.OnFragmentInteractionListener{
+public class ViewForumQuestionsActivity extends AppCompatActivity implements
+        NewForumQuestionFragment.OnFragmentInteractionListener {
 
     private ForumQuestionFirestoreRecyclerAdapter adapter;
     private FirestoreRecyclerOptions<ForumQuestion> questionOptions;
@@ -30,7 +30,7 @@ public class ViewForumQuestionsActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_experiment_questions);
+        setContentView(R.layout.activity_view_forum_questions);
 
         // Get the current user
         currentUser = ((ExperimentApplication) this.getApplication()).getCurrentUser();
@@ -43,7 +43,7 @@ public class ViewForumQuestionsActivity extends AppCompatActivity
         currentExperiment = (Experiment) intent.getSerializableExtra("EXPERIMENT");
 
         // Set up UI elements and recyclerview / adapter
-        btnAddQuestion = (Button) findViewById(R.id.btn_add_question);
+        btnAddQuestion = (Button) findViewById(R.id.btn_forum_add_question);
 
         forumManager = ForumManager.getInstance();
 
@@ -53,9 +53,21 @@ public class ViewForumQuestionsActivity extends AppCompatActivity
         questionOptions = forumManager.getAllExperimentQuestions(currentExperiment);
         adapter = new ForumQuestionFirestoreRecyclerAdapter(questionOptions);
 
-        rv = (RecyclerView) findViewById(R.id.experiment_forum_rv);
+        rv = (RecyclerView) findViewById(R.id.forum_question_rv);
         rv.setLayoutManager(new LinearLayoutManager(ViewForumQuestionsActivity.this));
         rv.setAdapter(adapter);
+
+        // Set up adapter on item click listener - if a question is clicked go to the reply view activity
+        // for that particular question
+        adapter.setOnItemClickListener(new ForumQuestionFirestoreRecyclerAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
+                ForumQuestion question = documentSnapshot.toObject(ForumQuestion.class);
+                Intent intent = new Intent(ViewForumQuestionsActivity.this, ViewForumRepliesActivity.class);
+                intent.putExtra("question", question);
+                startActivity(intent);
+            }
+        });
 
         btnAddQuestion.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,7 +91,7 @@ public class ViewForumQuestionsActivity extends AppCompatActivity
     }
 
     /**
-     * On fragment dialog's OK, create the new ForumQuestion and add it to the database
+     * Function for the new question fragment interaction listener interface
      **/
     @Override
     public void onOkPressed(String askedQuestionContent){
