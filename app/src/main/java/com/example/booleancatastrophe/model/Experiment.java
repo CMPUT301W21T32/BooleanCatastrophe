@@ -1,5 +1,8 @@
 package com.example.booleancatastrophe.model;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 // Class that holds all information about a given experiment, should follow an simple POJO structure
 // for easy database usage
 public class Experiment {
@@ -74,4 +77,24 @@ public class Experiment {
         this.type = type;
     }
 
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if(obj == null){ return false; }
+        if(!(obj instanceof Experiment)) { return false; }
+        Experiment exp = (Experiment) obj;
+        //TODO: Good design might suggest that two experiments are equal iff their IDs are equal
+        return this.id.equals(exp.id);
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return new StringBuilder().append(this.type.name()).append("Experiment(")
+                                  .append(this.id).append(", \"")
+                                  .append(this.description).append("\", ")
+                                  .append(this.region).append(", ")
+                                  .append(this.owner).append(", ")
+                                  .append(this.minTrials).append(")")
+                .toString();
+    }
 }
