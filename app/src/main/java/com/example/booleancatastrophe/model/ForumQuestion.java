@@ -1,56 +1,117 @@
 package com.example.booleancatastrophe.model;
 
+import com.google.firebase.firestore.Exclude;
+
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Forum Question object that contains a number of replies
  **/
-public class ForumQuestion extends ForumPost {
+public class ForumQuestion {
 
+    @Exclude
+    private Experiment experiment;
+    @Exclude
+    private User poster;
+    @Exclude
     private ArrayList<ForumReply> replies = new ArrayList<>();
 
+    private String id;
+    private Date date;
+    private String experimentID;
+    private String posterID;
+    private String content;
+    private ArrayList<String> replyIDs = new ArrayList<>();
+
+    /**
+     * Empty ForumQuestion constructor for Firestore easy object serialization / deserialization
+     **/
     public ForumQuestion() {}
 
+    /**
+     * ForumQuestion constructor
+     * @param experiment
+     * Experiment this question is related to
+     * @param poster
+     * User who posted this question
+     * @param content
+     * The visible question contents
+     **/
     public ForumQuestion(Experiment experiment, User poster, String content) {
-        super(experiment, poster, content);
+        this.experiment = experiment;
+        this.poster = poster;
+
+        this.id = null;    // will be set by the ForumManager
+        this.date = new Date();
+        this.experimentID = experiment.getId();
+        this.posterID = poster.getAccountID();
+        this.content = content;
     }
 
-    /**
-     * This function adds a reply to the list of replies that address this question
-     * @param reply
-     * The reply to add to this Question's list of replies
-     **/
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public String getExperimentID() {
+        return experimentID;
+    }
+
+    public void setExperimentID(String experimentID) {
+        this.experimentID = experimentID;
+    }
+
+    public String getPosterID() {
+        return posterID;
+    }
+
+    public void setPosterID(String posterID) {
+        this.posterID = posterID;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public ArrayList<String> getReplyIDs() {
+        return replyIDs;
+    }
+
+    public void setReplyIDs(ArrayList<String> replyIDs) {
+        this.replyIDs = replyIDs;
+    }
+
+    @Exclude
+    public Experiment getExperiment() {
+        return experiment;
+    }
+
+    @Exclude
+    public User getPoster() {
+        return poster;
+    }
+
     public void addReply(ForumReply reply) {
         replies.add(reply);
+        replyIDs.add(reply.getId());
     }
 
-    /**
-     * This function gets the replies list that this question holds
-     * @return replies
-     * The list of replies contained by this question
-     **/
-    public ArrayList<ForumReply> getReplies() {
-        return replies;
-    }
-
-    /**
-     * This function gets the IDs of the replies in the replies list that this question holds
-     * @return ids
-     * The list of reply ids contained by this question
-     **/
-    public ArrayList<String> getReplyIds() {
-        ArrayList<String> ids = new ArrayList<>();
-        for(int i = 0; i < replies.size(); ++i) {
-            ids.add(replies.get(i).getId());
-        }
-        return ids;
-    }
-
-    /**
-     * This function gets the number of the replies in the replies list that this question holds
-     * @return numReplies
-     * The number of replies contained by this question
-     **/
     public int getReplyNumber() {
         return replies.size();
     }

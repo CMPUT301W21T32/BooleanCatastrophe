@@ -14,6 +14,7 @@ import com.example.booleancatastrophe.model.ForumManager;
 import com.example.booleancatastrophe.model.ForumQuestion;
 import com.example.booleancatastrophe.model.Trial;
 import com.example.booleancatastrophe.model.User;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
 public class ViewForumQuestionsActivity extends AppCompatActivity
         implements NewForumQuestionFragment.OnFragmentInteractionListener{
@@ -40,12 +41,14 @@ public class ViewForumQuestionsActivity extends AppCompatActivity
         Intent intent = getIntent();
         currentExperiment = (Experiment) intent.getSerializableExtra("EXPERIMENT");
 
-        // Set up UI elements
-        rv = (RecyclerView) findViewById(R.id.experiment_forum_rv);
+        // Set up UI elements and recyclerview / adapter
         btnAddQuestion = (Button) findViewById(R.id.btn_add_question);
 
         forumManager = ForumManager.getInstance();
+
         adapter = new ForumQuestionFirestoreRecyclerAdapter(forumManager.getAllExperimentQuestions(currentExperiment));
+
+        rv = (RecyclerView) findViewById(R.id.experiment_forum_rv);
         rv.setLayoutManager(new LinearLayoutManager(ViewForumQuestionsActivity.this));
         rv.setAdapter(adapter);
 
@@ -76,7 +79,7 @@ public class ViewForumQuestionsActivity extends AppCompatActivity
     @Override
     public void onOkPressed(String askedQuestionContent){
        ForumQuestion newForumQuestion = new ForumQuestion(currentExperiment, currentUser, askedQuestionContent);
-       forumManager.addForumPost(newForumQuestion);
-       adapter.updateOptions(forumManager.getAllExperimentQuestions(currentExperiment));
+       forumManager.addForumQuestion(newForumQuestion);
+//       adapter.updateOptions(forumManager.getAllExperimentQuestions(currentExperiment));
     }
 }
