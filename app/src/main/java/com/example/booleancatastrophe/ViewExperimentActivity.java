@@ -48,9 +48,8 @@ public class ViewExperimentActivity extends AppCompatActivity implements NewTria
             currentExperiment = (Experiment) getIntent().getSerializableExtra("experiment");
         }
 
-        currentExperiment.setId("Test");
         //get trial data from DB
-        eManager.getTrials("Test", new FirestoreTrialListCallback() {
+        eManager.getTrials(currentExperiment.getId(), new FirestoreTrialListCallback() {
             @Override
             public void OnCallBack(ArrayList<Trial> trials) {
                 currentTrials = trials;
