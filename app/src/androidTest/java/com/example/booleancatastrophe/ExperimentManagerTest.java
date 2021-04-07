@@ -64,7 +64,6 @@ public class ExperimentManagerTest {
     }
 
     private void getAllExperiments(FirestoreCallback<ArrayList<Experiment>> threadUnblocker){
-        //TODO: No way to get the full list of experiments
         em.getExperimentList(null, threadUnblocker);
     }
 

@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import com.example.booleancatastrophe.storage.FirestoreCallback;
 import com.example.booleancatastrophe.storage.Database;
 
+import com.example.booleancatastrophe.utils.UniversalSet;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -21,6 +22,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 // Class to manage all database operations related to experiments
 public class ExperimentManager {
@@ -146,6 +149,13 @@ public class ExperimentManager {
      *         });
      **/
     public void getExperimentList(ArrayList<String> experimentIDs, FirestoreCallback<ArrayList<Experiment>> firestoreCallback) {
+        Set<String> idsToFind;
+        if(experimentIDs != null){
+            idsToFind = new HashSet<>(experimentIDs);
+        }
+        else{
+            idsToFind = new UniversalSet();
+        }
         ArrayList<Experiment> experimentList = new ArrayList<Experiment>();
         experimentRef
                 .get()
@@ -154,8 +164,9 @@ public class ExperimentManager {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                if(experimentIDs.contains( ((Experiment) document.toObject(Experiment.class)).getId())){
-                                    experimentList.add((Experiment) document.toObject(Experiment.class));
+                                Experiment ex = (Experiment) document.toObject(Experiment.class);
+                                if(idsToFind.contains(ex.getId())){
+                                    experimentList.add(ex);
                                 }
                             }
                             firestoreCallback.onCallback(experimentList);
