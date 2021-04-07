@@ -38,6 +38,7 @@ public class ViewExperimentActivity extends AppCompatActivity implements NewTria
         TextView trialCountText = (TextView) findViewById(R.id.trialCountText);
         Button newTrialButton = (Button) findViewById(R.id.newTrialButton);
         Button btnViewExperimentForum = (Button) findViewById(R.id.btn_experiment_forum);
+        Button btnViewExperimentStatistics = (Button) findViewById(R.id.btn_experiment_statistics);
 
         // Get the current experiment data through the intent
         Bundle extras = getIntent().getExtras();
@@ -76,6 +77,14 @@ public class ViewExperimentActivity extends AppCompatActivity implements NewTria
             newIntent.putExtra("EXPERIMENT", currentExperiment);
             startActivity(newIntent);
         });
+
+        // Go to statistics view when this is clicked
+        btnViewExperimentStatistics.setOnClickListener((v) -> {
+            Intent newIntent = new Intent(this, ViewStatisticsActivity.class);
+            newIntent.putExtra("EXPERIMENT", currentExperiment);
+            startActivity(newIntent);
+        });
+
     }
 
     public Experiment getCurrentExperiment(){

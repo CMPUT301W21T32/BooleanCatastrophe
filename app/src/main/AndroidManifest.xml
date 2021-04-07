@@ -10,7 +10,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MaterialComponents.Light.NoActionBar">
-        <activity android:name=".ViewForumRepliesActivity"></activity>
+        <activity android:name=".ViewStatisticsActivity"></activity>
+        <activity android:name=".ViewForumRepliesActivity" />
         <activity android:name=".ViewForumQuestionsActivity" />
         <activity android:name=".ViewExperimentActivity" />
         <activity android:name=".UserProfileActivity" />

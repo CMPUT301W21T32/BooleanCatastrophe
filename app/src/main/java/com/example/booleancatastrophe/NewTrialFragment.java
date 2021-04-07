@@ -25,6 +25,8 @@ import com.example.booleancatastrophe.model.ExperimentType;
 import com.example.booleancatastrophe.model.Trial;
 import com.google.firebase.firestore.GeoPoint;
 
+import java.util.Date;
+
 //Fragment to capture a new trial on the given experiment
 //TODO implement geolocation features
 //TODO clean up UI
@@ -104,8 +106,9 @@ public class NewTrialFragment extends DialogFragment {
                         Double result = Double.parseDouble(trialResult.getText().toString());
                         Trial newTrial = new Trial(((ExperimentApplication) getActivity().getApplication()).getAccountID()
                                 , result
-                                , new GeoPoint(45, 45)
-                                , type);
+                                , new GeoPoint(45, 45) //Eventually get the users location if locationEnable
+                                , type
+                                , new Date());
                         listener.onOkPressed(newTrial);
                     }
                 }).create();

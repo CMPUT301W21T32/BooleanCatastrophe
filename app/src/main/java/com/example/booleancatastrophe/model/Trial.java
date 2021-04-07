@@ -3,6 +3,8 @@ package com.example.booleancatastrophe.model;
 import com.example.booleancatastrophe.model.ExperimentType;
 import com.google.firebase.firestore.GeoPoint;
 
+import java.util.Date;
+
 // Class to hold all information about a trial
 public class Trial {
 
@@ -10,14 +12,16 @@ public class Trial {
     private double result;   //to make the class easily serializable and deserializable we use a double for all results
     private GeoPoint location;
     private ExperimentType type;
+    private Date date;
 
     public Trial() {}
 
-    public Trial(String experimenter, double result, GeoPoint location, ExperimentType type){
+    public Trial(String experimenter, double result, GeoPoint location, ExperimentType type, Date date){
         this.experimenter = experimenter;
         this.result = result;
         this.location = location;
         this.type = type;
+        this.date = date;
     }
 
     public String getExperimenter(){
@@ -53,5 +57,7 @@ public class Trial {
     }
 
     public ExperimentType getType(){ return type; }
+
+    public Date getDate(){ return date; }
 
 }
