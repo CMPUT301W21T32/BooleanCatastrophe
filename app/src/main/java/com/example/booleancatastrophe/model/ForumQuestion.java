@@ -22,6 +22,7 @@ public class ForumQuestion implements Serializable {
     private Date date;
     private String experimentID;
     private String posterID;
+    private String posterUsername;
     private String content;
     private ArrayList<String> replyIDs = new ArrayList<>();
 
@@ -47,6 +48,7 @@ public class ForumQuestion implements Serializable {
         this.date = new Date();
         this.experimentID = experiment.getId();
         this.posterID = poster.getAccountID();
+        this.posterUsername = poster.getUsername();
         this.content = content;
     }
 
@@ -80,6 +82,14 @@ public class ForumQuestion implements Serializable {
 
     public void setPosterID(String posterID) {
         this.posterID = posterID;
+    }
+
+    public String getPosterUsername() {
+        return posterUsername;
+    }
+
+    public void setPosterUsername(String posterUsername) {
+        this.posterUsername = posterUsername;
     }
 
     public String getContent() {

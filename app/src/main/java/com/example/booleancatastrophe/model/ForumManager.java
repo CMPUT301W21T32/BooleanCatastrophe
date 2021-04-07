@@ -20,6 +20,9 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+//TODO think about handling updates better ie. if the user changes their username...
+// doesn't matter for functionality, just for visuals as the user id will be consistent
+
 /** This class handles the database operations related to experiment forums */
 public class ForumManager {
 
@@ -63,6 +66,7 @@ public class ForumManager {
         d.put("date", new Timestamp(forumQuestion.getDate()));
         d.put("experimentID", forumQuestion.getExperimentID());
         d.put("posterID", forumQuestion.getPosterID());
+        d.put("posterUsername", forumQuestion.getPosterUsername());
         d.put("content", forumQuestion.getContent());
         d.put("replyIDs", forumQuestion.getReplyIDs());
 
@@ -77,6 +81,40 @@ public class ForumManager {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.w(TAG, "Error adding forum question");
+                    }
+                });
+
+        d.clear();
+    }
+
+    /** Update an already created forum question in the database
+     * @param forumQuestion
+     * The question to update that already exists in the database
+     **/
+    public void updateForumQuestion(ForumQuestion forumQuestion) {
+        DocumentReference docRef = questionsRef.document(forumQuestion.getId());
+
+        // Construct the structure of the data entry to update in the database
+        d.clear();
+        d.put("id", forumQuestion.getId());
+        d.put("date", new Timestamp(forumQuestion.getDate()));
+        d.put("experimentID", forumQuestion.getExperimentID());
+        d.put("posterID", forumQuestion.getPosterID());
+        d.put("posterUsername", forumQuestion.getPosterUsername());
+        d.put("content", forumQuestion.getContent());
+        d.put("replyIDs", forumQuestion.getReplyIDs());
+
+        docRef.set(d)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Successfully updated forum question");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error updating forum question");
                     }
                 });
 
@@ -98,6 +136,7 @@ public class ForumManager {
         d.put("date", new Timestamp(forumReply.getDate()));
         d.put("questionID", forumReply.getQuestionID());
         d.put("posterID", forumReply.getPosterID());
+        d.put("posterUsername", forumReply.getPosterUsername());
         d.put("content", forumReply.getContent());
 
         docRef.set(d)
@@ -141,15 +180,9 @@ public class ForumManager {
      * The data option that the ForumReply recycler view adapter will be linked to / watching
      **/
     public FirestoreRecyclerOptions<ForumReply> getAllQuestionReplies(ForumQuestion question) {
-        Query query = repliesRef.whereEqualTo("questionID", question.getId()).orderBy("date", Query.Direction.DESCENDING);
+        Query query = repliesRef.whereEqualTo("questionID", question.getId()).orderBy("date", Query.Direction.ASCENDING);
         return new FirestoreRecyclerOptions.Builder<ForumReply>()
                 .setQuery(query, ForumReply.class)
                 .build();
     }
-
-
-
-
-
-
 }

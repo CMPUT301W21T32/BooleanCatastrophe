@@ -16,6 +16,7 @@ public class ForumReply {
     private Date date;
     private String questionID;
     private String posterID;
+    private String posterUsername;
     private String content;
 
     /**
@@ -40,6 +41,7 @@ public class ForumReply {
         this.date = new Date();
         this.questionID = question.getId();
         this.posterID = poster.getAccountID();
+        this.posterUsername = poster.getUsername();
         this.content = content;
     }
 
@@ -93,6 +95,14 @@ public class ForumReply {
 
     public void setPosterID(String posterID) {
         this.posterID = posterID;
+    }
+
+    public String getPosterUsername() {
+        return posterUsername;
+    }
+
+    public void setPosterUsername(String posterUsername) {
+        this.posterUsername = posterUsername;
     }
 
     public String getContent() {

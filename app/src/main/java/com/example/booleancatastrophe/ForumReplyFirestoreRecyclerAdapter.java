@@ -26,9 +26,9 @@ public class ForumReplyFirestoreRecyclerAdapter extends FirestoreRecyclerAdapter
     protected void onBindViewHolder(
             @NonNull ForumReplyFirestoreRecyclerAdapter.ForumReplyHolder holder, int position, @NonNull ForumReply model) {
         holder.tvReply.setText(model.getContent());
-        holder.tvPosterName.setText(model.getPoster().getUsername());
+        holder.tvPosterName.setText(model.getPosterUsername());
         holder.tvDate.setText(model.getDate().toString());
-        // Holder image and reply label have values in the XML but could change here...
+        // Holder image has XML values, would be easy to add additional UI elements here
     }
 
     @NonNull

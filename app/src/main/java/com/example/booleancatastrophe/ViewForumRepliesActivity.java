@@ -85,6 +85,9 @@ public class ViewForumRepliesActivity extends AppCompatActivity implements
     @Override
     public void onOkPressed(String replyContent){
         ForumReply newForumReply = new ForumReply(currentQuestion, currentUser, replyContent);
+        currentQuestion.addReply(newForumReply);
+
+        forumManager.updateForumQuestion(currentQuestion);
         forumManager.addForumReply(newForumReply);
     }
 }
