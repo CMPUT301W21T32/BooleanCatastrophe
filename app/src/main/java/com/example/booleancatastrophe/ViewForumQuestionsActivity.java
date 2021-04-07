@@ -20,6 +20,7 @@ public class ViewForumQuestionsActivity extends AppCompatActivity
         implements NewForumQuestionFragment.OnFragmentInteractionListener{
 
     private ForumQuestionFirestoreRecyclerAdapter adapter;
+    private FirestoreRecyclerOptions<ForumQuestion> questionOptions;
     private ForumManager forumManager;
     private RecyclerView rv;
     private Button btnAddQuestion;
@@ -46,7 +47,11 @@ public class ViewForumQuestionsActivity extends AppCompatActivity
 
         forumManager = ForumManager.getInstance();
 
-        adapter = new ForumQuestionFirestoreRecyclerAdapter(forumManager.getAllExperimentQuestions(currentExperiment));
+        // Set up the adapter to listen for a specific data / query combination - note that this can be changed by modifying questionOptions via
+        // possible ForumManager queries and then call
+        // adapter.updateOptions(questionOptions);
+        questionOptions = forumManager.getAllExperimentQuestions(currentExperiment);
+        adapter = new ForumQuestionFirestoreRecyclerAdapter(questionOptions);
 
         rv = (RecyclerView) findViewById(R.id.experiment_forum_rv);
         rv.setLayoutManager(new LinearLayoutManager(ViewForumQuestionsActivity.this));
@@ -80,6 +85,5 @@ public class ViewForumQuestionsActivity extends AppCompatActivity
     public void onOkPressed(String askedQuestionContent){
        ForumQuestion newForumQuestion = new ForumQuestion(currentExperiment, currentUser, askedQuestionContent);
        forumManager.addForumQuestion(newForumQuestion);
-//       adapter.updateOptions(forumManager.getAllExperimentQuestions(currentExperiment));
     }
 }
