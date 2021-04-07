@@ -122,8 +122,4 @@ public class ForumQuestion implements Serializable {
         replies.add(reply);
         replyIDs.add(reply.getId());
     }
-
-    public int getReplyNumber() {
-        return replies.size();
-    }
 }

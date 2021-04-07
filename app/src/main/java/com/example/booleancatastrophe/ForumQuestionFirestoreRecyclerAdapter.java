@@ -27,7 +27,7 @@ public class ForumQuestionFirestoreRecyclerAdapter extends FirestoreRecyclerAdap
     protected void onBindViewHolder(
             @NonNull ForumQuestionHolder holder, int position, @NonNull ForumQuestion model) {
         holder.tvQuestion.setText(model.getContent());
-        holder.tvNumberOfReplies.setText(String.valueOf(model.getReplyNumber()));
+        holder.tvNumberOfReplies.setText(String.valueOf(model.getReplyIDs().size()));
         // Holder image and reply label have values in the XML but could change here...
     }
 
