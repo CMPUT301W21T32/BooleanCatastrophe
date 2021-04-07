@@ -39,13 +39,12 @@ public class ViewForumQuestionsActivity extends AppCompatActivity implements
         }
 
         // Retrieve the experiment passed via the intent
-        Intent intent = getIntent();
-        currentExperiment = (Experiment) intent.getSerializableExtra("EXPERIMENT");
+        currentExperiment = (Experiment) getIntent().getSerializableExtra("EXPERIMENT");
+
+        // Get the forum manager instance
+        forumManager = ForumManager.getInstance();
 
         // Set up UI elements and recyclerview / adapter
-        btnAddQuestion = (Button) findViewById(R.id.btn_forum_add_question);
-
-        forumManager = ForumManager.getInstance();
 
         // Set up the adapter to listen for a specific data / query combination - note that this can be changed by modifying questionOptions via
         // possible ForumManager queries and then call
@@ -64,10 +63,12 @@ public class ViewForumQuestionsActivity extends AppCompatActivity implements
             public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
                 ForumQuestion question = documentSnapshot.toObject(ForumQuestion.class);
                 Intent intent = new Intent(ViewForumQuestionsActivity.this, ViewForumRepliesActivity.class);
-                intent.putExtra("question", question);
+                intent.putExtra("QUESTION", question);
                 startActivity(intent);
             }
         });
+
+        btnAddQuestion = (Button) findViewById(R.id.btn_forum_add_question);
 
         btnAddQuestion.setOnClickListener(new View.OnClickListener() {
             @Override
