@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".TrialDetailsFragment">
+
+    <TextView
+        android:id="@+id/experiment_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Title"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/experiment_desc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/experiment_title"
+        android:layout_marginTop="8dp"
+        android:text="Description" />
+
+    <TextView
+        android:id="@+id/trial_result"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/experiment_desc"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_toEndOf="@+id/trial_result_text"
+        android:text="656"
+        android:textAlignment="textEnd"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/trial_result_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/experiment_desc"
+        android:layout_marginTop="8dp"
+        android:text="Trial result - " />
+
+    <TextView
+        android:id="@+id/trial_location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/trial_result"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_toEndOf="@+id/trial_location_text"
+        android:text="Cameron Library"
+        android:textAlignment="textEnd"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/trial_location_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/trial_result_text"
+        android:layout_marginTop="8dp"
+        android:text="Trial location - " />
+
+    <TextView
+        android:id="@+id/experiment_by_placeholder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="0dp"
+        android:layout_toEndOf="@+id/experiment_title"
+        android:text=" - Experiment by " />
+
+    <TextView
+        android:id="@+id/experiment_owner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="0dp"
+        android:layout_toEndOf="@+id/experiment_by_placeholder"
+        android:text="user"
+        android:textStyle="bold" />
+
+</RelativeLayout>

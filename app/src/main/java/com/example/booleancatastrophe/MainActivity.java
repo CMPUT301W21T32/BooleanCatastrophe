@@ -92,6 +92,14 @@ public class MainActivity extends AppCompatActivity implements
                 return true;
             } else {   // User's action not recognized; interacts with 'more' dropdown (look into)!
                 topAppToolbar.setTitle("IDK");
+
+
+                /* Temporary use of this button to test QR code generation
+
+                 */
+                Intent intent = new Intent(this, GenerateQRCodeActivity.class);
+                startActivity(intent);
+
                 return false;
             }
         });

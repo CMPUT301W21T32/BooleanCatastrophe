@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.booleancatastrophe"
-        minSdkVersion 30
+        minSdkVersion 28
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -52,6 +52,9 @@ dependencies {
 	implementation 'com.firebase:firebase-client-android:2.5.0'
     // Dependancy for firebase installations
     implementation 'com.google.firebase:firebase-installations:16.3.5'
+
+    implementation 'com.google.zxing:core:3.4.1'
+    implementation 'com.google.zxing:javase:3.4.1'
 
 
 

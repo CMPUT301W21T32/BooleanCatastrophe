@@ -41,4 +41,8 @@
     <string name="rad_nonnegcount_tooltip">Set up as a non-negative integer count experiment (zero or more trial type)</string>
     <string name="lbl_pub_exp_min">Minimum Trials:</string>
     <string name="pub_exp_min_default_value">0</string>
+    <string name="top_app_bar_title_generate_qr_code">Generate QR Code</string>
+    <string name="top_app_bar_share">Share</string>
+    <string name="cd_top_app_bar_share">Top app bar button to share</string>
+    <string name="btn_print">Print</string>
 </resources>
