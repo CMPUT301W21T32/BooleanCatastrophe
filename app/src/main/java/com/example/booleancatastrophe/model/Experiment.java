@@ -80,4 +80,23 @@ public class Experiment implements Serializable {
         this.type = type;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == null){ return false; }
+        if(!(obj instanceof Experiment)) { return false; }
+        Experiment exp = (Experiment) obj;
+        //TODO: Good design might suggest that two experiments are equal iff their IDs are equal
+        return this.id.equals(exp.id);
+    }
+
+    @Override
+    public String toString() {
+        return new StringBuilder().append(this.type.name()).append("Experiment(")
+                                  .append(this.id).append(", \"")
+                                  .append(this.description).append("\", ")
+                                  .append(this.region).append(", ")
+                                  .append(this.owner).append(", ")
+                                  .append(this.minTrials).append(")")
+                .toString();
+    }
 }

@@ -11,8 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.booleancatastrophe.interfaces.FirestoreExperimentListCallback;
-import com.example.booleancatastrophe.interfaces.FirestoreUserCallback;
 import com.example.booleancatastrophe.model.Experiment;
 import com.example.booleancatastrophe.model.ExperimentManager;
 import com.example.booleancatastrophe.model.User;
@@ -73,19 +71,14 @@ public class TabSubscribedExperimentsFragment extends Fragment {
         /* See the ExperimentManager and UserManager classes to integrate */
         String id = ((ExperimentApplication) this.getActivity().getApplication()).getAccountID();
         Log.d("Subscribed", id);
-        uManager.getUser(id, new FirestoreUserCallback() {
-            @Override
-            public void OnCallBack(User user) {
-                eManager.getExperimentList(user.getSubscriptions(), new FirestoreExperimentListCallback() {
-                    @Override
-                    public void OnCallBack(ArrayList<Experiment> list) {
+        uManager.getUser(id, (user) -> {
+                //In the database callback, get the experiments which the retrieved user is subscribed to
+                eManager.getExperimentList(user.getSubscriptions(), (ArrayList<Experiment> list) -> {
                         experiments.addAll(list);
                         if(!(list.isEmpty())){
                             Log.d("Subscribed", "Got list");
                         }
-                    }
                 });
-            }
         });
 
 
