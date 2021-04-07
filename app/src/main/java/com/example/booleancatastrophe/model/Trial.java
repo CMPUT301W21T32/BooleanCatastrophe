@@ -32,25 +32,25 @@ public class Trial {
         return location;
     }
 
-    public Number getResult(){
-        Number temp = 0;
+    public Double getResult(){
+        Double temp = 0d;
         switch (type){
             case COUNT:
-                temp = 1;
+                temp = 1d;
                 break;
             case BINOMIAL:     //map 0 to a failure and anything else to a success
                 if(result == 0){
-                    temp = 0;
+                    temp = 0d;
                 }
                 else{
-                    temp = 1;
+                    temp = 1d;
                 }
                 break;
             case MEASUREMENT:
                 temp = result;
                 break;
             case NONNEGCOUNT:
-                temp = (int) result;
+                temp = result;
                 break;
         }
         return temp;

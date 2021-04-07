@@ -25,6 +25,16 @@ public class ViewExperimentActivity extends AppCompatActivity implements NewTria
     private User currentUser;
     private ExperimentManager eManager = new ExperimentManager();
     private UserManager userManager = new UserManager();
+    private int trialCount;
+    private String minTrials;
+
+    private TextView usernameText;
+    private TextView descriptionText;
+    private TextView regionText;
+    private TextView trialCountText;
+    private Button newTrialButton;
+    private Button btnViewExperimentForum ;
+    private Button btnViewExperimentStatistics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,13 +42,13 @@ public class ViewExperimentActivity extends AppCompatActivity implements NewTria
         setContentView(R.layout.activity_view_experiment);
 
         //user = ((ExperimentApplication) this.getApplication()).getCurrentUser();
-        TextView usernameText = (TextView) findViewById(R.id.usernameText);
-        TextView descriptionText = (TextView) findViewById(R.id.descriptionText);
-        TextView regionText = (TextView) findViewById(R.id.regionText);
-        TextView trialCountText = (TextView) findViewById(R.id.trialCountText);
-        Button newTrialButton = (Button) findViewById(R.id.newTrialButton);
-        Button btnViewExperimentForum = (Button) findViewById(R.id.btn_experiment_forum);
-        Button btnViewExperimentStatistics = (Button) findViewById(R.id.btn_experiment_statistics);
+        usernameText = (TextView) findViewById(R.id.usernameText);
+        descriptionText = (TextView) findViewById(R.id.descriptionText);
+        regionText = (TextView) findViewById(R.id.regionText);
+        trialCountText = (TextView) findViewById(R.id.trialCountText);
+        newTrialButton = (Button) findViewById(R.id.newTrialButton);
+        btnViewExperimentForum = (Button) findViewById(R.id.btn_experiment_forum);
+        btnViewExperimentStatistics = (Button) findViewById(R.id.btn_experiment_statistics);
 
         // Get the current experiment data through the intent
         Bundle extras = getIntent().getExtras();
@@ -51,8 +61,8 @@ public class ViewExperimentActivity extends AppCompatActivity implements NewTria
             @Override
             public void onCallback(ArrayList<Trial> trials) {
                 currentTrials = trials;
-                String trialCount = ((Integer)trials.size()).toString();
-                String minTrials = ((Integer) currentExperiment.getMinTrials()).toString();
+                trialCount = ((Integer)trials.size());
+                minTrials = ((Integer) currentExperiment.getMinTrials()).toString();
                 String display = trialCount + " / " + minTrials + " trials completed";
                 trialCountText.setText(display);
             }
@@ -94,6 +104,9 @@ public class ViewExperimentActivity extends AppCompatActivity implements NewTria
     //Adds a new trial to the experiment
     public void onOkPressed(Trial newTrial){
         eManager.addTrial(currentExperiment.getId(), newTrial);
+        trialCount++;
+        String display = trialCount + " / " + minTrials + " trials completed";
+        trialCountText.setText(display);
 
     }
 
