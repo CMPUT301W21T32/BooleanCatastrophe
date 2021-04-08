@@ -58,18 +58,11 @@ public class TabOwnedExperimentsFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ExperimentApplication experimentApplication = (ExperimentApplication) getActivity().getApplication();
-        if(experimentApplication == null) {
-            Log.w("JACOB TESTING", "experiment application is null");
-        } else {
-            currentUser = experimentApplication.getCurrentUser();
-            if(currentUser == null) {
-                Log.w("JACOB TESTING", "retrieved current user is null");
-            }
-        }
-
         // Get the current user
-//        currentUser = ((ExperimentApplication) getActivity().getApplication()).getCurrentUser();
+        currentUser = ((ExperimentApplication) (requireActivity().getApplication())).getCurrentUser();
+        if(currentUser == null) {
+            Log.w("JACOB TESTING", "retrieved current user is null");
+        }
 
         experimentOptions = eManager.getUserPublishedExperiments(currentUser);
         adapter = new ExperimentFirestoreRecyclerAdapter(experimentOptions);
