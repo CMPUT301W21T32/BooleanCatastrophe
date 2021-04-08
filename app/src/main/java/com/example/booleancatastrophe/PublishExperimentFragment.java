@@ -22,6 +22,9 @@ import com.example.booleancatastrophe.model.User;
 
 
 // TODO set up the new experiment location functionality
+/**
+ * This fragment is a dialog to publish a new experiment
+ **/
 public class PublishExperimentFragment extends DialogFragment {
 
     /* Required empty public constructor */

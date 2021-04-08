@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import com.example.booleancatastrophe.interfaces.FirestoreCodeCallback;
 import com.example.booleancatastrophe.interfaces.FirestoreTrialListCallback;
 import com.example.booleancatastrophe.interfaces.FirestoreUserCallback;
@@ -17,12 +18,13 @@ import com.example.booleancatastrophe.model.Code;
 import com.example.booleancatastrophe.model.CodeManager;
 import com.example.booleancatastrophe.model.Experiment;
 import com.example.booleancatastrophe.model.ExperimentManager;
-import com.example.booleancatastrophe.model.ExperimentType;
 import com.example.booleancatastrophe.model.Trial;
 import com.example.booleancatastrophe.model.User;
 import com.example.booleancatastrophe.model.UserManager;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.example.booleancatastrophe.storage.FirestoreCallback;
+
 
 import java.util.ArrayList;
 
@@ -61,21 +63,18 @@ public class ViewExperimentActivity extends AppCompatActivity implements NewTria
         Button newTrialButton = (Button) findViewById(R.id.newTrialButton);
         Button newQrCodeButton = findViewById(R.id.newQrCodeButton);
         Button newBarcodeButton = findViewById(R.id.newBarcodeButton);
+        Button btnViewExperimentForum = (Button) findViewById(R.id.btn_experiment_forum);
 
-        //get experiment data (eventually) through intent
-        //TODO Check that this bundle/intent loading to get experiment is working, add else case if the extra received is null
-//        currentExperiment = new Experiment("Coin Flip", "AB", "Braden", 10, ExperimentType.MEASUREMENT);
-
+        // Get the current experiment data through the intent
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
             currentExperiment = (Experiment) getIntent().getSerializableExtra("experiment");
         }
 
-        currentExperiment.setId("Test");
         //get trial data from DB
-        eManager.getTrials("Test", new FirestoreTrialListCallback() {
+        eManager.getTrials(currentExperiment.getId(), new FirestoreCallback<ArrayList<Trial>>() {
             @Override
-            public void OnCallBack(ArrayList<Trial> trials) {
+            public void onCallback(ArrayList<Trial> trials) {
                 currentTrials = trials;
                 String trialCount = ((Integer)trials.size()).toString();
                 String minTrials = ((Integer) currentExperiment.getMinTrials()).toString();
@@ -84,12 +83,10 @@ public class ViewExperimentActivity extends AppCompatActivity implements NewTria
             }
         });
 
-        userManager.getUser(((ExperimentApplication) this.getApplication()).getAccountID(), new FirestoreUserCallback() {
-            @Override
-            public void OnCallBack(User user) {
-                currentUser = user;
-                usernameText.setText( currentUser.getUsername() );
-            }
+        userManager.getUser(((ExperimentApplication) this.getApplication()).getAccountID(),
+                (User user) -> {
+                    currentUser = user;
+                    usernameText.setText( currentUser.getUsername() );
         });
 
         descriptionText.setText( currentExperiment.getDescription() );
@@ -108,6 +105,13 @@ public class ViewExperimentActivity extends AppCompatActivity implements NewTria
         newBarcodeButton.setOnClickListener(view -> {
             trialFragmentMode = REGISTER_BARCODE;
             new NewTrialFragment().show(getSupportFragmentManager(), REGISTER_BARCODE);
+        });
+
+        /* Go to the experiment question forum activity if this button is clicked */
+        btnViewExperimentForum.setOnClickListener((v) -> {
+            Intent newIntent = new Intent(this, ViewForumQuestionsActivity.class);
+            newIntent.putExtra("EXPERIMENT", currentExperiment);
+            startActivity(newIntent);
         });
     }
 

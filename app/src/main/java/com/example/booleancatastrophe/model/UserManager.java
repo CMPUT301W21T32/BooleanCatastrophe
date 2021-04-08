@@ -5,9 +5,9 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.example.booleancatastrophe.ExperimentApplication;
-import com.example.booleancatastrophe.interfaces.FirestoreCallback;
-import com.example.booleancatastrophe.interfaces.FirestoreUserCallback;
+import com.example.booleancatastrophe.storage.Database;
+import com.example.booleancatastrophe.storage.FirestoreCallback;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -20,7 +20,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class UserManager {
 
     private static final String TAG = "User Manager";
-    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final FirebaseFirestore db = Database.getInstance();
     private final CollectionReference usersRef = db.collection("users");
 
     /**
@@ -48,7 +48,7 @@ public class UserManager {
      * @param accountID the id of the user
      * @param firestoreCallback defines the function called when the database operation is complete
      **/
-    public void getUser(String accountID, FirestoreUserCallback firestoreCallback) {
+    public void getUser(String accountID, FirestoreCallback<User> firestoreCallback) {
         usersRef.document(accountID).get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
@@ -59,7 +59,7 @@ public class UserManager {
                             Log.d(TAG, "No such document");
                         }
                         //should return a null object if the user does not exist
-                        firestoreCallback.OnCallBack((User) documentSnapshot.toObject(User.class));
+                        firestoreCallback.onCallback((User) documentSnapshot.toObject(User.class));
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -75,14 +75,14 @@ public class UserManager {
      * @param accountID the id of the user
      * @param email the new value of email
      **/
-    public void setEmail(String accountID, String email, FirestoreCallback firestoreCallback){
+    public void setEmail(String accountID, String email, FirestoreCallback<Void> firestoreCallback){
         usersRef.document(accountID).update("email", email)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "Email has been changed");
                         //currentUser.setEmail(email);
-                        firestoreCallback.OnCallBack();
+                        firestoreCallback.onCallback(null);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -98,15 +98,14 @@ public class UserManager {
      * @param accountID the id of the user
      * @param username the new value of username
      **/
-    public void setUsername(String accountID, String username, FirestoreCallback firestoreCallback){
+    public void setUsername(String accountID, String username, FirestoreCallback<Void> firestoreCallback){
         usersRef.document(accountID).update("username", username)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "Username has been changed");
                         //currentUser.setUsername(username);
-                        firestoreCallback.OnCallBack();
-
+                        firestoreCallback.onCallback(null);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -123,7 +122,7 @@ public class UserManager {
      * @param accountID the id of the user
      * @param experimentID the experiment to be added
      **/
-    public void subsribe(String accountID, String experimentID) {
+    public void subscribe(String accountID, String experimentID) {
         usersRef.document(accountID).update("subscriptions", FieldValue.arrayUnion(experimentID))
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -159,7 +158,4 @@ public class UserManager {
                     }
                 });
     }
-
-
-
 }

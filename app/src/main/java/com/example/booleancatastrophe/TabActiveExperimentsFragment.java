@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.booleancatastrophe.interfaces.FirestoreExperimentListCallback;
 import com.example.booleancatastrophe.model.Experiment;
 import com.example.booleancatastrophe.model.ExperimentManager;
 
@@ -133,19 +132,15 @@ public class TabActiveExperimentsFragment extends Fragment {
         experiments.add(e19);*/
         /* See the ExperimentManager and UserManager classes to integrate */
 
-        eManager.getPublishedExperiments(new FirestoreExperimentListCallback() { //this function is currently broken
-            @Override
-            public void OnCallBack(ArrayList<Experiment> list) {
-                    experiments.addAll(list);
-                    if(!(list.isEmpty())){
-                        Log.d("Published", "Got list");
-                    }
-                    else{
-                        Log.d("Published", "No list :(");
-                    }
+        eManager.getPublishedExperiments((ArrayList<Experiment> list) -> { //this function is currently broken
+            experiments.addAll(list);
+            if(!(list.isEmpty())){
+                Log.d("Published", "Got list");
+            }
+            else{
+                Log.d("Published", "No list :(");
             }
         });
-
 
     }
 }

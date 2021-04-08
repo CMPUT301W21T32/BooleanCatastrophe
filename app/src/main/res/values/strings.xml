@@ -47,4 +47,14 @@
     <string name="btn_print">Print</string>
     <string name="btn_generate_qr">Generate QR</string>
     <string name="btn_register_barcode">Register Barcode</string>
+    <string name="tv_forum_questions">Experiment Question Forum</string>
+    <string name="btn_add_question">Post New Question</string>
+    <string name="cd_forum_question">Image for forum questions</string>
+    <string name="lbl_forum_question_num_replies">Replies</string>
+    <string name="btn_experiment_forum">View Experiment Forum</string>
+    <string name="hint_new_question">Enter your question regarding this experiment...</string>
+    <string name="tv_forum_replies">Question Replies Forum</string>
+    <string name="btn_add_reply">Add Reply</string>
+    <string name="cd_forum_reply">Image for the forum replies</string>
+    <string name="hint_new_reply">Enter your reply to this question...</string>
 </resources>

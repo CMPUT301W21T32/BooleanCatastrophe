@@ -38,10 +38,10 @@ public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecycl
             @Override
             public void onClick(View view) {
                 int pos = viewHolder.getAdapterPosition();
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("experiment", experiments.get(pos));
+//                Bundle bundle = new Bundle();
+//                bundle.putSerializable("experiment", experiments.get(pos));
                 Intent intent = new Intent(context, ViewExperimentActivity.class);
-                intent.putExtras(bundle);
+                intent.putExtra("experiment", experiments.get(pos));
                 context.startActivity(intent);
             }
         });
