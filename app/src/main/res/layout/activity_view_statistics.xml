@@ -73,6 +73,7 @@
         android:id="@+id/mean_value_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:maxLength="4"
         android:layout_marginTop="25dp"
         android:layout_marginEnd="176dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -83,6 +84,7 @@
         android:id="@+id/stddev_value_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:maxLength="4"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="176dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -93,6 +95,7 @@
         android:id="@+id/lowerQ_value_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:maxLength="4"
         android:layout_marginTop="40dp"
         android:layout_marginEnd="176dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -103,6 +106,7 @@
         android:id="@+id/median_value_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:maxLength="4"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="176dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -114,8 +118,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:maxLength="4"
         android:layout_marginEnd="176dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/median_value_text"
         tools:text="upperQ" />
+
+    <com.jjoe64.graphview.GraphView
+        android:layout_width="357dp"
+        android:layout_height="179dp"
+        android:id="@+id/time_plot"
+        android:layout_marginTop="68dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/upperQ_value_text" />
+
+    <com.jjoe64.graphview.GraphView
+        android:id="@+id/histogram"
+        android:layout_width="357dp"
+        android:layout_height="179dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/time_plot" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
