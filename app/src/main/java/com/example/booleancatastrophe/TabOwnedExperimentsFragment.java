@@ -58,8 +58,12 @@ public class TabOwnedExperimentsFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Get the current user
-        currentUser = ((ExperimentApplication) (requireActivity().getApplication())).getCurrentUser();
+        // Get the current user - broke into two pieces for debugging
+        ExperimentApplication expApp = (ExperimentApplication) (getActivity().getApplication());
+        if(expApp == null) {
+            Log.w("JACOB TESTING", "retrieved application is null");
+        }
+        currentUser = expApp.getCurrentUser();
         if(currentUser == null) {
             Log.w("JACOB TESTING", "retrieved current user is null");
         }
