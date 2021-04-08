@@ -8,6 +8,7 @@ import com.example.booleancatastrophe.storage.FirestoreCallback;
 import com.example.booleancatastrophe.storage.Database;
 
 import com.example.booleancatastrophe.utils.UniversalSet;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -18,6 +19,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -292,4 +294,18 @@ public class ExperimentManager {
 
     //void search(String token){ }
 
+    /**
+     * Function to get Firestore Recycler Options object with inbuilt query for all experiments
+     * which are owned by a given user
+     * @param user
+     * The user to whom all the experiments are owned
+     * @return objectFireStoreRecyclerOption
+     * The data option that the ForumQuestion recycler view adapter will be linked to / watching
+     **/
+    public FirestoreRecyclerOptions<Experiment> getUserPublishedExperiments(User user) {
+        Query query = experimentRef.whereEqualTo("owner", user.getAccountID());
+        return new FirestoreRecyclerOptions.Builder<Experiment>()
+                .setQuery(query, Experiment.class)
+                .build();
+    }
 }
