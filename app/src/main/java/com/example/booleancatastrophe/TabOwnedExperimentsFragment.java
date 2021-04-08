@@ -58,33 +58,29 @@ public class TabOwnedExperimentsFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Get the current user - broke into two pieces for debugging
-        ExperimentApplication expApp = (ExperimentApplication) (getActivity().getApplication());
-        if(expApp == null) {
-            Log.w("JACOB TESTING", "retrieved application is null");
+        // Get the current user, if null don't read in data to avoid crash and re-check the user in
+        // the onStart and onStop to set it up
+        currentUser = ((ExperimentApplication) getActivity().getApplication()).getCurrentUser();
+
+        if(currentUser != null) {
+            experimentOptions = eManager.getUserPublishedExperiments(currentUser);
+            adapter = new ExperimentFirestoreRecyclerAdapter(experimentOptions);
+
+            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            recyclerView.setAdapter(adapter);
+
+            // Set up adapter on item click listener - if a question is clicked go to the individual
+            // experiment view activity
+            adapter.setOnItemClickListener(new ExperimentFirestoreRecyclerAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
+                    Experiment experiment = documentSnapshot.toObject(Experiment.class);
+                    Intent intent = new Intent(getContext(), ViewExperimentActivity.class);
+                    intent.putExtra("EXPERIMENT", experiment);
+                    startActivity(intent);
+                }
+            });
         }
-        currentUser = expApp.getCurrentUser();
-        if(currentUser == null) {
-            Log.w("JACOB TESTING", "retrieved current user is null");
-        }
-
-        experimentOptions = eManager.getUserPublishedExperiments(currentUser);
-        adapter = new ExperimentFirestoreRecyclerAdapter(experimentOptions);
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(adapter);
-
-        // Set up adapter on item click listener - if a question is clicked go to the individual
-        // experiment view activity
-        adapter.setOnItemClickListener(new ExperimentFirestoreRecyclerAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
-                Experiment experiment = documentSnapshot.toObject(Experiment.class);
-                Intent intent = new Intent(getContext(), ViewExperimentActivity.class);
-                intent.putExtra("EXPERIMENT", experiment);
-                startActivity(intent);
-            }
-        });
 
 //        experiments = new ArrayList<>();
 
@@ -135,11 +131,17 @@ public class TabOwnedExperimentsFragment extends Fragment {
     public void onStart() {
         super.onStart();
         adapter.startListening();
+        if(currentUser == null) {
+            currentUser = ((ExperimentApplication) getActivity().getApplication()).getCurrentUser();
+        }
     }
 
     @Override
     public void onStop() {
         super.onStop();
         adapter.stopListening();
+        if(currentUser == null) {
+            currentUser = ((ExperimentApplication) getActivity().getApplication()).getCurrentUser();
+        }
     }
 }
