@@ -45,4 +45,6 @@
     <string name="top_app_bar_share">Share</string>
     <string name="cd_top_app_bar_share">Top app bar button to share</string>
     <string name="btn_print">Print</string>
+    <string name="btn_generate_qr">Generate QR</string>
+    <string name="btn_register_barcode">Register Barcode</string>
 </resources>

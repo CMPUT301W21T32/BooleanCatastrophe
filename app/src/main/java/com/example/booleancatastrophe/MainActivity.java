@@ -104,17 +104,8 @@ public class MainActivity extends AppCompatActivity implements
                 Intent intent = new Intent(this, UserProfileActivity.class);
                 startActivity(intent);
                 return true;
-            } else if (id == R.id.top_app_bar_generate_qr){
-                /* Temporary use of this button to test QR code generation
-
-                 */
-                Intent intent = new Intent(this, GenerateQRCodeActivity.class);
-                startActivity(intent);
             } else if (id == R.id.top_app_bar_scan_qr) {
                 new IntentIntegrator(this).setDesiredBarcodeFormats(IntentIntegrator.QR_CODE).initiateScan();
-            } else if (id == R.id.top_app_bar_register_barcode) {
-                Trial testTrial = new Trial("experimenter_name", 5.54, new GeoPoint(-90, -180), ExperimentType.MEASUREMENT);
-                String testExpId = "12345";
             } else if (id == R.id.top_app_bar_scan_barcode) {
                 new IntentIntegrator(this).setDesiredBarcodeFormats(IntentIntegrator.EAN_13).initiateScan();
             } else {   // User's action not recognized; interacts with 'more' dropdown (look into)!
@@ -224,11 +215,6 @@ public class MainActivity extends AppCompatActivity implements
                     });
                 }
 
-                // BARCODE REGISTER LOGIC -- this code block should be moved to onActivityResult() in the ViewExperimentActivity.  Here for testing purposes only.
-//
-//                if (result.getFormatName() == IntentIntegrator.EAN_13) {
-//                    CodeManager.addBarcode(((ExperimentApplication) this.getApplication()).getAccountID(), result.getContents(), );
-//                }
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);

@@ -36,10 +36,8 @@ public class GenerateQRCodeActivity extends AppCompatActivity {
 
         myToolbar.setNavigationOnClickListener(view -> finish());
 
-
-        // todo get real data from intent to pass tto qrcode generator
-        Experiment experiment = generateTestExperiment();
-        Trial trial = generateTestTrial();
+        Experiment experiment = (Experiment) getIntent().getSerializableExtra("EXPERIMENT");
+        Trial trial = getIntent().getParcelableExtra("TRIAL");
         Bitmap bitmap = CodeManager.generateQrCode(experiment, trial, 250);
         ImageView imageView =  findViewById(R.id.qr_code_image_view);
         imageView.setImageBitmap(bitmap);
@@ -58,16 +56,6 @@ public class GenerateQRCodeActivity extends AppCompatActivity {
                 .add(R.id.trial_details_frame, TrialDetailsFragment.newInstance(experiment, trial))
                 .commit();
 
-    }
-
-    private Trial generateTestTrial() {
-        return new Trial("experimenter_name", 5.54, new GeoPoint(-90, -180), ExperimentType.MEASUREMENT);
-    }
-
-    private Experiment generateTestExperiment() {
-        Experiment exp = new Experiment("This experiment is very cool", "Edmonton, AB", "experiment Owner", 20, ExperimentType.MEASUREMENT);
-        exp.setId("1234");
-        return exp;
     }
 
 }
