@@ -308,4 +308,17 @@ public class ExperimentManager {
                 .setQuery(query, Experiment.class)
                 .build();
     }
+
+    /**
+     * Function to get Firestore Recycler Options object with inbuilt query for no experiments -
+     * used to fix issue where user is null upon program startup while waiting to update from db
+     * @return objectFireStoreRecyclerOption
+     * The data options that the ForumQuestion recycler view adapter will be linked to / watching
+     **/
+    public FirestoreRecyclerOptions<Experiment> getNoExperiments() {
+        Query query = experimentRef.whereEqualTo("owner", "-1");
+        return new FirestoreRecyclerOptions.Builder<Experiment>()
+                .setQuery(query, Experiment.class)
+                .build();
+    }
 }

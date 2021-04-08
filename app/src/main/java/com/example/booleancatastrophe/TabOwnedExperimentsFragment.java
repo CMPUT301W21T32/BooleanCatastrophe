@@ -50,6 +50,34 @@ public class TabOwnedExperimentsFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_tab_owned_experiments, container,
                 false);
         recyclerView = (RecyclerView) view.findViewById(R.id.tab_owned_experiments_rv);
+// Get the current user, if null don't read in data to avoid crash and re-check the user in
+        // the onStart and onStop to set it up
+        currentUser = ((ExperimentApplication) getActivity().getApplication()).getCurrentUser();
+
+        // If current user hasn't been retrieved from the asynchronous database call yet, option
+        // for experiment options should be blank and updated later in the onresume and onpause
+        if(currentUser == null) {
+            experimentOptions = eManager.getNoExperiments();
+        } else {
+            experimentOptions = eManager.getUserPublishedExperiments(currentUser);
+        }
+
+        adapter = new ExperimentFirestoreRecyclerAdapter(experimentOptions);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(adapter);
+
+        // Set up adapter on item click listener - if a question is clicked go to the individual
+        // experiment view activity
+        adapter.setOnItemClickListener(new ExperimentFirestoreRecyclerAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
+                Experiment experiment = documentSnapshot.toObject(Experiment.class);
+                Intent intent = new Intent(getContext(), ViewExperimentActivity.class);
+                intent.putExtra("EXPERIMENT", experiment);
+                startActivity(intent);
+            }
+        });
 
         return view;
     }
@@ -58,29 +86,7 @@ public class TabOwnedExperimentsFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Get the current user, if null don't read in data to avoid crash and re-check the user in
-        // the onStart and onStop to set it up
-        currentUser = ((ExperimentApplication) getActivity().getApplication()).getCurrentUser();
 
-        if(currentUser != null) {
-            experimentOptions = eManager.getUserPublishedExperiments(currentUser);
-            adapter = new ExperimentFirestoreRecyclerAdapter(experimentOptions);
-
-            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-            recyclerView.setAdapter(adapter);
-
-            // Set up adapter on item click listener - if a question is clicked go to the individual
-            // experiment view activity
-            adapter.setOnItemClickListener(new ExperimentFirestoreRecyclerAdapter.OnItemClickListener() {
-                @Override
-                public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
-                    Experiment experiment = documentSnapshot.toObject(Experiment.class);
-                    Intent intent = new Intent(getContext(), ViewExperimentActivity.class);
-                    intent.putExtra("EXPERIMENT", experiment);
-                    startActivity(intent);
-                }
-            });
-        }
 
 //        experiments = new ArrayList<>();
 
@@ -142,6 +148,26 @@ public class TabOwnedExperimentsFragment extends Fragment {
         adapter.stopListening();
         if(currentUser == null) {
             currentUser = ((ExperimentApplication) getActivity().getApplication()).getCurrentUser();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(currentUser == null) {
+            currentUser = ((ExperimentApplication) getActivity().getApplication()).getCurrentUser();
+            experimentOptions = eManager.getUserPublishedExperiments(currentUser);
+            adapter.updateOptions(experimentOptions);
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(currentUser == null) {
+            currentUser = ((ExperimentApplication) getActivity().getApplication()).getCurrentUser();
+            experimentOptions = eManager.getUserPublishedExperiments(currentUser);
+            adapter.updateOptions(experimentOptions);
         }
     }
 }
