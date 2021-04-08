@@ -9,14 +9,28 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.widget.Toast;
 
+import com.example.booleancatastrophe.interfaces.FirestoreCodeCallback;
+import com.example.booleancatastrophe.interfaces.FirestoreExperimentCallback;
+import com.example.booleancatastrophe.model.Code;
+import com.example.booleancatastrophe.model.CodeManager;
 import com.example.booleancatastrophe.model.Experiment;
 import com.example.booleancatastrophe.model.ExperimentManager;
+import com.example.booleancatastrophe.model.ExperimentType;
+import com.example.booleancatastrophe.model.Trial;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.firestore.GeoPoint;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+
+import static com.example.booleancatastrophe.model.CodeManager.parseQrString;
 
 
 // Took a lot of help from https://stackoverflow.com/questions/41504539/android-tablayout-navigation-with-recyclerview-items
@@ -90,10 +104,14 @@ public class MainActivity extends AppCompatActivity implements
                 Intent intent = new Intent(this, UserProfileActivity.class);
                 startActivity(intent);
                 return true;
+            } else if (id == R.id.top_app_bar_scan_qr) {
+                new IntentIntegrator(this).setDesiredBarcodeFormats(IntentIntegrator.QR_CODE).initiateScan();
+            } else if (id == R.id.top_app_bar_scan_barcode) {
+                new IntentIntegrator(this).setDesiredBarcodeFormats(IntentIntegrator.EAN_13).initiateScan();
             } else {   // User's action not recognized; interacts with 'more' dropdown (look into)!
                 topAppToolbar.setTitle("IDK");
-                return false;
             }
+            return false;
         });
 
 
@@ -156,5 +174,50 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onOkPressed(Experiment experiment) {
         experimentManager.addExperiment(experiment);
+    }
+
+    // launch qr code scanner and add trial if successfully scanned
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d(TAG, "onActivityResult() started!");
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if(result != null) {
+            if(result.getContents() == null) {
+                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+                ExperimentManager expManager = new ExperimentManager();
+                // QR SCAN LOGIC
+                if (result.getFormatName().equals(IntentIntegrator.QR_CODE)) {
+                    Pair<String, Trial> pair = CodeManager.parseQrString(result.getContents(), ((ExperimentApplication) getApplication()).getAccountID());
+                    if (pair != null) {
+                        // TODO get user confirmation maybe
+
+                        expManager.addTrial(pair.first, pair.second);
+                        Log.d(TAG, "Valid QR code");
+                    } else {
+                        Log.d(TAG, "Invalid QR code");
+                    }
+                }
+
+                // BARCODE SCAN LOGIC
+                else if (result.getFormatName().equals(IntentIntegrator.EAN_13)) {
+                    CodeManager.getBarcode(((ExperimentApplication) this.getApplication()).getAccountID(), result.getContents(), new FirestoreCodeCallback() {
+                        @Override
+                        public void OnCallBack(Code code) {
+                            if (code != null) {
+                                expManager.addTrial(code.getExperimentId(), code.getTrial());
+                                Log.d(TAG, "Valid barcode");
+                            } else {
+                                Log.d(TAG, "Unregistered barcode");
+                            }
+                        }
+                    });
+                }
+
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
     }
 }
