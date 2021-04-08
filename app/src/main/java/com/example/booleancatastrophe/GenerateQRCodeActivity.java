@@ -21,6 +21,8 @@ import com.example.booleancatastrophe.model.ExperimentType;
 import com.example.booleancatastrophe.model.Trial;
 import com.google.firebase.firestore.GeoPoint;
 
+import java.util.Objects;
+
 public class GenerateQRCodeActivity extends AppCompatActivity {
 
     @Override
@@ -28,20 +30,17 @@ public class GenerateQRCodeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_generate_q_r_code);
 
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.top_app_toolbar_generate_qr);
+        Toolbar myToolbar = findViewById(R.id.top_app_toolbar_generate_qr);
         setSupportActionBar(myToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
-        myToolbar.setNavigationOnClickListener(view -> {
-            finish();
-        });
+        myToolbar.setNavigationOnClickListener(view -> finish());
 
 
         // todo get real data from intent to pass tto qrcode generator
         Experiment experiment = generateTestExperiment();
         Trial trial = generateTestTrial();
-        CodeManager codeManager = new CodeManager();
-        Bitmap bitmap = codeManager.generateQrCode(experiment, trial, 250);
+        Bitmap bitmap = CodeManager.generateQrCode(experiment, trial, 250);
         ImageView imageView =  findViewById(R.id.qr_code_image_view);
         imageView.setImageBitmap(bitmap);
 
@@ -49,6 +48,7 @@ public class GenerateQRCodeActivity extends AppCompatActivity {
         printBtn.setOnClickListener(view -> {
             PrintHelper photoPrinter = new PrintHelper(this);
             photoPrinter.setScaleMode(PrintHelper.SCALE_MODE_FIT);
+            assert bitmap != null;
             photoPrinter.printBitmap("qrcode.bmp - print", bitmap);
 
         });
@@ -65,7 +65,9 @@ public class GenerateQRCodeActivity extends AppCompatActivity {
     }
 
     private Experiment generateTestExperiment() {
-        return new Experiment("This experiment is very cool", "Edmonton, AB", "experiment Owner", 20, ExperimentType.MEASUREMENT);
+        Experiment exp = new Experiment("This experiment is very cool", "Edmonton, AB", "experiment Owner", 20, ExperimentType.MEASUREMENT);
+        exp.setId("1234");
+        return exp;
     }
 
 }

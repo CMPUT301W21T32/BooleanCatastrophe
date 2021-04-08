@@ -25,5 +25,17 @@
         android:title="@string/top_app_bar_more"
         android:contentDescription="@string/cd_top_app_bar_more"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/top_app_bar_generate_qr"
+        android:title="Generate QR Code (test)" />
+    <item
+        android:id="@+id/top_app_bar_scan_qr"
+        android:title="Scan QR code (test)" />
+    <item
+        android:id="@+id/top_app_bar_register_barcode"
+        android:title="Register barcode (test)" />
+    <item
+        android:id="@+id/top_app_bar_scan_barcode"
+        android:title="Scan barcode (test)" />
 
 </menu>
