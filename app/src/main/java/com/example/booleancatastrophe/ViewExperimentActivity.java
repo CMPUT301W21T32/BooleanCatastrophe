@@ -186,14 +186,36 @@ public class ViewExperimentActivity extends AppCompatActivity implements NewTria
      * @param doIt
      * Boolean variable dictating whether the tools will be enabled/visible or disabled/invisible */
     private void setupOwnerTools(boolean doIt) {
+        setUpPublishButton(doIt);
+    }
+
+    /**
+     * This function sets up specific owner tool: unpublish or re-publish button which changes
+     * the current experiment's internal state and the button's action depending on that state
+     * @param doIt
+     * Boolean variable dictating whether the button will be visible and functioning or gone */
+    private void setUpPublishButton(boolean doIt) {
         if(doIt) {
+            if(currentExperiment.getPublished()) {
+                btnUnpublishExperiment.setText("Unpublish");
+            } else {
+                btnUnpublishExperiment.setText("Re-publish");
+            }
             btnUnpublishExperiment.setEnabled(true);
             btnUnpublishExperiment.setVisibility(View.VISIBLE);
             btnUnpublishExperiment.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    eManager.unpublish(currentExperiment.getId());
-                    currentExperiment.setPublished(false);
+                    if(currentExperiment.getPublished()) {
+                        eManager.unpublish(currentExperiment.getId());
+                        currentExperiment.setPublished(false);
+                        btnUnpublishExperiment.setText("Re-publish");
+                    } else {
+                        eManager.publish(currentExperiment.getId());
+                        currentExperiment.setPublished(true);
+                        btnUnpublishExperiment.setText("Unpublish");
+                    }
+
                 }
             });
         } else {
