@@ -67,4 +67,5 @@
     <string name="btn_home_search">Search For Experiments or Users</string>
     <string name="btn_home_scan_qr">Scan QR Code</string>
     <string name="btn_home_scan_barcode">Scan Barcode</string>
+    <string name="lbl_pub_exp_location_req">Location Required</string>
 </resources>

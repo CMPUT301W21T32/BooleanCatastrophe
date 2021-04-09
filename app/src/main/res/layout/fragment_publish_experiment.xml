@@ -12,12 +12,12 @@
         android:id="@+id/et_pub_exp_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="30dp"
         android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
-        android:importantForAutofill="no"
+        android:layout_marginEnd="30dp"
         android:ems="10"
         android:hint="@string/hint_pub_exp_description"
+        android:importantForAutofill="no"
         android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -27,26 +27,22 @@
      person who clicked the 'publish experiment' button, not editable) -->
 
     <!-- Radio buttons for selecting the experiment trial type -->
+
     <TextView
         android:id="@+id/tv_pub_exp_owner"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="16dp"
         android:ems="10"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/et_pub_exp_region"
         app:layout_constraintTop_toBottomOf="@+id/et_pub_exp_region" />
 
     <RadioGroup
         android:id="@+id/rad_group_pub_exp"
-        android:layout_width="match_parent"
+        android:layout_width="157dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
         android:layout_marginTop="10dp"
-        android:layout_marginEnd="30dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/et_pub_exp_description"
         app:layout_constraintTop_toBottomOf="@+id/et_pub_exp_description">
 
         <RadioButton
@@ -106,17 +102,24 @@
 
     <EditText
         android:id="@+id/et_pub_exp_region"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginTop="16dp"
         android:hint="@string/hint_pub_exp_region"
         android:importantForAutofill="no"
         android:inputType="text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/switch_location_req"
+        app:layout_constraintTop_toBottomOf="@+id/switch_location_req" />
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/switch_location_req"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/lbl_pub_exp_location_req"
+        android:textColor="?android:attr/textColorSecondary"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="@+id/lbl_pub_exp_min"
         app:layout_constraintTop_toBottomOf="@+id/lbl_pub_exp_min" />
 
 

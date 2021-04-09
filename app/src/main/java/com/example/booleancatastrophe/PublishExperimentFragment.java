@@ -19,6 +19,7 @@ import androidx.fragment.app.DialogFragment;
 import com.example.booleancatastrophe.model.Experiment;
 import com.example.booleancatastrophe.model.ExperimentType;
 import com.example.booleancatastrophe.model.User;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 
 
 // TODO set up the new experiment location functionality
@@ -39,6 +40,7 @@ public class PublishExperimentFragment extends DialogFragment {
     private RadioGroup radGroup;
     private EditText etDescription;
     private EditText etRegion;
+    private SwitchMaterial switchLocationReq;
 
     User user;
     private OnFragmentInteractionListener listener;
@@ -70,6 +72,7 @@ public class PublishExperimentFragment extends DialogFragment {
         etRegion = view.findViewById(R.id.et_pub_exp_region);
         tvOwner = view.findViewById(R.id.tv_pub_exp_owner);
         radGroup = view.findViewById(R.id.rad_group_pub_exp);
+        switchLocationReq = view.findViewById(R.id.switch_location_req);
 
         user = ((ExperimentApplication) this.getActivity().getApplication()).getCurrentUser();
         if(user.getUsername().equals("") || user == null) {
@@ -117,7 +120,7 @@ public class PublishExperimentFragment extends DialogFragment {
                         }
 
                         listener.onOkPressed(new Experiment(
-                                expDescription, expRegion, expOwner, expMinTrials, expType.name()));
+                                expDescription, expRegion, expOwner, expMinTrials, expType.name(), switchLocationReq.isChecked()));
                     }
                 }).create();
     }
