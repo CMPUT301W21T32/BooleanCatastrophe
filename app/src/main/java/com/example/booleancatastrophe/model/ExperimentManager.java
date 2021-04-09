@@ -129,7 +129,21 @@ public class ExperimentManager {
     }
 
     //function to end the given experiment
-    public void end(String eID) {};
+    public void end(String eID) {
+        experimentRef.document(eID).update("ended", true)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Experiment has been ended");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Experiment failed to be ended");
+                    }
+                });
+    }
 
     /**
      * function to get a list of experiment objects from the database

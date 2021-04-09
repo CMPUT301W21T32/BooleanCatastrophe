@@ -48,6 +48,7 @@ public class ViewExperimentActivity extends AppCompatActivity implements NewTria
     Button newBarcodeButton;
     Button btnViewExperimentForum;
     Button btnUnpublishExperiment;
+    Button btnEndExperiment;
 
     // a hacky solution to pass the trial received from NewTrialFragment to onActivityResult()
     private Trial tempNewTrial;
@@ -74,6 +75,7 @@ public class ViewExperimentActivity extends AppCompatActivity implements NewTria
         newBarcodeButton = findViewById(R.id.newBarcodeButton);
         btnViewExperimentForum = (Button) findViewById(R.id.btn_experiment_forum);
         btnUnpublishExperiment = (Button) findViewById(R.id.btn_unpublish_experiment);
+        btnEndExperiment = (Button) findViewById(R.id.btn_end_experiment);
 
         // Get the current experiment data through the intent
         Bundle extras = getIntent().getExtras();
@@ -187,6 +189,7 @@ public class ViewExperimentActivity extends AppCompatActivity implements NewTria
      * Boolean variable dictating whether the tools will be enabled/visible or disabled/invisible */
     private void setupOwnerTools(boolean doIt) {
         setUpPublishButton(doIt);
+        setUpEndButton(doIt);
     }
 
     /**
@@ -221,6 +224,38 @@ public class ViewExperimentActivity extends AppCompatActivity implements NewTria
         } else {
             btnUnpublishExperiment.setEnabled(false);
             btnUnpublishExperiment.setVisibility(View.GONE);
+        }
+    }
+
+    /**
+     * This function sets up specific owner tool: end experiment button which changes
+     * the current experiment's internal state
+     * @param doIt
+     * Boolean variable dictating whether the button will be visible and functioning or gone */
+    private void setUpEndButton(boolean doIt) {
+        if(doIt) {
+            if(currentExperiment.getEnded()) {
+                btnEndExperiment.setText("Already Ended");
+                btnEndExperiment.setEnabled(false);
+            } else {
+                btnEndExperiment.setText("End");
+                btnEndExperiment.setEnabled(true);
+            }
+            btnEndExperiment.setVisibility(View.VISIBLE);
+            btnEndExperiment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(!currentExperiment.getEnded()) {
+                        eManager.end(currentExperiment.getId());
+                        currentExperiment.setEnded(true);
+                        btnEndExperiment.setText("Already Ended");
+                        btnEndExperiment.setEnabled(false);
+                    }
+                }
+            });
+        } else {
+            btnEndExperiment.setEnabled(false);
+            btnEndExperiment.setVisibility(View.GONE);
         }
     }
 }
