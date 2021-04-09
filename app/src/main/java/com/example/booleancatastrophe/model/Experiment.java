@@ -31,6 +31,15 @@ public class Experiment implements Serializable {
     private int minTrials;
     private ArrayList<String> blacklistedUserIDs = new ArrayList<>();
     private ArrayList<String> subscribedUserIDs = new ArrayList<>();
+    private boolean locationRequired = true;
+
+    public boolean isLocationRequired() {
+        return locationRequired;
+    }
+
+    public void setLocationRequired(boolean locationRequired) {
+        this.locationRequired = locationRequired;
+    }
 
     /**
      * Empty required constructor for easier firestore automatic serialization and deserialization
