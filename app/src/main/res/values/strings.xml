@@ -62,4 +62,9 @@
     <string name="hint_pub_exp_region">Enter a region for this experiment...</string>
     <string name="btn_end_experiment">End Experiment</string>
     <string name="btn_experiment_subscribe">Subscribe</string>
+    <string name="btn_home_addexperiment">Add New Experiment</string>
+    <string name="btn_home_viewprofile">View Your Profile</string>
+    <string name="btn_home_search">Search For Experiments or Users</string>
+    <string name="btn_home_scan_qr">Scan QR Code</string>
+    <string name="btn_home_scan_barcode">Scan Barcode</string>
 </resources>

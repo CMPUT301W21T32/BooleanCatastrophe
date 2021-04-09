@@ -96,8 +96,7 @@ public class MainActivity extends AppCompatActivity implements
         topAppToolbar.setOnMenuItemClickListener(item -> {
             int id = item.getItemId();
             if(id == R.id.top_app_bar_search) {    // User selected the top bar search icon
-                // TODO add behaviour of search, may want to look up SearchView for better behaviour option
-                topAppToolbar.setTitle("SEARCH PRESS");
+                // TODO launch search activity
                 return true;
             } else if(id == R.id.top_app_bar_userprofile) {    // User selected the top bar profile icon
                 Intent intent = new Intent(this, UserProfileActivity.class);
