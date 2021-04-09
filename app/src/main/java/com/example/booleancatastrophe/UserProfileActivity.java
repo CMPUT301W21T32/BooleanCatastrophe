@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputFilter;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -57,6 +58,16 @@ public class UserProfileActivity extends AppCompatActivity {
         /* Display the user's current username and email, which can be modified */
         etUsername.setText(user.getUsername());
         etEmail.setText(user.getEmail());
+
+        /* If the current user id doesn't match with the passed user id, don't allow editing */
+        if(!(((ExperimentApplication) this.getApplication()).getCurrentUser().getAccountID().equals(user.getAccountID())))  {
+            etUsername.setEnabled(false);
+            etEmail.setEnabled(false);
+            etUsername.setInputType(InputType.TYPE_NULL);
+            etEmail.setInputType(InputType.TYPE_NULL);
+            btnSave.setEnabled(false);
+            btnSave.setText("---");
+        }
 
         /* Save Profile button onclick listener; update the user's username and email and
         * return to the MainActivity (for now) */
