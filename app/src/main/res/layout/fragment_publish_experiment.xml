@@ -26,6 +26,7 @@
     <!-- View who the owner of the experiment will be (the current user/
      person who clicked the 'publish experiment' button, not editable) -->
 
+    <!-- Radio buttons for selecting the experiment trial type -->
     <TextView
         android:id="@+id/tv_pub_exp_owner"
         android:layout_width="match_parent"
@@ -35,9 +36,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lbl_pub_exp_min" />
+        app:layout_constraintTop_toBottomOf="@+id/et_pub_exp_region" />
 
-    <!-- Radio buttons for selecting the experiment trial type -->
     <RadioGroup
         android:id="@+id/rad_group_pub_exp"
         android:layout_width="match_parent"
@@ -103,6 +103,21 @@
         app:layout_constraintHorizontal_bias="0.2"
         app:layout_constraintStart_toEndOf="@+id/lbl_pub_exp_min"
         />
+
+    <EditText
+        android:id="@+id/et_pub_exp_region"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="10dp"
+        android:hint="@string/hint_pub_exp_region"
+        android:importantForAutofill="no"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lbl_pub_exp_min" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
