@@ -2,19 +2,24 @@ package com.example.booleancatastrophe;
 
 
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.text.method.DigitsKeyListener;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,6 +29,10 @@ import com.example.booleancatastrophe.model.Experiment;
 import com.example.booleancatastrophe.model.ExperimentType;
 import com.example.booleancatastrophe.model.Trial;
 import com.google.firebase.firestore.GeoPoint;
+import com.schibstedspain.leku.LocationPickerActivity;
+
+import static com.schibstedspain.leku.LocationPickerActivityKt.LATITUDE;
+import static com.schibstedspain.leku.LocationPickerActivityKt.LONGITUDE;
 
 //Fragment to capture a new trial on the given experiment
 //TODO implement geolocation features
@@ -31,8 +40,13 @@ import com.google.firebase.firestore.GeoPoint;
 //TODO add "date" as a field for trials (for graphing) and implement it here
 public class NewTrialFragment extends DialogFragment {
 
+    private String TAG = "NewTrialFragment";
+
     private EditText trialResult;
     private TextView trialType;
+    private FrameLayout trialLocationFrame;
+    private boolean isLocationRequired;
+    private GeoPoint location;
 
     private NewTrialFragment.OnFragmentInteractionListener listener;
 
@@ -59,9 +73,11 @@ public class NewTrialFragment extends DialogFragment {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.new_trial_fragment_layout, null);
         trialResult = view.findViewById(R.id.et_trial_result);
         trialType = view.findViewById(R.id.trial_type);
+        trialLocationFrame = view.findViewById(R.id.get_location_frame);
         ExperimentType type = ExperimentType.valueOf(((ViewExperimentActivity) getActivity()).getCurrentExperiment().getStrType());
         String typeText = type.name();
         trialType.setText(typeText + " Trial");
+        isLocationRequired = ((ViewExperimentActivity) getActivity()).getCurrentExperiment().isLocationRequired();
 
         //SET INPUT PARAMS FROM THE TYPE
         switch (type) {
@@ -92,22 +108,86 @@ public class NewTrialFragment extends DialogFragment {
             // Error, abort the fragment
         }
 
+        if (isLocationRequired) {
+            Button btnAddLocation = new Button(getContext());
+            btnAddLocation.setText("LOCATION");
+            trialLocationFrame.addView(btnAddLocation);
+            btnAddLocation.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent locationPickerIntent = new LocationPickerActivity.Builder()
+                            .withLegacyLayout()
+                            .withGeolocApiKey("AIzaSyA4xH3jPbxGnZMYjLCkoNqR6z8hadtzhpA")
+                            .withSatelliteViewHidden()
+                            .withGoogleTimeZoneEnabled()
+                            .withVoiceSearchHidden()
+                            .build(getContext());
+
+                    startActivityForResult(locationPickerIntent, 1);
+                }
+            });
+        }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        return builder
+        AlertDialog d = builder
                 .setView(view)
                 .setTitle("Add Experiment")
                 .setNegativeButton("Cancel", null)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                .setPositiveButton("OK", (dialog, which) -> {  }).create();
+
+        d.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+
+                Button b = d.getButton(AlertDialog.BUTTON_POSITIVE);
+                b.setOnClickListener(new View.OnClickListener() {
+
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void onClick(View view) {
+                        String strNum = trialResult.getText().toString();
+                        if (strNum.length() == 0) {
+                            Toast.makeText(getContext(), "Invalid result!", Toast.LENGTH_LONG).show();
+                            return;
+                        }
                         Double result = Double.parseDouble(trialResult.getText().toString());
+
+                        //todo change to if location required
+                        if (isLocationRequired && location == null) {
+                            Toast.makeText(getContext(), "Location required!", Toast.LENGTH_LONG).show();
+                            return;
+                        }
+
                         Trial newTrial = new Trial(((ExperimentApplication) getActivity().getApplication()).getAccountID()
                                 , result
-                                , new GeoPoint(45, 45)
+                                , location
                                 , type);
                         listener.onOkPressed(newTrial);
+                        d.dismiss();
                     }
-                }).create();
+                });
+            }
+        });
+
+        return d;
+
+//        AlertDialog alertDialog = builder.create();
+//        alertDialog.show();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK && data != null) {
+            Log.d(TAG, "LOCATION OK");
+            if (requestCode == 1) {
+                double latitude = data.getDoubleExtra(LATITUDE, 0.0);
+                Log.d(TAG, "lat - " + Double.toString(latitude));
+                double longitude = data.getDoubleExtra(LONGITUDE, 0.0);
+                Log.d(TAG, "lon - " + Double.toString(longitude));
+                location = new GeoPoint(latitude, longitude);
+            }
+        }
+        if (resultCode == Activity.RESULT_CANCELED) {
+            Log.d(TAG, "LOCATION CANCELLED");
+        }
     }
 }
