@@ -7,13 +7,15 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.View;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.example.booleancatastrophe.interfaces.FirestoreCodeCallback;
@@ -95,11 +97,11 @@ public class MainActivity extends AppCompatActivity implements
         /* Listener for clicking on the various action buttons set up on the toolbar */
         topAppToolbar.setOnMenuItemClickListener(item -> {
             int id = item.getItemId();
-            if(id == R.id.top_app_bar_search) {    // User selected the top bar search icon
+            /*if(id == R.id.top_app_bar_search) {    // User selected the top bar search icon
                 // TODO add behaviour of search, may want to look up SearchView for better behaviour option
-                topAppToolbar.setTitle("SEARCH PRESS");
                 return true;
-            } else if(id == R.id.top_app_bar_userprofile) {    // User selected the top bar profile icon
+            } else*/
+            if(id == R.id.top_app_bar_userprofile) {    // User selected the top bar profile icon
                 Intent intent = new Intent(this, UserProfileActivity.class);
                 startActivity(intent);
                 return true;
@@ -121,6 +123,9 @@ public class MainActivity extends AppCompatActivity implements
             PublishExperimentFragment newExpFrag = new PublishExperimentFragment();
             newExpFrag.show(getSupportFragmentManager(), "PUBLISH_EXPERIMENT");
         });
+
+        // In case the activity is started by a search
+        handleSearchRequests(getIntent());
 
 
 //        tabOptions.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -167,7 +172,28 @@ public class MainActivity extends AppCompatActivity implements
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.top_app_bar, menu);
+
+        // Credit to the Android Development Team
+        // https://developer.android.com/guide/topics/search/search-dialog#ConfiguringWidget
+        // for setting up the search widget
+        SearchManager sm = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView sv = (SearchView) menu.findItem(R.id.top_app_bar_search).getActionView();
+        sv.setSearchableInfo(sm.getSearchableInfo(getComponentName()));
+
         return true;
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        handleSearchRequests(intent);
+    }
+
+    private void handleSearchRequests(Intent intent){
+        if(intent.getAction().equals(Intent.ACTION_SEARCH)){
+            Fragment page = viewPagerAdapter.getItem(viewPager.getCurrentItem());
+            //if(page instanceof Filterable){ ((Filterable) page).filter(); }
+        }
     }
 
     @Override

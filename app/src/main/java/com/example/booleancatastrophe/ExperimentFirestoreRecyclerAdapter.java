@@ -15,6 +15,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+// TODO: Filterable using notifyDataSetChanged() and similar methods
 public class ExperimentFirestoreRecyclerAdapter extends FirestoreRecyclerAdapter<Experiment, ExperimentFirestoreRecyclerAdapter.ExperimentHolder> {
 
     private OnItemClickListener listener;

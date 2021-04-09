@@ -70,6 +70,7 @@ Use this for further tab implementation help -->
 <!--                android:contentDescription="@string/cd_tab_ended_experiments"-->
 <!--                android:text="@string/lbl_tab_ended" />-->
         </com.google.android.material.tabs.TabLayout>
+
     </com.google.android.material.appbar.AppBarLayout>
 
     <!--        TODO the value for the viewpager is currently hardcoded... may have to add a constraint layout but would prefer it was dynamic -->

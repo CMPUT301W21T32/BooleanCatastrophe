@@ -49,7 +49,7 @@ public class TrialDetailsFragment extends Fragment {
         TrialDetailsFragment fragment = new TrialDetailsFragment();
         Bundle args = new Bundle();
         args.putString(EXPERIMENT_TITLE, "Sample Title");
-        args.putString(EXPERIMENT_OWNER, experiment.getOwner());
+        args.putString(EXPERIMENT_OWNER, experiment.getOwnerID());
         args.putString(EXPERIMENT_DESCRIPTION, experiment.getDescription());
         args.putString(TRIAL_RESULT, trial.getResult().toString());
         args.putString(TRIAL_LOCATION, trial.getLocation().toString());
