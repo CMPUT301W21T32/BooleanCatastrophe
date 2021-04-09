@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.booleancatastrophe" >
+    package="com.example.booleancatastrophe">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <uses-feature
+        android:name="android.hardware.location.network"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.location.gps"
+        android:required="false" />
 
     <application
         android:name=".ExperimentApplication"
@@ -11,10 +24,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MaterialComponents.Light.NoActionBar">
-
-        <activity android:name=".ViewStatisticsActivity"></activity>
+        <activity android:name=".SearchActivity"></activity>
+        <activity android:name=".ViewStatisticsActivity" />
         <activity android:name=".ViewForumRepliesActivity" />
-        <activity android:name=".GenerateQRCodeActivity" ></activity>
+        <activity android:name=".GenerateQRCodeActivity" />
         <activity android:name=".ViewForumQuestionsActivity" />
         <activity android:name=".ViewExperimentActivity" />
         <activity android:name=".UserProfileActivity" />
@@ -28,28 +41,24 @@
         <activity
             android:name="com.schibstedspain.leku.LocationPickerActivity"
             android:label="@string/leku_title_activity_location_picker"
+            android:parentActivityName=".MainActivity"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"
-            android:windowSoftInputMode="adjustPan"
-            android:parentActivityName=".MainActivity">
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
-            <meta-data android:name="android.app.searchable"
+
+            <meta-data
+                android:name="android.app.searchable"
                 android:resource="@xml/leku_searchable" />
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-        <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyA4xH3jPbxGnZMYjLCkoNqR6z8hadtzhpA"/>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyA4xH3jPbxGnZMYjLCkoNqR6z8hadtzhpA" />
     </application>
-
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-
-    <uses-feature android:name="android.hardware.location.network" android:required="false" />
-    <uses-feature android:name="android.hardware.location.gps" android:required="false"  />
 
 </manifest>

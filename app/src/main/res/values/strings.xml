@@ -67,4 +67,10 @@
     <string name="btn_home_search">Search For Experiments or Users</string>
     <string name="btn_home_scan_qr">Scan QR Code</string>
     <string name="btn_home_scan_barcode">Scan Barcode</string>
+    <string name="tv_search_experiment">Search For Experiment:</string>
+    <string name="tv_search_user">"Search for User:      "</string>
+    <string name="hint_search_experiment">Search for experiment...</string>
+    <string name="hint_search_for_user">Search for user...</string>
+    <string name="btn_search_experiment">Search Experiments</string>
+    <string name="btn_search_user">Search Users</string>
 </resources>

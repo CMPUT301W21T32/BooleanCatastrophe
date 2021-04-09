@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SearchActivity">
+
+    <TextView
+        android:id="@+id/tv_search_experiment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="40dp"
+        android:text="@string/tv_search_experiment"
+        app:layout_constraintEnd_toStartOf="@+id/et_search_experiment"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/et_search_experiment"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:inputType="text"
+        android:hint="@string/hint_search_experiment"
+        android:importantForAutofill="no"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBaseline_toBaselineOf="@+id/tv_search_experiment"
+        app:layout_constraintStart_toEndOf="@+id/tv_search_experiment"
+        tools:layout_editor_absoluteY="227dp" />
+
+    <Button
+        android:id="@+id/btn_search_experiment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/btn_search_experiment"
+        app:layout_constraintStart_toStartOf="@+id/et_search_experiment"
+        app:layout_constraintTop_toBottomOf="@+id/et_search_experiment" />
+
+    <TextView
+        android:id="@+id/tv_search_user"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="120dp"
+        android:text="@string/tv_search_user"
+        app:layout_constraintEnd_toStartOf="@+id/et_search_user"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_search_experiment" />
+
+
+    <EditText
+        android:id="@+id/et_search_user"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:inputType="text"
+        android:hint="@string/hint_search_for_user"
+        app:layout_constraintBaseline_toBaselineOf="@+id/tv_search_user"
+        android:importantForAutofill="no"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tv_search_user"
+        tools:layout_editor_absoluteY="455dp" />
+
+    <Button
+        android:id="@+id/btn_search_user"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/btn_search_user"
+        app:layout_constraintStart_toStartOf="@+id/et_search_user"
+        app:layout_constraintTop_toBottomOf="@+id/et_search_user" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/search_rv"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="40dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_search_user" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
