@@ -269,6 +269,8 @@ public class ViewExperimentActivity extends AppCompatActivity implements NewTria
                         currentExperiment.setEnded(true);
                         btnEndExperiment.setText("Already Ended");
                         btnEndExperiment.setEnabled(false);
+                        newTrialButton.setText("Experiment Ended");
+                        newTrialButton.setEnabled(false);
                     }
                 }
             });
