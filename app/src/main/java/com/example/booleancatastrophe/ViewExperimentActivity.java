@@ -26,6 +26,7 @@ import com.example.booleancatastrophe.storage.FirestoreCallback;
 
 
 import java.util.ArrayList;
+import java.util.Map;
 
 //Activity to view the experiment that was clicked
 //TODO forum, owner tools, statistics
@@ -46,6 +47,7 @@ public class ViewExperimentActivity extends AppCompatActivity implements NewTria
     private Button newTrialButton;
     private Button btnViewExperimentForum ;
     private Button btnViewExperimentStatistics;
+    private Button btnViewExperimentMap;
     private Button newQrCodeButton;
     private Button newBarcodeButton;
     Button btnUnpublishExperiment;
@@ -81,6 +83,7 @@ public class ViewExperimentActivity extends AppCompatActivity implements NewTria
         newBarcodeButton = findViewById(R.id.newBarcodeButton);
         btnViewExperimentForum = (Button) findViewById(R.id.btn_experiment_forum);
         btnViewExperimentStatistics = (Button) findViewById(R.id.btn_experiment_statistics);
+        btnViewExperimentMap = (Button) findViewById(R.id.btn_experiment_map);
         btnUnpublishExperiment = (Button) findViewById(R.id.btn_unpublish_experiment);
         btnEndExperiment = (Button) findViewById(R.id.btn_end_experiment);
         btnSubscribe = (Button) findViewById(R.id.btn_experiment_subscribe);
@@ -141,6 +144,17 @@ public class ViewExperimentActivity extends AppCompatActivity implements NewTria
             Intent newIntent = new Intent(this, ViewStatisticsActivity.class);
             newIntent.putExtra("EXPERIMENT", currentExperiment);
             startActivity(newIntent);
+        });
+
+        btnViewExperimentMap.setOnClickListener(v -> {
+            Intent newIntent = new Intent(this, MapActivity.class);
+            eManager.getTrials(currentExperiment.getId(), new FirestoreCallback<ArrayList<Trial>>() {
+                @Override
+                public void onCallback(ArrayList<Trial> databaseResult) {
+                    newIntent.putParcelableArrayListExtra("TRIALS", databaseResult);
+                    startActivity(newIntent);
+                }
+            });
         });
 
     }

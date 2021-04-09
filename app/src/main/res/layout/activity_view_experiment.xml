@@ -118,7 +118,7 @@
         android:layout_marginEnd="10dp"
         android:text="@string/btn_experiment_subscribe"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.961"
+        app:layout_constraintHorizontal_bias="0.65"
         app:layout_constraintStart_toEndOf="@+id/btn_experiment_forum"
         app:layout_constraintTop_toBottomOf="@+id/cardView" />
 
@@ -150,9 +150,17 @@
         android:layout_height="55dp"
         android:layout_marginTop="4dp"
         android:text="@string/btn_experiment_statistics"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.466"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/btn_experiment_forum"
+        app:layout_constraintTop_toBottomOf="@+id/btn_experiment_forum" />
+
+    <Button
+        android:id="@+id/btn_experiment_map"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/btn_experiment_map"
+        app:layout_constraintStart_toEndOf="@+id/btn_experiment_statistics"
         app:layout_constraintTop_toBottomOf="@+id/btn_experiment_forum" />
 
 

@@ -24,7 +24,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MaterialComponents.Light.NoActionBar">
-        <activity android:name=".SearchActivity"></activity>
+        <activity android:name=".MapActivity"></activity>
+        <activity android:name=".SearchActivity" />
         <activity android:name=".ViewStatisticsActivity" />
         <activity android:name=".ViewForumRepliesActivity" />
         <activity android:name=".GenerateQRCodeActivity" />
@@ -55,7 +56,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyA4xH3jPbxGnZMYjLCkoNqR6z8hadtzhpA" />
