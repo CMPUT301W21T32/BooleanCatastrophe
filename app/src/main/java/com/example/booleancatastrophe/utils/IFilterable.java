@@ -5,5 +5,5 @@ package com.example.booleancatastrophe.utils;
  * It is up to the implementor to decide what this means.
  */
 public interface IFilterable {
-    public void filter();
+    public void filter(String query);
 }

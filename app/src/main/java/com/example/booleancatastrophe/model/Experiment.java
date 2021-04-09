@@ -211,8 +211,14 @@ public class Experiment implements Serializable {
 
     @Override
     @Exclude
+    public int hashCode() {
+        return this.getId().hashCode();
+    }
+
+    @Override
+    @Exclude
     public String toString() {
-        return new StringBuilder().append(this.type.name()).append("Experiment(")
+        return new StringBuilder().append(this.type).append("Experiment(")
                                   .append(this.id).append(", \"")
                                   .append(this.description).append("\", ")
                                   .append(this.region).append(", ")

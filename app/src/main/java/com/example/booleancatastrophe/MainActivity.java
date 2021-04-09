@@ -25,6 +25,7 @@ import com.example.booleancatastrophe.model.Experiment;
 import com.example.booleancatastrophe.model.ExperimentManager;
 import com.example.booleancatastrophe.model.ExperimentType;
 import com.example.booleancatastrophe.model.Trial;
+import com.example.booleancatastrophe.utils.IFilterable;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.firestore.GeoPoint;
@@ -125,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements
         });
 
         // In case the activity is started by a search
-        handleSearchRequests(getIntent());
+        handleSearchIntent(getIntent());
 
 
 //        tabOptions.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -179,6 +180,18 @@ public class MainActivity extends AppCompatActivity implements
         SearchManager sm = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView sv = (SearchView) menu.findItem(R.id.top_app_bar_search).getActionView();
         sv.setSearchableInfo(sm.getSearchableInfo(getComponentName()));
+        sv.setOnQueryTextListener(new SearchView.OnQueryTextListener(){
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                handleSearchDelegation(newText);
+                return true;
+            }
+        });
 
         return true;
     }
@@ -186,13 +199,33 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        handleSearchRequests(intent);
+        setIntent(intent);
+        handleSearchIntent(intent);
     }
 
-    private void handleSearchRequests(Intent intent){
+    private void handleSearchIntent(Intent intent){
         if(intent.getAction().equals(Intent.ACTION_SEARCH)){
-            Fragment page = viewPagerAdapter.getItem(viewPager.getCurrentItem());
-            //if(page instanceof Filterable){ ((Filterable) page).filter(); }
+            handleSearchDelegation(intent.getStringExtra(SearchManager.QUERY));
+        }
+    }
+    private void handleSearchDelegation(String query){
+        Fragment page = viewPagerAdapter.getItem(viewPager.getCurrentItem());
+        // TODO: Could be better if these tabs shared a superclass
+        if(page instanceof TabActiveExperimentsFragment){
+            ((IFilterable) ((TabActiveExperimentsFragment) page).recyclerView.getAdapter())
+                    .filter(query);
+        }
+        else if(page instanceof TabOwnedExperimentsFragment){
+            ((IFilterable) ((TabOwnedExperimentsFragment) page).recyclerView.getAdapter())
+                    .filter(query);
+        }
+        else if(page instanceof TabSubscribedExperimentsFragment){
+            ((IFilterable) ((TabSubscribedExperimentsFragment) page).recyclerView.getAdapter())
+                    .filter(query);
+        }
+        else if(page instanceof TabEndedExperimentsFragment){
+            ((IFilterable) ((TabEndedExperimentsFragment) page).recyclerView.getAdapter())
+                    .filter(query);
         }
     }
 
