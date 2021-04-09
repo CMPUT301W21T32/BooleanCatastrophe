@@ -3,6 +3,10 @@ package com.example.booleancatastrophe.storage;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Consumer;
+
 /**
  * Class which should be used to gain database accesses in this app.
  */
@@ -40,5 +44,32 @@ public class Database {
         }
         instance = db;
         return instance;
+    }
+
+
+    //Could be modified to enable batch requests in parallel, but I don't have time right now
+    public static <T> T synchronousDBQuery(Consumer<FirestoreCallback<T>> dbAccessFunction) {
+        //Credits to qwertzguy (https://stackoverflow.com/users/965176/qwertzguy)
+        //on StackOverflow     (https://stackoverflow.com/a/49523790)
+        //for the method of forcing a thread to block on a condition
+        CountDownLatch barrier = new CountDownLatch(1);
+
+        AtomicReference<T> dbResultHolder = new AtomicReference<>();
+
+        dbAccessFunction.accept((databaseResult)->{
+            dbResultHolder.set(databaseResult);
+            barrier.countDown();
+        });
+
+        //Credits to jdmichal (https://stackoverflow.com/users/12275/jdmichal)
+        //on StackOverflow    (https://stackoverflow.com/a/3168465)
+        //for the references on gracefully handling InterruptedExceptions
+        try {
+            barrier.await();
+        } catch (InterruptedException e) {
+            //Interrupted flag is not set when this exception is thrown
+            Thread.currentThread().interrupt();
+        }
+        return dbResultHolder.get();
     }
 }

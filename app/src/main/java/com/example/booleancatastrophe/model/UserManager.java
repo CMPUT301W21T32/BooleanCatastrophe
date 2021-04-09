@@ -72,6 +72,10 @@ public class UserManager {
                 });
     }
 
+    public User getUser(String accountID) {
+        return Database.synchronousDBQuery((queryUnblocker)->{ this.getUser(accountID, queryUnblocker); });
+    }
+
     /**
      * set the email of a user
      * @param accountID the id of the user

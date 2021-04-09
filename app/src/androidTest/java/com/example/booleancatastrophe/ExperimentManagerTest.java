@@ -37,32 +37,6 @@ public class ExperimentManagerTest {
     private Experiment e1;
     private Experiment e2;
 
-    //Could be modified to enable batch requests in parallel, but I don't have time right now
-    public <T> T synchronousDBQuery(Consumer<FirestoreCallback<T>> dbAccessFunction) {
-        //Credits to qwertzguy (https://stackoverflow.com/users/965176/qwertzguy)
-        //on StackOverflow     (https://stackoverflow.com/a/49523790)
-        //for the method of forcing a thread to block on a condition
-        CountDownLatch barrier = new CountDownLatch(1);
-
-        AtomicReference<T> dbResultHolder = new AtomicReference<>();
-
-        dbAccessFunction.accept((databaseResult)->{
-            dbResultHolder.set(databaseResult);
-            barrier.countDown();
-        });
-
-        //Credits to jdmichal (https://stackoverflow.com/users/12275/jdmichal)
-        //on StackOverflow    (https://stackoverflow.com/a/3168465)
-        //for the references on gracefully handling InterruptedExceptions
-        try {
-            barrier.await();
-        } catch (InterruptedException e) {
-            //Interrupted flag is not set when this exception is thrown
-            Thread.currentThread().interrupt();
-        }
-        return dbResultHolder.get();
-    }
-
     private void getAllExperiments(FirestoreCallback<ArrayList<Experiment>> threadUnblocker){
         em.getExperimentList(null, threadUnblocker);
     }
@@ -80,13 +54,12 @@ public class ExperimentManagerTest {
     public void makeExperimentManager() {
         //Clear database (really quick, incomplete implementation)
         //Maybe necessary later: https://firebase.google.com/docs/firestore/manage-data/delete-data?hl=en#collections
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        Task<QuerySnapshot> t = synchronousDBQuery((threadUnblocker)->{
-            db.collection("experiments").limit(50).get().addOnCompleteListener(threadUnblocker::onCallback);
+        Task<QuerySnapshot> t = Database.synchronousDBQuery((threadUnblocker)->{
+            Database.getInstance().collection("experiments").limit(50).get().addOnCompleteListener(threadUnblocker::onCallback);
         });
         if(t.getResult() != null){
             for(DocumentSnapshot d : t.getResult().getDocuments()){
-                synchronousDBQuery((threadUnblocker)->{
+                Database.synchronousDBQuery((threadUnblocker)->{
                     d.getReference().delete().addOnCompleteListener(threadUnblocker::onCallback);
                 });
             }
@@ -94,7 +67,7 @@ public class ExperimentManagerTest {
 
         //Instantiate
         em = new ExperimentManager();
-        assertTrue(synchronousDBQuery(this::getAllExperiments).isEmpty());
+        assertTrue(Database.synchronousDBQuery(this::getAllExperiments).isEmpty());
     }
 
     @Before
@@ -113,7 +86,7 @@ public class ExperimentManagerTest {
 
         em.addExperiment(e1);
 
-        theExperiments = synchronousDBQuery(this::getAllExperiments);
+        theExperiments = Database.synchronousDBQuery(this::getAllExperiments);
         assertEquals(1, theExperiments.size());
         //TODO: Probably need to override equals() method from Object before this will work
         assertEquals(theExperiments.get(0), e1);
@@ -126,13 +99,13 @@ public class ExperimentManagerTest {
 
         em.addExperiment(e2);
 
-        theExperiments = synchronousDBQuery(this::getAllExperiments);
+        theExperiments = Database.synchronousDBQuery(this::getAllExperiments);
         assertEquals(2, theExperiments.size());
         assertTrue(theExperiments.contains(e1));
         assertTrue(theExperiments.contains(e2));
 
         assertEquals(e2,
-                synchronousDBQuery((Consumer<FirestoreCallback<Experiment>>)
+                Database.synchronousDBQuery((Consumer<FirestoreCallback<Experiment>>)
                         (threadUnblocker -> {
                             em.getExperiment(e2.getId(), threadUnblocker);
                         }))
@@ -146,7 +119,7 @@ public class ExperimentManagerTest {
 
         em.publish(e1.getId());
 
-        theExperiments = synchronousDBQuery(this::getAllExperiments);
+        theExperiments = Database.synchronousDBQuery(this::getAllExperiments);
         assertTrue(theExperiments.get(0).getPublished());
 
         assertTrue(e1.getPublished());
@@ -158,39 +131,39 @@ public class ExperimentManagerTest {
         em.addExperiment(e1);
 
         //Test freshly-added experiment
-        theTrials = synchronousDBQuery(this.getTrialsForExperiment(e1.getId()));
+        theTrials = Database.synchronousDBQuery(this.getTrialsForExperiment(e1.getId()));
         assertTrue(theTrials.isEmpty());
 
         //Test non-existent experiment ID
         try{
-            synchronousDBQuery(this.getTrialsForExperiment(e2.getId()));
+            Database.synchronousDBQuery(this.getTrialsForExperiment(e2.getId()));
             fail("Expected to fail searching for trials with an empty experiment ID");
         }
         catch (IllegalArgumentException ex){}
 
         e2.setId("a");
-        theTrials = synchronousDBQuery(this.getTrialsForExperiment(e2.getId()));
+        theTrials = Database.synchronousDBQuery(this.getTrialsForExperiment(e2.getId()));
         assertTrue(theTrials.isEmpty());
 
         //Test adding multiple trials
         em.addTrial(e1.getId(), new Trial(e1.getOwnerID(), 1, null, ExperimentType.BINOMIAL));
-        theTrials = synchronousDBQuery(this.getTrialsForExperiment(e1.getId()));
+        theTrials = Database.synchronousDBQuery(this.getTrialsForExperiment(e1.getId()));
         assertEquals(1, theTrials.size());
 
         em.addTrial(e1.getId(), new Trial("A witch", 0, new GeoPoint(0, 0), ExperimentType.BINOMIAL));
-        theTrials = synchronousDBQuery(this.getTrialsForExperiment(e1.getId()));
+        theTrials = Database.synchronousDBQuery(this.getTrialsForExperiment(e1.getId()));
         assertEquals(2, theTrials.size());
 
         //Test adding bogus trials
         //TODO: Would it be better to throw an exception?
         em.addTrial(e1.getId(), new Trial("The big bad wolf", 10, null, ExperimentType.NONNEGCOUNT));
-        theTrials = synchronousDBQuery(this.getTrialsForExperiment(e1.getId()));
+        theTrials = Database.synchronousDBQuery(this.getTrialsForExperiment(e1.getId()));
         assertEquals(2, theTrials.size());
 
         //Test adding trials to non-existent experiment ID
         //TODO: Would it be better to throw an exception?
         em.addTrial(e2.getId(), new Trial("A wizard", 36.6, null, ExperimentType.MEASUREMENT));
-        theTrials = synchronousDBQuery(this.getTrialsForExperiment(e2.getId()));
+        theTrials = Database.synchronousDBQuery(this.getTrialsForExperiment(e2.getId()));
         assertTrue(theTrials.isEmpty());
     }
 }
