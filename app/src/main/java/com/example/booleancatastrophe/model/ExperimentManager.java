@@ -146,6 +146,49 @@ public class ExperimentManager {
     }
 
     /**
+     * add a user to an experiment's subscription list
+     * @param  experimentID the id of the experiment being updated
+     * @param  accountID the id of the user to be added
+     **/
+    public void addToSubscriptionList(String experimentID, String accountID) {
+        experimentRef.document(experimentID).update("subscribedUserIDs", FieldValue.arrayUnion(accountID))
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Added user to experiment's subscription list");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e(TAG, "Failed to add user to experiment's subscription list", e);
+                    }
+                });
+    }
+
+    /**
+     * remove a user from an experiment's subscription list
+     * @param  experimentID the id of the experiment being updated
+     * @param  accountID the id of the user to be removed
+     **/
+    public void removeFromSubscriptionList(String experimentID, String accountID) {
+        experimentRef.document(experimentID).update("subscribedUserIDs", FieldValue.arrayRemove(accountID))
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Removed user from experiment's subscription list");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e(TAG, "Failed to remove user from experiment's subscription list", e);
+                    }
+                });
+    }
+
+
+    /**
      * function to get a list of experiment objects from the database
      * Due to the Asynchronous behaviour it it nessecary to use a callback function, which is called
      * after a successful read
