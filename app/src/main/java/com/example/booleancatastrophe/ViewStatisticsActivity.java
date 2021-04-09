@@ -249,10 +249,10 @@ public class ViewStatisticsActivity extends AppCompatActivity {
                 for(int i = 0; i < numIntervals; i++){
                     int resultCount = 0;
                     double intervalMin = min + i*interval;
-                    double intervalMax = min + (i+1)*interval;
+                    double intervalMax = min + (i+1)*interval + 0.1;
                     intervalSeries.add(i, new BarGraphSeries<DataPoint>() );
                     for(int j = 0; j < trials.size(); j++){
-                        if(trials.get(j).getResult() >= intervalMin && trials.get(j).getResult() <= intervalMax){
+                        if(trials.get(j).getResult() >= intervalMin && trials.get(j).getResult() < intervalMax){
                             resultCount++;
                         }
                     }
@@ -260,6 +260,7 @@ public class ViewStatisticsActivity extends AppCompatActivity {
                     //and the title should be set
                     String low = new DecimalFormat("###.#").format(intervalMin);
                     String high = new DecimalFormat("###.#").format(intervalMax);
+                    Log.d("STATS", "Section " + i + " has " + resultCount + " results");
                     intervalSeries.get(i).appendData(new DataPoint(i, resultCount), true, 1);
                     intervalSeries.get(i).setTitle(low + " - " + high);
                     intervalSeries.get(i).setDrawValuesOnTop(true);
@@ -276,7 +277,10 @@ public class ViewStatisticsActivity extends AppCompatActivity {
                 }
                 histogram.getViewport().setXAxisBoundsManual(true);
                 histogram.getViewport().setMinX(-1);
-                histogram.getViewport().setMaxX(numIntervals + 3);
+                histogram.getViewport().setMaxX(numIntervals + 2);
+                histogram.getViewport().setYAxisBoundsManual(true);
+                histogram.getViewport().setMinY(0);
+                //histogram.getViewport().setMaxY();
                 histogram.getLegendRenderer().setVisible(true);
                 histogram.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
                 histogram.getGridLabelRenderer().setHorizontalLabelsVisible(false);
