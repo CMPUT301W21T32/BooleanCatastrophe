@@ -118,15 +118,11 @@ public class ViewExperimentActivity extends AppCompatActivity implements NewTria
 
                     /* Set up subscribe button for owners and experimenters based on state */
                     setupSubscribeButton();
+                    setupAddTrialButton();
         });
 
         descriptionText.setText( currentExperiment.getDescription() );
         regionText.setText(currentExperiment.getRegion());
-
-        newTrialButton.setOnClickListener((v) -> {
-            trialFragmentMode = ADD_TRIAL;
-            new NewTrialFragment().show(getSupportFragmentManager(), ADD_TRIAL);
-        });
 
         newQrCodeButton.setOnClickListener(view -> {
             trialFragmentMode = GENERATE_QR_CODE;
@@ -311,4 +307,35 @@ public class ViewExperimentActivity extends AppCompatActivity implements NewTria
             }
         });
     }
+
+    /**
+     * This function sets up state dependent add trial button - if the experiment isn't ended,
+     * the onclick will activate the 'add trial' fragment
+     **/
+    private void setupAddTrialButton() {
+
+        if(currentExperiment.getEnded()) {
+            newTrialButton.setText("Experiment Ended");
+            newTrialButton.setEnabled(false);
+        } else {
+            newTrialButton.setText("Add Trial");
+            newTrialButton.setEnabled(true);
+
+        }
+
+        newTrialButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!currentExperiment.getEnded()) {
+                    trialFragmentMode = ADD_TRIAL;
+                    new NewTrialFragment().show(getSupportFragmentManager(), ADD_TRIAL);
+                } else {
+                    newTrialButton.setText("Experiment Ended");
+                    newTrialButton.setEnabled(false);
+                }
+            }
+        });
+    }
+
+
 }
