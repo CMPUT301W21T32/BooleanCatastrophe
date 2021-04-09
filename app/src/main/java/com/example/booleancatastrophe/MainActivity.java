@@ -99,7 +99,9 @@ public class MainActivity extends AppCompatActivity implements
                 // TODO launch search activity
                 return true;
             } else if(id == R.id.top_app_bar_userprofile) {    // User selected the top bar profile icon
+                // Pass the current user
                 Intent intent = new Intent(this, UserProfileActivity.class);
+                intent.putExtra("user", ((ExperimentApplication) this.getApplication()).getCurrentUser());
                 startActivity(intent);
                 return true;
             } else if (id == R.id.top_app_bar_scan_qr) {

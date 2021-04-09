@@ -2,6 +2,7 @@ package com.example.booleancatastrophe;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.util.Log;
@@ -9,11 +10,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.booleancatastrophe.model.Experiment;
 import com.example.booleancatastrophe.model.User;
 import com.example.booleancatastrophe.model.UserManager;
 
-// TODO fix it up so it properly interacts with User/UserManager to update the name and email database fields
 
+/**
+ * This activity is called to view other user's profiles in a non-editable way or your own profile
+ * with the fields editable so you can change your username or contact email
+ **/
 public class UserProfileActivity extends AppCompatActivity {
 
     private final static String TAG = "User Profile Activity";
@@ -29,10 +34,16 @@ public class UserProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
 
-        user = ((ExperimentApplication) this.getApplication()).getCurrentUser();
+        // Get the passed User through the intent
+        Bundle extras = getIntent().getExtras();
+        if(extras != null) {
+            user = (User) getIntent().getSerializableExtra("user");
+        }
+
         if(user == null){
             finish();
         }
+
         etUsername = (EditText) findViewById(R.id.et_user_name);
         etEmail = (EditText) findViewById(R.id.et_user_email);
         btnSave = (Button) findViewById(R.id.btn_save_profile);
