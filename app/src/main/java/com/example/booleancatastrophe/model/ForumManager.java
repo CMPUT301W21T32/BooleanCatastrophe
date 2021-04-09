@@ -51,6 +51,23 @@ public class ForumManager {
         return forumManager;
     }
 
+    /**
+     * This function sets up the Forum Manager's internal hash-map entry to control the
+     * database structure of forum questions
+     * @param question
+     * The forum question being manually serialized
+     **/
+    private void setQuestionHashMap(ForumQuestion question) {
+        d.clear();
+        d.put("id", question.getId());
+        d.put("date", new Timestamp(question.getDate()));
+        d.put("experimentID", question.getExperimentID());
+        d.put("posterID", question.getPosterID());
+        d.put("posterUsername", question.getPosterUsername());
+        d.put("content", question.getContent());
+        d.put("replyIDs", question.getReplyIDs());
+    }
+
     /** Add a forum question to the database - id will be created automatically
      * @param forumQuestion
      * The question to add to the database
@@ -61,14 +78,7 @@ public class ForumManager {
         forumQuestion.setId(docRef.getId());
 
         // Construct the structure of the data entry to put into the database
-        d.clear();
-        d.put("id", forumQuestion.getId());
-        d.put("date", new Timestamp(forumQuestion.getDate()));
-        d.put("experimentID", forumQuestion.getExperimentID());
-        d.put("posterID", forumQuestion.getPosterID());
-        d.put("posterUsername", forumQuestion.getPosterUsername());
-        d.put("content", forumQuestion.getContent());
-        d.put("replyIDs", forumQuestion.getReplyIDs());
+        setQuestionHashMap(forumQuestion);
 
         docRef.set(d)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -95,14 +105,7 @@ public class ForumManager {
         DocumentReference docRef = questionsRef.document(forumQuestion.getId());
 
         // Construct the structure of the data entry to update in the database
-        d.clear();
-        d.put("id", forumQuestion.getId());
-        d.put("date", new Timestamp(forumQuestion.getDate()));
-        d.put("experimentID", forumQuestion.getExperimentID());
-        d.put("posterID", forumQuestion.getPosterID());
-        d.put("posterUsername", forumQuestion.getPosterUsername());
-        d.put("content", forumQuestion.getContent());
-        d.put("replyIDs", forumQuestion.getReplyIDs());
+        setQuestionHashMap(forumQuestion);
 
         docRef.set(d)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -121,6 +124,22 @@ public class ForumManager {
         d.clear();
     }
 
+    /**
+     * This function sets up the Forum Manager's internal hash-map entry to control the
+     * database structure of forum replies
+     * @param reply
+     * The forum reply being manually serialized
+     **/
+    private void setReplyHashMap(ForumReply reply) {
+        d.clear();
+        d.put("id", reply.getId());
+        d.put("date", new Timestamp(reply.getDate()));
+        d.put("questionID", reply.getQuestionID());
+        d.put("posterID", reply.getPosterID());
+        d.put("posterUsername", reply.getPosterUsername());
+        d.put("content", reply.getContent());
+    }
+
     /** Add a forum reply to the database - id will be created automatically
      * @param forumReply
      * The reply to add to the database
@@ -131,13 +150,7 @@ public class ForumManager {
         forumReply.setId(docRef.getId());
 
         // Construct the structure of the data entry to put into the database
-        d.clear();
-        d.put("id", forumReply.getId());
-        d.put("date", new Timestamp(forumReply.getDate()));
-        d.put("questionID", forumReply.getQuestionID());
-        d.put("posterID", forumReply.getPosterID());
-        d.put("posterUsername", forumReply.getPosterUsername());
-        d.put("content", forumReply.getContent());
+        setReplyHashMap(forumReply);
 
         docRef.set(d)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {

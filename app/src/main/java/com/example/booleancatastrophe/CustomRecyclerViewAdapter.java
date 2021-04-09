@@ -53,7 +53,7 @@ public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecycl
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
         holder.tvExperimentItemDescription.setText(experiments.get(position).getDescription());
-        holder.tvExperimentItemOwner.setText(experiments.get(position).getOwner());
+        holder.tvExperimentItemOwner.setText(experiments.get(position).getOwnerID());
         // TODO use the icon as some kind of data indicator or allow users to set the picture, etc.
         // do it in this kind of way somehow:
 //        holder.imgExperimentImage.setImageResource(experiments.get(position).getPhoto());
