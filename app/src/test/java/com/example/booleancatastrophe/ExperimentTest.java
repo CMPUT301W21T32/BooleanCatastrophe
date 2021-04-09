@@ -15,9 +15,9 @@ public class ExperimentTest {
     @BeforeEach
     public void makeExperiments(){
         e1 = new Experiment("First Experiment", "Greater Toronto Area",
-                "Radomir", 5, ExperimentType.BINOMIAL);
+                "Radomir", 5, ExperimentType.BINOMIAL.name());
         e2 = new Experiment("Second Experiment", "Victoria",
-                "Radomir", 5, ExperimentType.MEASUREMENT);
+                "Radomir", 5, ExperimentType.MEASUREMENT.name());
     }
 
     //TODO: What should the default constructor even do? What does it mean?
@@ -65,7 +65,7 @@ public class ExperimentTest {
         assertEquals("Radomir", e1.getOwner());
         assertEquals("Radomir", e2.getOwner());
 
-        e2.setOwner("E.T.");
+        e2.setOwnerID("E.T.");
         assertEquals("Radomir", e1.getOwner());
         assertEquals("E.T.", e2.getOwner());
     }

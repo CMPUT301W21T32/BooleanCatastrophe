@@ -115,7 +115,7 @@ public class PublishExperimentFragment extends DialogFragment {
                         }
 
                         listener.onOkPressed(new Experiment(
-                                expDescription, expRegion, expOwner, expMinTrials, expType));
+                                expDescription, expRegion, expOwner, expMinTrials, expType.name()));
                     }
                 }).create();
     }
