@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Pair;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,6 +39,16 @@ public class ViewExperimentActivity extends AppCompatActivity implements NewTria
 
     private static final String TAG = "View Experiment Activity";
 
+    TextView usernameText;
+    TextView descriptionText;
+    TextView regionText;
+    TextView trialCountText;
+    Button newTrialButton;
+    Button newQrCodeButton;
+    Button newBarcodeButton;
+    Button btnViewExperimentForum;
+    Button btnUnpublishExperiment;
+
     // a hacky solution to pass the trial received from NewTrialFragment to onActivityResult()
     private Trial tempNewTrial;
 
@@ -54,14 +65,15 @@ public class ViewExperimentActivity extends AppCompatActivity implements NewTria
         setContentView(R.layout.activity_view_experiment);
 
         //user = ((ExperimentApplication) this.getApplication()).getCurrentUser();
-        TextView usernameText = (TextView) findViewById(R.id.usernameText);
-        TextView descriptionText = (TextView) findViewById(R.id.descriptionText);
-        TextView regionText = (TextView) findViewById(R.id.regionText);
-        TextView trialCountText = (TextView) findViewById(R.id.trialCountText);
-        Button newTrialButton = (Button) findViewById(R.id.newTrialButton);
-        Button newQrCodeButton = findViewById(R.id.newQrCodeButton);
-        Button newBarcodeButton = findViewById(R.id.newBarcodeButton);
-        Button btnViewExperimentForum = (Button) findViewById(R.id.btn_experiment_forum);
+        usernameText = (TextView) findViewById(R.id.usernameText);
+        descriptionText = (TextView) findViewById(R.id.descriptionText);
+        regionText = (TextView) findViewById(R.id.regionText);
+        trialCountText = (TextView) findViewById(R.id.trialCountText);
+        newTrialButton = (Button) findViewById(R.id.newTrialButton);
+        newQrCodeButton = findViewById(R.id.newQrCodeButton);
+        newBarcodeButton = findViewById(R.id.newBarcodeButton);
+        btnViewExperimentForum = (Button) findViewById(R.id.btn_experiment_forum);
+        btnUnpublishExperiment = (Button) findViewById(R.id.btn_unpublish_experiment);
 
         // Get the current experiment data through the intent
         Bundle extras = getIntent().getExtras();
@@ -84,7 +96,15 @@ public class ViewExperimentActivity extends AppCompatActivity implements NewTria
         userManager.getUser(((ExperimentApplication) this.getApplication()).getAccountID(),
                 (User user) -> {
                     currentUser = user;
-                    usernameText.setText( currentUser.getUsername() );
+                    usernameText.setText( currentUser.getUsername());
+
+                    /* If the user is the account owner, make the owner tools available and set their
+                     * onclick listeners - unpublish, end, ignore certain people's results, specify geo-location */
+                    if(currentExperiment.getOwnerID().equals(currentUser.getAccountID())) {
+                        setupOwnerTools(true);
+                    } else {
+                        setupOwnerTools(false);
+                    }
         });
 
         descriptionText.setText( currentExperiment.getDescription() );
@@ -134,7 +154,6 @@ public class ViewExperimentActivity extends AppCompatActivity implements NewTria
                 new IntentIntegrator(this).setDesiredBarcodeFormats(IntentIntegrator.EAN_13).initiateScan();
                 break;
         }
-
     }
 
     // launch qr code scanner and add trial if successfully scanned
@@ -161,5 +180,25 @@ public class ViewExperimentActivity extends AppCompatActivity implements NewTria
         }
     }
 
-
+    /**
+     * This function sets up the UI owner tools based on whether the experimenter viewing this
+     * experiment is the owner or not and enables/disables this functionality
+     * @param doIt
+     * Boolean variable dictating whether the tools will be enabled/visible or disabled/invisible */
+    private void setupOwnerTools(boolean doIt) {
+        if(doIt) {
+            btnUnpublishExperiment.setEnabled(true);
+            btnUnpublishExperiment.setVisibility(View.VISIBLE);
+            btnUnpublishExperiment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    eManager.unpublish(currentExperiment.getId());
+                    currentExperiment.setPublished(false);
+                }
+            });
+        } else {
+            btnUnpublishExperiment.setEnabled(false);
+            btnUnpublishExperiment.setVisibility(View.GONE);
+        }
+    }
 }

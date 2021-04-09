@@ -57,4 +57,5 @@
     <string name="btn_add_reply">Add Reply</string>
     <string name="cd_forum_reply">Image for the forum replies</string>
     <string name="hint_new_reply">Enter your reply to this question...</string>
+    <string name="btn_unpublish_experiment">Unpublish Experiment</string>
 </resources>
