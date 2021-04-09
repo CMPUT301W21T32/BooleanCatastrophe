@@ -27,7 +27,7 @@ public class ExperimentFirestoreRecyclerAdapter extends FirestoreRecyclerAdapter
     protected void onBindViewHolder(
             @NonNull ExperimentFirestoreRecyclerAdapter.ExperimentHolder holder, int position, @NonNull Experiment model) {
         holder.tvExperimentItemDescription.setText(model.getDescription());
-        holder.tvExperimentItemOwner.setText(model.getOwnerID());
+//        holder.tvExperimentItemOwner.setText(model.getOwnerID());
         // Holder image could be set here...
     }
 
@@ -42,7 +42,7 @@ public class ExperimentFirestoreRecyclerAdapter extends FirestoreRecyclerAdapter
     public class ExperimentHolder extends RecyclerView.ViewHolder {
 
         TextView tvExperimentItemDescription;
-        TextView tvExperimentItemOwner;
+//        TextView tvExperimentItemOwner;
         ImageView imgExperimentImage;
 
         public ExperimentHolder(View itemView) {
@@ -50,8 +50,8 @@ public class ExperimentFirestoreRecyclerAdapter extends FirestoreRecyclerAdapter
 
             tvExperimentItemDescription = (TextView) itemView.findViewById(
                     R.id.tv_experiment_item_description);
-            tvExperimentItemOwner = (TextView) itemView.findViewById(
-                    R.id.tv_experiment_item_owner);
+//            tvExperimentItemOwner = (TextView) itemView.findViewById(
+//                    R.id.tv_experiment_item_owner);
             imgExperimentImage = (ImageView) itemView.findViewById(
                     R.id.img_experiment_item);
 
