@@ -6,7 +6,10 @@ import android.os.Parcelable;
 import com.example.booleancatastrophe.model.ExperimentType;
 import com.google.firebase.firestore.GeoPoint;
 
-import java.io.Serializable;
+
+import java.util.Date;
+
+
 
 // Class to hold all information about a trial
 public class Trial implements Parcelable {
@@ -15,14 +18,16 @@ public class Trial implements Parcelable {
     private double result;   //to make the class easily serializable and deserializable we use a double for all results
     private GeoPoint location;
     private ExperimentType type;
+    private Date date;
 
     public Trial() {}
 
-    public Trial(String experimenter, double result, GeoPoint location, ExperimentType type){
+    public Trial(String experimenter, double result, GeoPoint location, ExperimentType type, Date date){
         this.experimenter = experimenter;
         this.result = result;
         this.location = location;
         this.type = type;
+        this.date = date;
     }
 
     protected Trial(Parcel in) {
@@ -30,6 +35,7 @@ public class Trial implements Parcelable {
         result = in.readDouble();
         location = new GeoPoint(in.readDouble(), in.readDouble());
         type = ExperimentType.valueOf(in.readString());
+        date = new Date(in.readLong());
     }
 
     public static final Creator<Trial> CREATOR = new Creator<Trial>() {
@@ -52,31 +58,33 @@ public class Trial implements Parcelable {
         return location;
     }
 
-    public Number getResult(){
-        Number temp = 0;
+    public Double getResult(){
+        Double temp = 0d;
         switch (type){
             case COUNT:
-                temp = 1;
+                temp = 1d;
                 break;
             case BINOMIAL:     //map 0 to a failure and anything else to a success
                 if(result == 0){
-                    temp = 0;
+                    temp = 0d;
                 }
                 else{
-                    temp = 1;
+                    temp = 1d;
                 }
                 break;
             case MEASUREMENT:
                 temp = result;
                 break;
             case NONNEGCOUNT:
-                temp = (int) result;
+                temp = result;
                 break;
         }
         return temp;
     }
 
     public ExperimentType getType(){ return type; }
+
+    public Date getDate(){ return date; }
 
     @Override
     public int describeContents() {
@@ -91,5 +99,6 @@ public class Trial implements Parcelable {
         dest.writeDouble(location.getLatitude());
         dest.writeDouble(location.getLongitude());
         dest.writeString(type.toString());
+        dest.writeLong(date.getTime());
     }
 }

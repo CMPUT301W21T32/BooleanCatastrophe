@@ -34,6 +34,8 @@ import com.schibstedspain.leku.LocationPickerActivity;
 import static com.schibstedspain.leku.LocationPickerActivityKt.LATITUDE;
 import static com.schibstedspain.leku.LocationPickerActivityKt.LONGITUDE;
 
+import java.util.Date;
+
 //Fragment to capture a new trial on the given experiment
 //TODO implement geolocation features
 //TODO clean up UI
@@ -160,7 +162,8 @@ public class NewTrialFragment extends DialogFragment {
                         Trial newTrial = new Trial(((ExperimentApplication) getActivity().getApplication()).getAccountID()
                                 , result
                                 , location
-                                , type);
+                                , type
+                                , new Date());
                         listener.onOkPressed(newTrial);
                         d.dismiss();
                     }

@@ -36,19 +36,24 @@ public class ViewExperimentActivity extends AppCompatActivity implements NewTria
     private User currentUser;
     private ExperimentManager eManager = new ExperimentManager();
     private UserManager userManager = new UserManager();
+    private int trialCount;
+    private String minTrials;
+
+    private TextView usernameText;
+    private TextView descriptionText;
+    private TextView regionText;
+    private TextView trialCountText;
+    private Button newTrialButton;
+    private Button btnViewExperimentForum ;
+    private Button btnViewExperimentStatistics;
+    private Button newQrCodeButton;
+    private Button newBarcodeButton;
+    Button btnUnpublishExperiment;
+    Button btnEndExperiment;
+    Button btnSubscribe;
 
     private static final String TAG = "View Experiment Activity";
 
-    TextView usernameText;
-    TextView descriptionText;
-    TextView regionText;
-    TextView trialCountText;
-    Button newTrialButton;
-    Button newQrCodeButton;
-    Button newBarcodeButton;
-    Button btnViewExperimentForum;
-    Button btnUnpublishExperiment;
-    Button btnEndExperiment;
 
     // a hacky solution to pass the trial received from NewTrialFragment to onActivityResult()
     private Trial tempNewTrial;
@@ -66,6 +71,7 @@ public class ViewExperimentActivity extends AppCompatActivity implements NewTria
         setContentView(R.layout.activity_view_experiment);
 
         //user = ((ExperimentApplication) this.getApplication()).getCurrentUser();
+
         usernameText = (TextView) findViewById(R.id.usernameText);
         descriptionText = (TextView) findViewById(R.id.descriptionText);
         regionText = (TextView) findViewById(R.id.regionText);
@@ -74,8 +80,10 @@ public class ViewExperimentActivity extends AppCompatActivity implements NewTria
         newQrCodeButton = findViewById(R.id.newQrCodeButton);
         newBarcodeButton = findViewById(R.id.newBarcodeButton);
         btnViewExperimentForum = (Button) findViewById(R.id.btn_experiment_forum);
+        btnViewExperimentStatistics = (Button) findViewById(R.id.btn_experiment_statistics);
         btnUnpublishExperiment = (Button) findViewById(R.id.btn_unpublish_experiment);
         btnEndExperiment = (Button) findViewById(R.id.btn_end_experiment);
+        btnSubscribe = (Button) findViewById(R.id.btn_experiment_subscribe);
 
         // Get the current experiment data through the intent
         Bundle extras = getIntent().getExtras();
@@ -88,8 +96,8 @@ public class ViewExperimentActivity extends AppCompatActivity implements NewTria
             @Override
             public void onCallback(ArrayList<Trial> trials) {
                 currentTrials = trials;
-                String trialCount = ((Integer)trials.size()).toString();
-                String minTrials = ((Integer) currentExperiment.getMinTrials()).toString();
+                trialCount = ((Integer)trials.size());
+                minTrials = ((Integer) currentExperiment.getMinTrials()).toString();
                 String display = trialCount + " / " + minTrials + " trials completed";
                 trialCountText.setText(display);
             }
@@ -100,6 +108,9 @@ public class ViewExperimentActivity extends AppCompatActivity implements NewTria
                     currentUser = user;
                     usernameText.setText( currentUser.getUsername());
 
+                    // Only set up all the buttons once the current user has been pulled from
+                    // the database
+
                     /* If the user is the account owner, make the owner tools available and set their
                      * onclick listeners - unpublish, end, ignore certain people's results, specify geo-location */
                     if(currentExperiment.getOwnerID().equals(currentUser.getAccountID())) {
@@ -107,25 +118,16 @@ public class ViewExperimentActivity extends AppCompatActivity implements NewTria
                     } else {
                         setupOwnerTools(false);
                     }
+
+                    /* Set up subscribe button for owners and experimenters based on state */
+                    setupNewBarcodeButton();
+                    setupNewQrCodeButton();
+                    setupSubscribeButton();
+                    setupAddTrialButton();
         });
 
         descriptionText.setText( currentExperiment.getDescription() );
         regionText.setText(currentExperiment.getRegion());
-
-        newTrialButton.setOnClickListener((v) -> {
-            trialFragmentMode = ADD_TRIAL;
-            new NewTrialFragment().show(getSupportFragmentManager(), ADD_TRIAL);
-        });
-
-        newQrCodeButton.setOnClickListener(view -> {
-            trialFragmentMode = GENERATE_QR_CODE;
-            new NewTrialFragment().show(getSupportFragmentManager(), GENERATE_QR_CODE);
-        });
-
-        newBarcodeButton.setOnClickListener(view -> {
-            trialFragmentMode = REGISTER_BARCODE;
-            new NewTrialFragment().show(getSupportFragmentManager(), REGISTER_BARCODE);
-        });
 
         /* Go to the experiment question forum activity if this button is clicked */
         btnViewExperimentForum.setOnClickListener((v) -> {
@@ -133,6 +135,14 @@ public class ViewExperimentActivity extends AppCompatActivity implements NewTria
             newIntent.putExtra("EXPERIMENT", currentExperiment);
             startActivity(newIntent);
         });
+
+        // Go to statistics view when this is clicked
+        btnViewExperimentStatistics.setOnClickListener((v) -> {
+            Intent newIntent = new Intent(this, ViewStatisticsActivity.class);
+            newIntent.putExtra("EXPERIMENT", currentExperiment);
+            startActivity(newIntent);
+        });
+
     }
 
     public Experiment getCurrentExperiment(){
@@ -141,9 +151,13 @@ public class ViewExperimentActivity extends AppCompatActivity implements NewTria
 
     //Adds a new trial to the experiment
     public void onOkPressed(Trial newTrial){
+
         switch (trialFragmentMode) {
             case ADD_TRIAL:
                 eManager.addTrial(currentExperiment.getId(), newTrial);
+                trialCount++;
+                String display = trialCount + " / " + minTrials + " trials completed";
+                trialCountText.setText(display);
                 break;
             case GENERATE_QR_CODE:
                 Intent intent = new Intent(this, GenerateQRCodeActivity.class);
@@ -188,8 +202,8 @@ public class ViewExperimentActivity extends AppCompatActivity implements NewTria
      * @param doIt
      * Boolean variable dictating whether the tools will be enabled/visible or disabled/invisible */
     private void setupOwnerTools(boolean doIt) {
-        setUpPublishButton(doIt);
-        setUpEndButton(doIt);
+        setupPublishButton(doIt);
+        setupEndButton(doIt);
     }
 
     /**
@@ -197,7 +211,7 @@ public class ViewExperimentActivity extends AppCompatActivity implements NewTria
      * the current experiment's internal state and the button's action depending on that state
      * @param doIt
      * Boolean variable dictating whether the button will be visible and functioning or gone */
-    private void setUpPublishButton(boolean doIt) {
+    private void setupPublishButton(boolean doIt) {
         if(doIt) {
             if(currentExperiment.getPublished()) {
                 btnUnpublishExperiment.setText("Unpublish");
@@ -232,7 +246,7 @@ public class ViewExperimentActivity extends AppCompatActivity implements NewTria
      * the current experiment's internal state
      * @param doIt
      * Boolean variable dictating whether the button will be visible and functioning or gone */
-    private void setUpEndButton(boolean doIt) {
+    private void setupEndButton(boolean doIt) {
         if(doIt) {
             if(currentExperiment.getEnded()) {
                 btnEndExperiment.setText("Already Ended");
@@ -245,11 +259,17 @@ public class ViewExperimentActivity extends AppCompatActivity implements NewTria
             btnEndExperiment.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(!currentExperiment.getEnded()) {
+                    if(!currentExperiment.getEnded() && trialCount >= currentExperiment.getMinTrials()) {
                         eManager.end(currentExperiment.getId());
                         currentExperiment.setEnded(true);
                         btnEndExperiment.setText("Already Ended");
                         btnEndExperiment.setEnabled(false);
+                        newTrialButton.setText("Experiment Ended");
+                        newTrialButton.setEnabled(false);
+                        newBarcodeButton.setText("Experiment Ended");
+                        newBarcodeButton.setEnabled(false);
+                        newQrCodeButton.setText("Experiment Ended");
+                        newQrCodeButton.setEnabled(false);
                     }
                 }
             });
@@ -257,5 +277,120 @@ public class ViewExperimentActivity extends AppCompatActivity implements NewTria
             btnEndExperiment.setEnabled(false);
             btnEndExperiment.setVisibility(View.GONE);
         }
+    }
+
+    /**
+     * This function sets up state dependent subscription button which changes the current
+     * experiment's subscription list and user's subscriptions
+    **/
+    private void setupSubscribeButton() {
+
+        if(currentUser.getSubscriptions().contains(currentExperiment.getId())) {
+            btnSubscribe.setText("Unsubscribe");
+        } else {
+            btnSubscribe.setText("Subscribe");
+        }
+
+        btnSubscribe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(currentUser.getSubscriptions().contains(currentExperiment.getId())) {
+                    userManager.unsubscribe(currentUser.getAccountID(), currentExperiment.getId());
+                    eManager.removeFromSubscriptionList(currentExperiment.getId(), currentUser.getAccountID());
+                    currentUser.removeSubscription(currentExperiment.getId());
+                    btnSubscribe.setText("Subscribe");
+                } else {
+                    userManager.subscribe(currentUser.getAccountID(), currentExperiment.getId());
+                    eManager.addToSubscriptionList(currentExperiment.getId(), currentUser.getAccountID());
+                    currentUser.addSubscription(currentExperiment.getId());
+                    btnSubscribe.setText("Unsubscribe");
+                }
+            }
+        });
+    }
+
+    /**
+     * This function sets up state dependent add trial button - if the experiment isn't ended,
+     * the onclick will activate the 'add trial' fragment in add trial mode
+     **/
+    private void setupAddTrialButton() {
+
+        if(currentExperiment.getEnded()) {
+            newTrialButton.setText("Experiment Ended");
+            newTrialButton.setEnabled(false);
+        } else {
+            newTrialButton.setText("Add Trial");
+            newTrialButton.setEnabled(true);
+
+        }
+
+        newTrialButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!currentExperiment.getEnded()) {
+                    trialFragmentMode = ADD_TRIAL;
+                    new NewTrialFragment().show(getSupportFragmentManager(), ADD_TRIAL);
+                } else {
+                    newTrialButton.setText("Experiment Ended");
+                    newTrialButton.setEnabled(false);
+                }
+            }
+        });
+    }
+
+    /**
+     * This function sets up state dependent register new barcode button - if the experiment isn't
+     * ended, the onclick will activate the 'new trial' fragment in barcode mode
+     **/
+    private void setupNewBarcodeButton() {
+
+        if(currentExperiment.getEnded()) {
+            newBarcodeButton.setText("Experiment Ended");
+            newBarcodeButton.setEnabled(false);
+        } else {
+            newBarcodeButton.setText("Register Barcode");
+            newBarcodeButton.setEnabled(true);
+        }
+
+        newBarcodeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!currentExperiment.getEnded()) {
+                    trialFragmentMode = REGISTER_BARCODE;
+                    new NewTrialFragment().show(getSupportFragmentManager(), REGISTER_BARCODE);
+                } else {
+                    newBarcodeButton.setText("Experiment Ended");
+                    newBarcodeButton.setEnabled(false);
+                }
+            }
+        });
+    }
+
+    /**
+     * This function sets up state dependent generate qr code button - if the experiment isn't
+     * ended, the onclick will activate the 'new trial' fragment in qr mode
+     **/
+    private void setupNewQrCodeButton() {
+
+        if(currentExperiment.getEnded()) {
+            newQrCodeButton.setText("Experiment Ended");
+            newQrCodeButton.setEnabled(false);
+        } else {
+            newQrCodeButton.setText("Generate QR");
+            newQrCodeButton.setEnabled(true);
+        }
+
+        newQrCodeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!currentExperiment.getEnded()) {
+                    trialFragmentMode = GENERATE_QR_CODE;
+                    new NewTrialFragment().show(getSupportFragmentManager(), GENERATE_QR_CODE);
+                } else {
+                    newQrCodeButton.setText("Experiment Ended");
+                    newQrCodeButton.setEnabled(false);
+                }
+            }
+        });
     }
 }

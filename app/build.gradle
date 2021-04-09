@@ -55,6 +55,10 @@ dependencies {
     
         // Dependency for FirebaseUI for Cloud Firestore
     implementation 'com.firebaseui:firebase-ui-firestore:7.1.1'
+
+    // Dependancy for graphing capabilities
+    implementation 'com.jjoe64:graphview:4.2.2'
+
     implementation 'com.google.zxing:core:3.4.1'
     implementation 'com.google.zxing:javase:3.4.1'
     implementation 'com.journeyapps:zxing-android-embedded:4.2.0'

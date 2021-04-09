@@ -20,6 +20,7 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 
+import java.util.Date;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -33,12 +34,14 @@ public class CodeManager {
     private static final String trialTypeTag = "TrialType";
     private static final String trialResultTag = "TrialResult";
     private static final String trialLocationTag = "TrialLocation";
+    private static final String trialDateTag = "TrialDate";
     private static final String delimiter = "; ";
     private static final String colon = ": ";
     private static final Pattern regexPattern = Pattern.compile(experimentTag + colon + "(.*)" + delimiter
             + trialTypeTag + colon + "(.*)" + delimiter
             + trialResultTag + colon + "(.*)" + delimiter
-            + trialLocationTag + colon + "(null|GeoPoint \\{ latitude=(-?[0-9]*.[0-9]*), longitude=(-?[0-9]*.[0-9]) \\})" + delimiter);
+            + trialLocationTag + colon + "(null|GeoPoint \\{ latitude=(-?[0-9]*.[0-9]*), longitude=(-?[0-9]*.[0-9]) \\})"
+            + delimiter + trialDateTag + colon + "(.*)" + delimiter );
 
     private static final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private static final CollectionReference usersRef = db.collection("users");
@@ -49,7 +52,8 @@ public class CodeManager {
         String data = experimentTag + colon + experiment.getId() + delimiter
                         + trialTypeTag + colon + trial.getType().toString() + delimiter
                         + trialResultTag + colon + trial.getResult().toString() + delimiter
-                        + trialLocationTag + colon + (trial.getLocation()!=null ? trial.getLocation().toString() : "null") + delimiter;
+                        + trialLocationTag + colon + (trial.getLocation()!=null ? trial.getLocation().toString() : "null") + delimiter
+                        + trialDateTag + colon + trial.getDate().getTime() + delimiter;
         BitMatrix bitMatrix;
         try {
             bitMatrix = writer.encode(data, BarcodeFormat.QR_CODE, size, size);
@@ -78,9 +82,10 @@ public class CodeManager {
             double trialResult = Double.parseDouble(Objects.requireNonNull(m.group(3)));
             double lat = Double.parseDouble(Objects.requireNonNull(m.group(5)));
             double lon = Double.parseDouble(Objects.requireNonNull(m.group(6)));
+            long date = Long.parseLong(m.group(7));
             GeoPoint location = new GeoPoint(lat, lon);
             assert trialType != null;
-            trial = new Trial(experimenterId, trialResult, location, ExperimentType.valueOf(trialType.toUpperCase()));
+            trial = new Trial(experimenterId, trialResult, location, ExperimentType.valueOf(trialType.toUpperCase()), new Date(date));
             return new Pair<>(experimentId, trial);
         } else {
             Log.d(TAG, "Could not parse QR code string");

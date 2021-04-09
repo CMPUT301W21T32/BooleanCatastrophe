@@ -6,6 +6,9 @@ import com.example.booleancatastrophe.model.Trial;
 import com.google.firebase.firestore.GeoPoint;
 
 import org.junit.jupiter.api.Test;
+
+import java.util.Date;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TrialTest {
@@ -16,10 +19,10 @@ public class TrialTest {
 
     @Test
     public void testMiscellaneous(){
-        Trial t1 = new Trial("new", 1, new GeoPoint(0, 0), ExperimentType.COUNT);
+        Trial t1 = new Trial("new", 1, new GeoPoint(0, 0), ExperimentType.COUNT, new Date());
 
         //Test trials without a Geolocation
-        Trial t3 = new Trial("new", 1, null, ExperimentType.COUNT);
+        Trial t3 = new Trial("new", 1, null, ExperimentType.COUNT, new Date());
         assertNull(t3.getLocation());
         assertNotEquals(t1, t3);
     }
@@ -29,7 +32,7 @@ public class TrialTest {
         //TODO: There is no checking if the input in a valid range when the trial is created.
         boolean flag = false;
         try {
-            Trial t1 = new Trial("a phony", -10, new GeoPoint(1, 5), ExperimentType.NONNEGCOUNT);
+            Trial t1 = new Trial("a phony", -10, new GeoPoint(1, 5), ExperimentType.NONNEGCOUNT, new Date());
 
             if(!(t1.getResult().intValue() < 0)){ flag = true; }
         } catch (IllegalArgumentException ex){
@@ -41,8 +44,8 @@ public class TrialTest {
 
     @Test
     public void testResult(){
-        Trial t1 = new Trial("new", 1, new GeoPoint(0, 0), ExperimentType.COUNT);
-        Trial t2 = new Trial("someone", -1, new GeoPoint(0, 0), ExperimentType.COUNT);
+        Trial t1 = new Trial("new", 1, new GeoPoint(0, 0), ExperimentType.COUNT, new Date());
+        Trial t2 = new Trial("someone", -1, new GeoPoint(0, 0), ExperimentType.COUNT, new Date());
 
         assertEquals(t1.getResult(), t2.getResult());
     }
