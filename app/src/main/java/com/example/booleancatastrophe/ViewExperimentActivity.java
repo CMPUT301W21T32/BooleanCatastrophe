@@ -12,8 +12,6 @@ import android.widget.Toast;
 
 
 import com.example.booleancatastrophe.interfaces.FirestoreCodeCallback;
-import com.example.booleancatastrophe.interfaces.FirestoreTrialListCallback;
-import com.example.booleancatastrophe.interfaces.FirestoreUserCallback;
 import com.example.booleancatastrophe.model.Code;
 import com.example.booleancatastrophe.model.CodeManager;
 import com.example.booleancatastrophe.model.Experiment;
