@@ -318,7 +318,7 @@ public class ExperimentManager {
      * The data option that the ForumQuestion recycler view adapter will be linked to / watching
      **/
     public FirestoreRecyclerOptions<Experiment> getExperimentsSubscribedTo(User user) {
-        Query query = experimentRef.whereArrayContains("subscribedUserIDs", user.getAccountID());
+        Query query = experimentRef.whereArrayContains("subscribedUserIDs", user.getAccountID()).orderBy("date", Query.Direction.ASCENDING);
         return new FirestoreRecyclerOptions.Builder<Experiment>()
                 .setQuery(query, Experiment.class)
                 .build();
@@ -331,7 +331,7 @@ public class ExperimentManager {
      * The data option that the ForumQuestion recycler view adapter will be linked to / watching
      **/
     public FirestoreRecyclerOptions<Experiment> getExperimentsActive() {
-        Query query = experimentRef.whereEqualTo("ended", false);
+        Query query = experimentRef.whereEqualTo("ended", false).orderBy("date", Query.Direction.ASCENDING);
         return new FirestoreRecyclerOptions.Builder<Experiment>()
                 .setQuery(query, Experiment.class)
                 .build();
@@ -344,7 +344,7 @@ public class ExperimentManager {
      * The data option that the ForumQuestion recycler view adapter will be linked to / watching
      **/
     public FirestoreRecyclerOptions<Experiment> getExperimentsEnded() {
-        Query query = experimentRef.whereEqualTo("ended", true);
+        Query query = experimentRef.whereEqualTo("ended", true).orderBy("date", Query.Direction.ASCENDING);
         return new FirestoreRecyclerOptions.Builder<Experiment>()
                 .setQuery(query, Experiment.class)
                 .build();
