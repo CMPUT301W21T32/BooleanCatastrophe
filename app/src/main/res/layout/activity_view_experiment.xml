@@ -119,7 +119,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_experiment_forum"
-        android:backgroundTint="@color/black"/>
+        android:backgroundTint="@color/btn_warning"/>
 
     <Button
         android:id="@+id/btn_end_experiment"
@@ -130,7 +130,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_unpublish_experiment"
-        android:backgroundTint="@color/black"/>
+        android:backgroundTint="@color/btn_warning"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
