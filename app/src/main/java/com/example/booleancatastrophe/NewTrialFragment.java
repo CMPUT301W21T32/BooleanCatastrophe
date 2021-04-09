@@ -59,7 +59,7 @@ public class NewTrialFragment extends DialogFragment {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.new_trial_fragment_layout, null);
         trialResult = view.findViewById(R.id.et_trial_result);
         trialType = view.findViewById(R.id.trial_type);
-        ExperimentType type = (((ViewExperimentActivity) getActivity()).getCurrentExperiment().getType());
+        ExperimentType type = ExperimentType.valueOf(((ViewExperimentActivity) getActivity()).getCurrentExperiment().getStrType());
         String typeText = type.name();
         trialType.setText(typeText + " Trial");
 
