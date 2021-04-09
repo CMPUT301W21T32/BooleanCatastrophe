@@ -47,6 +47,7 @@ public class ViewStatisticsActivity extends AppCompatActivity {
     private Double quartileLower;
 
     private int numIntervals = 5;
+    private ExperimentType type;
 
     private LineGraphSeries<DataPoint> timeSeries = new LineGraphSeries<DataPoint>();
     private GraphView timePlot;
@@ -65,6 +66,8 @@ public class ViewStatisticsActivity extends AppCompatActivity {
 
         // Retrieve the experiment passed via the intent
         currentExperiment = (Experiment) getIntent().getSerializableExtra("EXPERIMENT");
+        Log.d("STATS", "Got experiment " + currentExperiment.getDescription());
+        type =  ExperimentType.valueOf(currentExperiment.getStrType());
 
         title = (TextView) findViewById(R.id.statisticsTitle);
         meanText = (TextView) findViewById(R.id.mean_value_text);
@@ -107,7 +110,6 @@ public class ViewStatisticsActivity extends AppCompatActivity {
             trialResults.add(trials.get(i).getResult());
         }
         //check for type COUNT which doesnt have significant results
-        ExperimentType type = currentExperiment.getType();
         if(type == ExperimentType.COUNT){
             // Most stats are not significant, use fillers and return
             meanText.setText(" ~ ");
@@ -169,7 +171,7 @@ public class ViewStatisticsActivity extends AppCompatActivity {
         timePlot.getGridLabelRenderer().setHorizontalLabelsVisible(false);
         timePlot.getGridLabelRenderer().setVerticalAxisTitleTextSize(35);
 
-        switch (currentExperiment.getType()){
+        switch (type){
             case BINOMIAL:
                 timePlot.getGridLabelRenderer().setVerticalAxisTitle("Success Rate");
                 break;
@@ -201,7 +203,7 @@ public class ViewStatisticsActivity extends AppCompatActivity {
         for(int i = 0; i < trials.size(); i++){
             results.add(trials.get(i).getResult());
         }
-        switch (currentExperiment.getType()){
+        switch (type){
             case BINOMIAL:
                 int pass = Collections.frequency(results, 1d);
                 int fail = Collections.frequency(results, 0d);
@@ -350,7 +352,7 @@ public class ViewStatisticsActivity extends AppCompatActivity {
             // IF the trial was before or on this day, include it in the stats
             if( trialDay <= dayofyear){
                 resultCount++;
-                switch (currentExperiment.getType()){
+                switch (type){
                     case BINOMIAL:
                         sum += trials.get(i).getResult();
                         break;

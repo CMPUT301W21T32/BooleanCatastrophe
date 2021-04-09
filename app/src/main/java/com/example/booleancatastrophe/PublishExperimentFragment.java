@@ -38,6 +38,7 @@ public class PublishExperimentFragment extends DialogFragment {
     private TextView tvOwner;  // Can't be changed; set to the current user
     private RadioGroup radGroup;
     private EditText etDescription;
+    private EditText etRegion;
 
     User user;
     private OnFragmentInteractionListener listener;
@@ -66,12 +67,13 @@ public class PublishExperimentFragment extends DialogFragment {
 
         etMinimumTrials = view.findViewById(R.id.et_pub_exp_min);
         etDescription = view.findViewById(R.id.et_pub_exp_description);
+        etRegion = view.findViewById(R.id.et_pub_exp_region);
         tvOwner = view.findViewById(R.id.tv_pub_exp_owner);
         radGroup = view.findViewById(R.id.rad_group_pub_exp);
 
         user = ((ExperimentApplication) this.getActivity().getApplication()).getCurrentUser();
-        if(user.getUsername().equals("")) {
-            tvOwner.setText("Owner:   YOU (username not set)");
+        if(user.getUsername().equals("") || user == null) {
+            tvOwner.setText("Owner:   YOU");
         } else {
             tvOwner.setText("Owner:   " + user.getUsername());
         }
@@ -91,7 +93,7 @@ public class PublishExperimentFragment extends DialogFragment {
                         /* As soon as OK is clicked, pass the new experiment with this dialog
                         * fragment's UI value selections */
                         String expDescription = etDescription.getText().toString();
-                        String expRegion = "";  // TODO set up location properly
+                        String expRegion = etRegion.getText().toString();
                         String expOwner = user.getAccountID();
                         int expMinTrials = Integer.parseInt(etMinimumTrials.getText().toString());
 

@@ -12,6 +12,8 @@ import android.widget.TextView;
 import com.example.booleancatastrophe.model.Experiment;
 import com.example.booleancatastrophe.model.Trial;
 
+import java.util.Date;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link TrialDetailsFragment#newInstance} factory method to
@@ -26,6 +28,7 @@ public class TrialDetailsFragment extends Fragment {
     private static final String EXPERIMENT_DESCRIPTION = "experimentDescription";
     private static final String TRIAL_RESULT = "trialResult";
     private static final String TRIAL_LOCATION = "trialLocation";
+    private static final String TRIAL_DATE = "trialDate";
 
     // TODO: Rename and change types of parameters
     private String experimentTitle;
@@ -33,6 +36,7 @@ public class TrialDetailsFragment extends Fragment {
     private String experimentDescription;
     private String trialResult;
     private String trialLocation;
+    private Date trialDate;
 
     public TrialDetailsFragment() {
         // Required empty public constructor
@@ -49,10 +53,11 @@ public class TrialDetailsFragment extends Fragment {
         TrialDetailsFragment fragment = new TrialDetailsFragment();
         Bundle args = new Bundle();
         args.putString(EXPERIMENT_TITLE, "Sample Title");
-        args.putString(EXPERIMENT_OWNER, experiment.getOwner().getUsername());
+        args.putString(EXPERIMENT_OWNER, experiment.getOwnerID());
         args.putString(EXPERIMENT_DESCRIPTION, experiment.getDescription());
         args.putString(TRIAL_RESULT, trial.getResult().toString());
         args.putString(TRIAL_LOCATION, trial.getLocation().toString());
+        args.putString(TRIAL_DATE, String.valueOf(trial.getDate().getTime()));
         fragment.setArguments(args);
         return fragment;
     }
@@ -66,6 +71,7 @@ public class TrialDetailsFragment extends Fragment {
             experimentDescription = getArguments().getString(EXPERIMENT_DESCRIPTION);
             trialResult = getArguments().getString(TRIAL_RESULT);
             trialLocation = getArguments().getString(TRIAL_LOCATION);
+            trialDate = new Date(Long.parseLong(getArguments().getString(TRIAL_DATE)));
         }
     }
 

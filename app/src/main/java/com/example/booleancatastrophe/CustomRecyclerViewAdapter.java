@@ -77,8 +77,8 @@ public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecycl
 
             tvExperimentItemDescription = (TextView) itemView.findViewById(
                     R.id.tv_experiment_item_description);
-            tvExperimentItemOwner = (TextView) itemView.findViewById(
-                    R.id.tv_experiment_item_owner);
+//            tvExperimentItemOwner = (TextView) itemView.findViewById(
+//                    R.id.tv_experiment_item_owner);
             imgExperimentImage = (ImageView) itemView.findViewById(
                     R.id.img_experiment_item);
         }

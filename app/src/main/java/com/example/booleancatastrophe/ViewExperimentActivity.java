@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Pair;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,8 +48,11 @@ public class ViewExperimentActivity extends AppCompatActivity implements NewTria
     private Button btnViewExperimentStatistics;
     private Button newQrCodeButton;
     private Button newBarcodeButton;
+    Button btnUnpublishExperiment;
+    Button btnEndExperiment;
 
     private static final String TAG = "View Experiment Activity";
+
 
     // a hacky solution to pass the trial received from NewTrialFragment to onActivityResult()
     private Trial tempNewTrial;
@@ -76,6 +80,8 @@ public class ViewExperimentActivity extends AppCompatActivity implements NewTria
         newBarcodeButton = findViewById(R.id.newBarcodeButton);
         btnViewExperimentForum = (Button) findViewById(R.id.btn_experiment_forum);
         btnViewExperimentStatistics = (Button) findViewById(R.id.btn_experiment_statistics);
+        btnUnpublishExperiment = (Button) findViewById(R.id.btn_unpublish_experiment);
+        btnEndExperiment = (Button) findViewById(R.id.btn_end_experiment);
 
         // Get the current experiment data through the intent
         Bundle extras = getIntent().getExtras();
@@ -98,7 +104,15 @@ public class ViewExperimentActivity extends AppCompatActivity implements NewTria
         userManager.getUser(((ExperimentApplication) this.getApplication()).getAccountID(),
                 (User user) -> {
                     currentUser = user;
-                    usernameText.setText( currentUser.getUsername() );
+                    usernameText.setText( currentUser.getUsername());
+
+                    /* If the user is the account owner, make the owner tools available and set their
+                     * onclick listeners - unpublish, end, ignore certain people's results, specify geo-location */
+                    if(currentExperiment.getOwnerID().equals(currentUser.getAccountID())) {
+                        setupOwnerTools(true);
+                    } else {
+                        setupOwnerTools(false);
+                    }
         });
 
         descriptionText.setText( currentExperiment.getDescription() );
@@ -160,7 +174,6 @@ public class ViewExperimentActivity extends AppCompatActivity implements NewTria
                 new IntentIntegrator(this).setDesiredBarcodeFormats(IntentIntegrator.EAN_13).initiateScan();
                 break;
         }
-
     }
 
     // launch qr code scanner and add trial if successfully scanned
@@ -187,5 +200,80 @@ public class ViewExperimentActivity extends AppCompatActivity implements NewTria
         }
     }
 
+    /**
+     * This function sets up the UI owner tools based on whether the experimenter viewing this
+     * experiment is the owner or not and enables/disables this functionality
+     * @param doIt
+     * Boolean variable dictating whether the tools will be enabled/visible or disabled/invisible */
+    private void setupOwnerTools(boolean doIt) {
+        setUpPublishButton(doIt);
+        setUpEndButton(doIt);
+    }
 
+    /**
+     * This function sets up specific owner tool: unpublish or re-publish button which changes
+     * the current experiment's internal state and the button's action depending on that state
+     * @param doIt
+     * Boolean variable dictating whether the button will be visible and functioning or gone */
+    private void setUpPublishButton(boolean doIt) {
+        if(doIt) {
+            if(currentExperiment.getPublished()) {
+                btnUnpublishExperiment.setText("Unpublish");
+            } else {
+                btnUnpublishExperiment.setText("Re-publish");
+            }
+            btnUnpublishExperiment.setEnabled(true);
+            btnUnpublishExperiment.setVisibility(View.VISIBLE);
+            btnUnpublishExperiment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(currentExperiment.getPublished()) {
+                        eManager.unpublish(currentExperiment.getId());
+                        currentExperiment.setPublished(false);
+                        btnUnpublishExperiment.setText("Re-publish");
+                    } else {
+                        eManager.publish(currentExperiment.getId());
+                        currentExperiment.setPublished(true);
+                        btnUnpublishExperiment.setText("Unpublish");
+                    }
+
+                }
+            });
+        } else {
+            btnUnpublishExperiment.setEnabled(false);
+            btnUnpublishExperiment.setVisibility(View.GONE);
+        }
+    }
+
+    /**
+     * This function sets up specific owner tool: end experiment button which changes
+     * the current experiment's internal state
+     * @param doIt
+     * Boolean variable dictating whether the button will be visible and functioning or gone */
+    private void setUpEndButton(boolean doIt) {
+        if(doIt) {
+            if(currentExperiment.getEnded()) {
+                btnEndExperiment.setText("Already Ended");
+                btnEndExperiment.setEnabled(false);
+            } else {
+                btnEndExperiment.setText("End");
+                btnEndExperiment.setEnabled(true);
+            }
+            btnEndExperiment.setVisibility(View.VISIBLE);
+            btnEndExperiment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(!currentExperiment.getEnded()) {
+                        eManager.end(currentExperiment.getId());
+                        currentExperiment.setEnded(true);
+                        btnEndExperiment.setText("Already Ended");
+                        btnEndExperiment.setEnabled(false);
+                    }
+                }
+            });
+        } else {
+            btnEndExperiment.setEnabled(false);
+            btnEndExperiment.setVisibility(View.GONE);
+        }
+    }
 }

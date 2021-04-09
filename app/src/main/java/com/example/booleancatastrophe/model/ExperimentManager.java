@@ -113,12 +113,13 @@ public class ExperimentManager {
      * @param eId the id of the experiment
      **/
     public void unpublish(String eId){
-        experimentRef.document(eId).update("published", false).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                Log.d(TAG, "Experiment has been unpublished");
-            }
-        })
+        experimentRef.document(eId).update("published", false)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Experiment has been unpublished");
+                    }
+                })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
@@ -128,7 +129,21 @@ public class ExperimentManager {
     }
 
     //function to end the given experiment
-    public void end(String eID) {};
+    public void end(String eID) {
+        experimentRef.document(eID).update("ended", true)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Experiment has been ended");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Experiment failed to be ended");
+                    }
+                });
+    }
 
     /**
      * function to get a list of experiment objects from the database
@@ -303,7 +318,9 @@ public class ExperimentManager {
      * The data option that the ForumQuestion recycler view adapter will be linked to / watching
      **/
     public FirestoreRecyclerOptions<Experiment> getExperimentsOwnedBy(User user) {
-        Query query = experimentRef.whereEqualTo("ownerID", user.getAccountID()).orderBy("date", Query.Direction.ASCENDING);
+        Query query = experimentRef
+                .whereEqualTo("ownerID", user.getAccountID())
+                .orderBy("date", Query.Direction.ASCENDING);
         return new FirestoreRecyclerOptions.Builder<Experiment>()
                 .setQuery(query, Experiment.class)
                 .build();
@@ -318,7 +335,10 @@ public class ExperimentManager {
      * The data option that the ForumQuestion recycler view adapter will be linked to / watching
      **/
     public FirestoreRecyclerOptions<Experiment> getExperimentsSubscribedTo(User user) {
-        Query query = experimentRef.whereArrayContains("subscribedUserIDs", user.getAccountID()).orderBy("date", Query.Direction.ASCENDING);
+        Query query = experimentRef
+                .whereArrayContains("subscribedUserIDs", user.getAccountID())
+                .whereEqualTo("published", true)
+                .orderBy("date", Query.Direction.ASCENDING);
         return new FirestoreRecyclerOptions.Builder<Experiment>()
                 .setQuery(query, Experiment.class)
                 .build();
@@ -331,7 +351,10 @@ public class ExperimentManager {
      * The data option that the ForumQuestion recycler view adapter will be linked to / watching
      **/
     public FirestoreRecyclerOptions<Experiment> getExperimentsActive() {
-        Query query = experimentRef.whereEqualTo("ended", false).orderBy("date", Query.Direction.ASCENDING);
+        Query query = experimentRef
+                .whereEqualTo("ended", false)
+                .whereEqualTo("published", true)
+                .orderBy("date", Query.Direction.ASCENDING);
         return new FirestoreRecyclerOptions.Builder<Experiment>()
                 .setQuery(query, Experiment.class)
                 .build();
@@ -344,7 +367,10 @@ public class ExperimentManager {
      * The data option that the ForumQuestion recycler view adapter will be linked to / watching
      **/
     public FirestoreRecyclerOptions<Experiment> getExperimentsEnded() {
-        Query query = experimentRef.whereEqualTo("ended", true).orderBy("date", Query.Direction.ASCENDING);
+        Query query = experimentRef
+                .whereEqualTo("ended", true)
+                .whereEqualTo("published", true)
+                .orderBy("date", Query.Direction.ASCENDING);
         return new FirestoreRecyclerOptions.Builder<Experiment>()
                 .setQuery(query, Experiment.class)
                 .build();
