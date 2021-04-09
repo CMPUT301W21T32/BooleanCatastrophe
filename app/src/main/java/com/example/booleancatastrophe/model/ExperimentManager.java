@@ -52,7 +52,7 @@ public class ExperimentManager {
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "Successfully added experiment");
                         // On success add the experiment ID to the owners "ownedExperiments"
-                        db.collection("users").document(exp.getOwner())
+                        db.collection("users").document(exp.getOwnerID())
                                 .update("ownedExperiments",  FieldValue.arrayUnion(exp.getId()));
                     }
                 })
@@ -302,8 +302,49 @@ public class ExperimentManager {
      * @return objectFireStoreRecyclerOption
      * The data option that the ForumQuestion recycler view adapter will be linked to / watching
      **/
-    public FirestoreRecyclerOptions<Experiment> getUserPublishedExperiments(User user) {
-        Query query = experimentRef.whereEqualTo("owner", user.getAccountID());
+    public FirestoreRecyclerOptions<Experiment> getExperimentsOwnedBy(User user) {
+        Query query = experimentRef.whereEqualTo("ownerID", user.getAccountID()).orderBy("date", Query.Direction.ASCENDING);
+        return new FirestoreRecyclerOptions.Builder<Experiment>()
+                .setQuery(query, Experiment.class)
+                .build();
+    }
+
+    /**
+     * Function to get Firestore Recycler Options object with inbuilt query for all experiments
+     * which have a given user in their subscription list
+     * @param user
+     * The user who in the experiment's subscription list
+     * @return objectFireStoreRecyclerOption
+     * The data option that the ForumQuestion recycler view adapter will be linked to / watching
+     **/
+    public FirestoreRecyclerOptions<Experiment> getExperimentsSubscribedTo(User user) {
+        Query query = experimentRef.whereArrayContains("subscribedUserIDs", user.getAccountID());
+        return new FirestoreRecyclerOptions.Builder<Experiment>()
+                .setQuery(query, Experiment.class)
+                .build();
+    }
+
+    /**
+     * Function to get Firestore Recycler Options object with inbuilt query for all experiments
+     * which are listed as active (ended = false)
+     * @return objectFireStoreRecyclerOption
+     * The data option that the ForumQuestion recycler view adapter will be linked to / watching
+     **/
+    public FirestoreRecyclerOptions<Experiment> getExperimentsActive() {
+        Query query = experimentRef.whereEqualTo("ended", false);
+        return new FirestoreRecyclerOptions.Builder<Experiment>()
+                .setQuery(query, Experiment.class)
+                .build();
+    }
+
+    /**
+     * Function to get Firestore Recycler Options object with inbuilt query for all experiments
+     * which are listed as ended (ended = true)
+     * @return objectFireStoreRecyclerOption
+     * The data option that the ForumQuestion recycler view adapter will be linked to / watching
+     **/
+    public FirestoreRecyclerOptions<Experiment> getExperimentsEnded() {
+        Query query = experimentRef.whereEqualTo("ended", true);
         return new FirestoreRecyclerOptions.Builder<Experiment>()
                 .setQuery(query, Experiment.class)
                 .build();
@@ -316,7 +357,7 @@ public class ExperimentManager {
      * The data options that the ForumQuestion recycler view adapter will be linked to / watching
      **/
     public FirestoreRecyclerOptions<Experiment> getNoExperiments() {
-        Query query = experimentRef.whereEqualTo("owner", "-1");
+        Query query = experimentRef.whereEqualTo("ownerID", "-1");
         return new FirestoreRecyclerOptions.Builder<Experiment>()
                 .setQuery(query, Experiment.class)
                 .build();

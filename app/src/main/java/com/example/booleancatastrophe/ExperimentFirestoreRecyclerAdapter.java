@@ -27,7 +27,7 @@ public class ExperimentFirestoreRecyclerAdapter extends FirestoreRecyclerAdapter
     protected void onBindViewHolder(
             @NonNull ExperimentFirestoreRecyclerAdapter.ExperimentHolder holder, int position, @NonNull Experiment model) {
         holder.tvExperimentItemDescription.setText(model.getDescription());
-        holder.tvExperimentItemOwner.setText(model.getOwner());
+        holder.tvExperimentItemOwner.setText(model.getOwnerID());
         // Holder image could be set here...
     }
 

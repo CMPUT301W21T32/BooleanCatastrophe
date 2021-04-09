@@ -32,11 +32,9 @@ public class TabOwnedExperimentsFragment extends Fragment {
 
     View view;
     RecyclerView recyclerView;
-    private List<Experiment> experiments;
     private ExperimentFirestoreRecyclerAdapter adapter;
     private FirestoreRecyclerOptions<Experiment> experimentOptions;
     private ExperimentManager eManager = new ExperimentManager();
-    private UserManager uManager = new UserManager();
     private User currentUser;
 
     public TabOwnedExperimentsFragment() {
@@ -50,7 +48,8 @@ public class TabOwnedExperimentsFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_tab_owned_experiments, container,
                 false);
         recyclerView = (RecyclerView) view.findViewById(R.id.tab_owned_experiments_rv);
-// Get the current user, if null don't read in data to avoid crash and re-check the user in
+
+        // Get the current user, if null don't read in data to avoid crash and re-check the user in
         // the onStart and onStop to set it up
         currentUser = ((ExperimentApplication) getActivity().getApplication()).getCurrentUser();
 
@@ -59,7 +58,7 @@ public class TabOwnedExperimentsFragment extends Fragment {
         if(currentUser == null) {
             experimentOptions = eManager.getNoExperiments();
         } else {
-            experimentOptions = eManager.getUserPublishedExperiments(currentUser);
+            experimentOptions = eManager.getExperimentsOwnedBy(currentUser);
         }
 
         adapter = new ExperimentFirestoreRecyclerAdapter(experimentOptions);
@@ -74,7 +73,7 @@ public class TabOwnedExperimentsFragment extends Fragment {
             public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
                 Experiment experiment = documentSnapshot.toObject(Experiment.class);
                 Intent intent = new Intent(getContext(), ViewExperimentActivity.class);
-                intent.putExtra("EXPERIMENT", experiment);
+                intent.putExtra("experiment", experiment);
                 startActivity(intent);
             }
         });
@@ -137,18 +136,12 @@ public class TabOwnedExperimentsFragment extends Fragment {
     public void onStart() {
         super.onStart();
         adapter.startListening();
-        if(currentUser == null) {
-            currentUser = ((ExperimentApplication) getActivity().getApplication()).getCurrentUser();
-        }
     }
 
     @Override
     public void onStop() {
         super.onStop();
         adapter.stopListening();
-        if(currentUser == null) {
-            currentUser = ((ExperimentApplication) getActivity().getApplication()).getCurrentUser();
-        }
     }
 
     @Override
@@ -156,8 +149,10 @@ public class TabOwnedExperimentsFragment extends Fragment {
         super.onResume();
         if(currentUser == null) {
             currentUser = ((ExperimentApplication) getActivity().getApplication()).getCurrentUser();
-            experimentOptions = eManager.getUserPublishedExperiments(currentUser);
-            adapter.updateOptions(experimentOptions);
+            if(currentUser != null) {
+                experimentOptions = eManager.getExperimentsOwnedBy(currentUser);
+                adapter.updateOptions(experimentOptions);
+            }
         }
     }
 
@@ -166,8 +161,10 @@ public class TabOwnedExperimentsFragment extends Fragment {
         super.onPause();
         if(currentUser == null) {
             currentUser = ((ExperimentApplication) getActivity().getApplication()).getCurrentUser();
-            experimentOptions = eManager.getUserPublishedExperiments(currentUser);
-            adapter.updateOptions(experimentOptions);
+            if(currentUser != null) {
+                experimentOptions = eManager.getExperimentsOwnedBy(currentUser);
+                adapter.updateOptions(experimentOptions);
+            }
         }
     }
 }

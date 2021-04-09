@@ -100,9 +100,9 @@ public class ExperimentManagerTest {
     @Before
     public void makeExperiments(){
         e1 = new Experiment("First Experiment", "Greater Toronto Area",
-                "Radomir", 5, ExperimentType.BINOMIAL);
+                "Radomir", 5, ExperimentType.BINOMIAL.name());
         e2 = new Experiment("Second Experiment", "Victoria",
-                "Radomir", 5, ExperimentType.MEASUREMENT);
+                "Radomir", 5, ExperimentType.MEASUREMENT.name());
     }
 
     //TODO: Why doesn't ExperimentManager use FirebaseDatabase class?
@@ -173,7 +173,7 @@ public class ExperimentManagerTest {
         assertTrue(theTrials.isEmpty());
 
         //Test adding multiple trials
-        em.addTrial(e1.getId(), new Trial(e1.getOwner(), 1, null, ExperimentType.BINOMIAL));
+        em.addTrial(e1.getId(), new Trial(e1.getOwnerID(), 1, null, ExperimentType.BINOMIAL));
         theTrials = synchronousDBQuery(this.getTrialsForExperiment(e1.getId()));
         assertEquals(1, theTrials.size());
 
