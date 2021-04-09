@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -13,11 +14,13 @@ import com.example.booleancatastrophe.model.ExperimentType;
 import com.example.booleancatastrophe.model.Trial;
 import com.example.booleancatastrophe.storage.FirestoreCallback;
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.LegendRenderer;
 import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -43,10 +46,16 @@ public class ViewStatisticsActivity extends AppCompatActivity {
     private Double quartileUpper;
     private Double quartileLower;
 
+    private int numIntervals = 5;
+
     private LineGraphSeries<DataPoint> timeSeries = new LineGraphSeries<DataPoint>();
     private GraphView timePlot;
 
     private BarGraphSeries<DataPoint> histogramSeries = new BarGraphSeries<DataPoint>();
+    private ArrayList<BarGraphSeries<DataPoint>> intervalSeries = new ArrayList<>();
+    private BarGraphSeries<DataPoint> passSeries = new BarGraphSeries<DataPoint>();
+    private BarGraphSeries<DataPoint> failSeries = new BarGraphSeries<DataPoint>();
+
     private GraphView histogram;
 
     @Override
@@ -188,6 +197,7 @@ public class ViewStatisticsActivity extends AppCompatActivity {
         }
         Double max, min;
         ArrayList<Double> results = new ArrayList<Double>();
+        ArrayList<DataPoint> data = new ArrayList<DataPoint>();
         for(int i = 0; i < trials.size(); i++){
             results.add(trials.get(i).getResult());
         }
@@ -195,51 +205,90 @@ public class ViewStatisticsActivity extends AppCompatActivity {
             case BINOMIAL:
                 int pass = Collections.frequency(results, 1d);
                 int fail = Collections.frequency(results, 0d);
-                histogramSeries.appendData(new DataPoint(0, fail), true, 2);
-                histogramSeries.appendData(new DataPoint(1, pass), true, 2);
-                histogram.getViewport().setMinY(0);
-                histogram.getGridLabelRenderer().setNumHorizontalLabels(2);
+                //Log.d("Stats", "Pass: " + pass + "  Fail: " + fail);
+                failSeries.appendData(new DataPoint(0, fail), true, 2);
+                passSeries.appendData(new DataPoint(1, pass), true, 2);
+                failSeries.setTitle("Failures");
+                passSeries.setTitle("Successes");
+                failSeries.setColor(Color.RED);
+                passSeries.setColor(Color.BLUE);
                 histogram.getViewport().setYAxisBoundsManual(true);
+                histogram.getViewport().setMinY(0);
+                histogram.getViewport().setMaxY(Math.max(pass, fail));
+                histogram.addSeries(passSeries);
+                histogram.addSeries(failSeries);
+                histogram.getViewport().setXAxisBoundsManual(true);
+                histogram.getViewport().setMinX(0);
+                histogram.getLegendRenderer().setVisible(true);
+                histogram.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+                histogram.getGridLabelRenderer().setHorizontalLabelsVisible(false);
+                //histogram.getViewport().setYAxisBoundsManual(true);
                 break;
             case NONNEGCOUNT:
                 max = Collections.max(results);
                 min = Collections.min(results);
                 for(int i = (int)Math.round(min); i <= max; i++){
-                    int resultCount = Collections.frequency(trials, (double) i);
-                    if(resultCount > 0){
-                        histogramSeries.appendData(new DataPoint(i, resultCount), true, (int)Math.round(max - min));
-                    }
+                    int resultCount = Collections.frequency(results, (double) i);
+                    //Log.d("STATS", "Found " + resultCount + " trials with result " + Integer.toString(i));
+                    histogramSeries.appendData(new DataPoint(i, resultCount), true, (int)Math.round(max - min));
                 }
+                histogramSeries.setDrawValuesOnTop(true);
+                histogramSeries.setSpacing(0);
+                histogram.addSeries(histogramSeries);
+                histogram.getViewport().setXAxisBoundsManual(true);
+                histogram.getViewport().setMinX(Math.round(min));
+                histogram.getViewport().setMaxX(Math.round(max));
                 break;
             case MEASUREMENT:
-                int numIntervals = 5;
                 max = Collections.max(results);
                 min = Collections.min(results);
                 double interval = (max - min) / numIntervals;
                 // for each interval loop the results and count all in range
-                for(int i = 0; i < 5; i++){
+                for(int i = 0; i < numIntervals; i++){
                     int resultCount = 0;
                     double intervalMin = min + i*interval;
                     double intervalMax = min + (i+1)*interval;
+                    intervalSeries.add(i, new BarGraphSeries<DataPoint>() );
                     for(int j = 0; j < trials.size(); j++){
                         if(trials.get(j).getResult() >= intervalMin && trials.get(j).getResult() <= intervalMax){
                             resultCount++;
                         }
                     }
-                    histogramSeries.appendData(new DataPoint(i, resultCount), true, 5);
+                    //After result is found the series corresponding to i should get the data appended
+                    //and the title should be set
+                    String low = new DecimalFormat("###.#").format(intervalMin);
+                    String high = new DecimalFormat("###.#").format(intervalMax);
+                    intervalSeries.get(i).appendData(new DataPoint(i, resultCount), true, 1);
+                    intervalSeries.get(i).setTitle(low + " - " + high);
+                    intervalSeries.get(i).setDrawValuesOnTop(true);
+                    //histogram.addSeries(intervalSeries.get(i));
+                    //histogramSeries.appendData(new DataPoint(i, resultCount), true, 5);
                 }
+                intervalSeries.get(0).setColor(Color.BLUE);
+                intervalSeries.get(1).setColor(Color.RED);
+                intervalSeries.get(2).setColor(Color.GREEN);
+                intervalSeries.get(3).setColor(Color.YELLOW);
+                intervalSeries.get(4).setColor(Color.MAGENTA);
+                for(int i = 0; i < numIntervals; i++){
+                    histogram.addSeries(intervalSeries.get(i));
+                }
+                histogram.getViewport().setXAxisBoundsManual(true);
+                histogram.getViewport().setMinX(-1);
+                histogram.getViewport().setMaxX(numIntervals + 3);
+                histogram.getLegendRenderer().setVisible(true);
+                histogram.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+                histogram.getGridLabelRenderer().setHorizontalLabelsVisible(false);
+
+
                 break;
             case COUNT:
                 break;
 
         }
-        histogramSeries.setSpacing(50);
-        histogramSeries.setDrawValuesOnTop(true);
-        histogramSeries.setValuesOnTopColor(Color.GREEN);
 
         histogram.getGridLabelRenderer().setHorizontalAxisTitle("Result");
-        histogram.getGridLabelRenderer().setVerticalAxisTitle("# of Occurences");
-        histogram.addSeries(histogramSeries);
+        histogram.getGridLabelRenderer().setVerticalAxisTitle("Occurences");
+
 
     }
 
