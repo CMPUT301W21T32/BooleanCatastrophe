@@ -2,18 +2,24 @@ package com.example.booleancatastrophe;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputFilter;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.booleancatastrophe.model.Experiment;
 import com.example.booleancatastrophe.model.User;
 import com.example.booleancatastrophe.model.UserManager;
 
-// TODO fix it up so it properly interacts with User/UserManager to update the name and email database fields
 
+/**
+ * This activity is called to view other user's profiles in a non-editable way or your own profile
+ * with the fields editable so you can change your username or contact email
+ **/
 public class UserProfileActivity extends AppCompatActivity {
 
     private final static String TAG = "User Profile Activity";
@@ -29,10 +35,16 @@ public class UserProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
 
-        user = ((ExperimentApplication) this.getApplication()).getCurrentUser();
+        // Get the passed User through the intent
+        Bundle extras = getIntent().getExtras();
+        if(extras != null) {
+            user = (User) getIntent().getSerializableExtra("user");
+        }
+
         if(user == null){
             finish();
         }
+
         etUsername = (EditText) findViewById(R.id.et_user_name);
         etEmail = (EditText) findViewById(R.id.et_user_email);
         btnSave = (Button) findViewById(R.id.btn_save_profile);
@@ -46,6 +58,16 @@ public class UserProfileActivity extends AppCompatActivity {
         /* Display the user's current username and email, which can be modified */
         etUsername.setText(user.getUsername());
         etEmail.setText(user.getEmail());
+
+        /* If the current user id doesn't match with the passed user id, don't allow editing */
+        if(!(((ExperimentApplication) this.getApplication()).getCurrentUser().getAccountID().equals(user.getAccountID())))  {
+            etUsername.setEnabled(false);
+            etEmail.setEnabled(false);
+            etUsername.setInputType(InputType.TYPE_NULL);
+            etEmail.setInputType(InputType.TYPE_NULL);
+            btnSave.setEnabled(false);
+            btnSave.setText("---");
+        }
 
         /* Save Profile button onclick listener; update the user's username and email and
         * return to the MainActivity (for now) */

@@ -49,7 +49,9 @@ public class TabHomeFragment extends Fragment {
         btnViewProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Pass the current user
                 Intent intent = new Intent(getContext(), UserProfileActivity.class);
+                intent.putExtra("user", ((ExperimentApplication) getActivity().getApplication()).getCurrentUser());
                 startActivity(intent);
             }
         });

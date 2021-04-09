@@ -1,5 +1,6 @@
 package com.example.booleancatastrophe.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 // TODO better error checking in the username and email setters - possibly the owned experiments too
@@ -12,7 +13,7 @@ import java.util.ArrayList;
  * data, no duplicates, etc.
  **/
 
-public class User {
+public class User implements Serializable {
     private String accountID; //changed from device ID
     private String username;
     private String email;
