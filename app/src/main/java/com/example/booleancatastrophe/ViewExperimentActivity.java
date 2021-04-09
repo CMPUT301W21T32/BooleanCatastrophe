@@ -50,6 +50,7 @@ public class ViewExperimentActivity extends AppCompatActivity implements NewTria
     private Button newBarcodeButton;
     Button btnUnpublishExperiment;
     Button btnEndExperiment;
+    Button btnSubscribe;
 
     private static final String TAG = "View Experiment Activity";
 
@@ -82,6 +83,7 @@ public class ViewExperimentActivity extends AppCompatActivity implements NewTria
         btnViewExperimentStatistics = (Button) findViewById(R.id.btn_experiment_statistics);
         btnUnpublishExperiment = (Button) findViewById(R.id.btn_unpublish_experiment);
         btnEndExperiment = (Button) findViewById(R.id.btn_end_experiment);
+        btnSubscribe = (Button) findViewById(R.id.btn_experiment_subscribe);
 
         // Get the current experiment data through the intent
         Bundle extras = getIntent().getExtras();
@@ -113,6 +115,9 @@ public class ViewExperimentActivity extends AppCompatActivity implements NewTria
                     } else {
                         setupOwnerTools(false);
                     }
+
+                    /* Set up subscribe button for owners and experimenters based on state */
+                    setupSubscribeButton();
         });
 
         descriptionText.setText( currentExperiment.getDescription() );
@@ -206,8 +211,8 @@ public class ViewExperimentActivity extends AppCompatActivity implements NewTria
      * @param doIt
      * Boolean variable dictating whether the tools will be enabled/visible or disabled/invisible */
     private void setupOwnerTools(boolean doIt) {
-        setUpPublishButton(doIt);
-        setUpEndButton(doIt);
+        setupPublishButton(doIt);
+        setupEndButton(doIt);
     }
 
     /**
@@ -215,7 +220,7 @@ public class ViewExperimentActivity extends AppCompatActivity implements NewTria
      * the current experiment's internal state and the button's action depending on that state
      * @param doIt
      * Boolean variable dictating whether the button will be visible and functioning or gone */
-    private void setUpPublishButton(boolean doIt) {
+    private void setupPublishButton(boolean doIt) {
         if(doIt) {
             if(currentExperiment.getPublished()) {
                 btnUnpublishExperiment.setText("Unpublish");
@@ -250,7 +255,7 @@ public class ViewExperimentActivity extends AppCompatActivity implements NewTria
      * the current experiment's internal state
      * @param doIt
      * Boolean variable dictating whether the button will be visible and functioning or gone */
-    private void setUpEndButton(boolean doIt) {
+    private void setupEndButton(boolean doIt) {
         if(doIt) {
             if(currentExperiment.getEnded()) {
                 btnEndExperiment.setText("Already Ended");
@@ -275,5 +280,35 @@ public class ViewExperimentActivity extends AppCompatActivity implements NewTria
             btnEndExperiment.setEnabled(false);
             btnEndExperiment.setVisibility(View.GONE);
         }
+    }
+
+    /**
+     * This function sets up state dependent subscription button which changes the current
+     * experiment's subscription list and user's subscriptions
+    **/
+    private void setupSubscribeButton() {
+
+        if(currentUser.getSubscriptions().contains(currentExperiment.getId())) {
+            btnSubscribe.setText("Unsubscribe");
+        } else {
+            btnSubscribe.setText("Subscribe");
+        }
+
+        btnSubscribe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(currentUser.getSubscriptions().contains(currentExperiment.getId())) {
+                    userManager.unsubscribe(currentUser.getAccountID(), currentExperiment.getId());
+                    eManager.removeFromSubscriptionList(currentExperiment.getId(), currentUser.getAccountID());
+                    currentUser.removeSubscription(currentExperiment.getId());
+                    btnSubscribe.setText("Subscribe");
+                } else {
+                    userManager.subscribe(currentUser.getAccountID(), currentExperiment.getId());
+                    eManager.addToSubscriptionList(currentExperiment.getId(), currentUser.getAccountID());
+                    currentUser.addSubscription(currentExperiment.getId());
+                    btnSubscribe.setText("Unsubscribe");
+                }
+            }
+        });
     }
 }

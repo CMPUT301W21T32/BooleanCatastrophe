@@ -61,4 +61,5 @@
     <string name="btn_unpublish_experiment">Unpublish Experiment</string>
     <string name="hint_pub_exp_region">Enter a region for this experiment...</string>
     <string name="btn_end_experiment">End Experiment</string>
+    <string name="btn_experiment_subscribe">Subscribe</string>
 </resources>
